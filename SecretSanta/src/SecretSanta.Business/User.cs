@@ -19,7 +19,7 @@ namespace SecretSanta.Business
             Id = id;
             FirstName = firstName ?? throw new ArgumentNullException(nameof(firstName));
             LastName = lastName ?? throw new ArgumentNullException(nameof(lastName));
-            Gifts = gifts ?? throw new ArgumentNullException(nameof(gifts));
+            Gifts = gifts ?? new List<Gift>();
         }
     }
 }
