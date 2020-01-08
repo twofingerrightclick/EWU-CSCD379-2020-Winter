@@ -20,10 +20,14 @@ namespace SecretSanta.Business
             FirstName = firstName ?? throw new ArgumentNullException(nameof(firstName));
             LastName = lastName ?? throw new ArgumentNullException(nameof(lastName));
 <<<<<<< refs/remotes/IntelliTect-Samples/master
+<<<<<<< refs/remotes/IntelliTect-Samples/master
             Gifts = gifts ?? new List<Gift>();
 =======
             Gifts = gifts ?? throw new ArgumentNullException(nameof(gifts));
 >>>>>>> added props and constructors. need to handle prop nulls
+=======
+            Gifts = gifts ?? new List<Gift>();
+>>>>>>> added a test for gift properties using reflection
         }
     }
 }
