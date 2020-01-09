@@ -11,6 +11,7 @@ namespace SecretSanta.Business.Tests
 {
     [TestClass()]
     public class GiftTests
+
     {
         [TestMethod()]
         public void GiftTest()
