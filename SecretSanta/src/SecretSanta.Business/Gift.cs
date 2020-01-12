@@ -11,7 +11,9 @@ namespace SecretSanta.Business
 
         public string Title { get; private set; }
         public string Description { get; private set; }
+
         public string Url { get; private set; }
+
         public User User { get; private set; }
 
         public Gift(int id, string title, string description, string url, User user)
