@@ -13,11 +13,7 @@ namespace SecretSanta.Business.Tests
     public class GiftTests
 
     {
-        [TestMethod()]
-        public void GiftTest()
-        {
-            Assert.Fail();
-        }
+       
 
         [TestMethod]
         public void All_Gift_Properties_Are_Filled_Correctly_No_Nulls()
