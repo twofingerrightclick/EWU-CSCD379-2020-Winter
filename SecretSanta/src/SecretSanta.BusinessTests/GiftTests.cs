@@ -15,21 +15,19 @@ namespace SecretSanta.Business.Tests
     {
        
 
-        [TestMethod]
-        public void All_Gift_Properties_Are_Filled_Correctly_No_Nulls()
+        [DataTestMethod]
+        //correct data
+        [DataRow(1, "FirstName", "LastName", 1, "Title", "Description", "Url",false)]
+        
+        public void All_Gift_Properties_Are_Filled_Correctly(int id, string firstName, string lastName, int giftId, string title, string description, string url, bool assert)
         {
-            User sampleUser = new User(1,"FirstName","LastName",null);
-            
-            Gift sampleGift = new Gift(1,"Title","Description","Url",sampleUser);
+            //arrange
+            User sampleUser = new User(id,firstName,lastName);
+            Gift sampleGift = new Gift(giftId,title,description,url,sampleUser);
+            IEnumerable<PropertyInfo> giftProperties = sampleGift.GetType().GetProperties();
 
-
-           
-
-                IEnumerable<PropertyInfo> giftProperties = sampleGift.GetType().GetProperties();
-
-                //done this way to practice with linq and reflection
-
-                bool nullsInGiftProperties = giftProperties
+               //Act
+                bool GiftPropertiesFilledIncorrectly = giftProperties
                 .Select(propertyInfo => { return (value: propertyInfo.GetValue(sampleGift)!, propertyInfo); })
                 .Any((valueAndProperty) =>
                 {
@@ -50,11 +48,37 @@ namespace SecretSanta.Business.Tests
                     }
                     return false;
                 });
-
-                Assert.IsFalse(nullsInGiftProperties);
+            //assert
+                Assert.IsTrue(GiftPropertiesFilledIncorrectly == assert);
 
             }
+
+
+        [DataTestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        //firstName null
+        [DataRow(1, null, "LastName", 1, "Title", "Description", "Url")]
+        //lastName null
+        [DataRow(1, "firstName", null, 1, "Title", "Description", "Url")]
+        //title null
+        [DataRow(1, "firstName", "LastName", 1, null, "Description", "Url")]
+        // description null
+        [DataRow(1, "FirstName", "LastName", 1, "Title", null, "Url")]
+        //url null
+        [DataRow(1, "FirstName", "LastName", 1, "Title", "Description", null)]
+
+        public void All_Gift_Properties_Are_Filled_Correctly_No_Nulls_User_And_Gift_Constructors_Throw_Exceptions(int id, string firstName, string lastName, int giftId, string title, string description, string url)
+        {
+            User sampleUser = new User(id, firstName, lastName);
+
+            Gift sampleGift = new Gift(giftId, title, description, url, sampleUser);
+
+
         }
+
+
+
+    }
 
 
 
