@@ -14,11 +14,12 @@ namespace SecretSanta.Business
         [AllowNull]
         public List<Gift> Gifts { get; set; }
 
-        public User(int id, string firstName, string lastName, List<Gift> gifts)
+        public User(int id, string firstName, string lastName)
         {
             Id = id;
             FirstName = firstName ?? throw new ArgumentNullException(nameof(firstName));
             LastName = lastName ?? throw new ArgumentNullException(nameof(lastName));
+<<<<<<< refs/remotes/IntelliTect-Samples/master
 <<<<<<< refs/remotes/IntelliTect-Samples/master
 <<<<<<< refs/remotes/IntelliTect-Samples/master
             Gifts = gifts ?? new List<Gift>();
@@ -28,6 +29,9 @@ namespace SecretSanta.Business
 =======
             Gifts = gifts ?? new List<Gift>();
 >>>>>>> added a test for gift properties using reflection
+=======
+            Gifts = new List<Gift>();
+>>>>>>> added null tests for Gift and User Constructors
         }
     }
 }
