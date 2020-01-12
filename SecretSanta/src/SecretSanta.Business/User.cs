@@ -11,8 +11,8 @@ namespace SecretSanta.Business
         public int Id { get; private set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        [AllowNull]
-        public List<Gift> Gifts { get; set; }
+    
+        public List<Gift> Gifts { get; }
 
         public User(int id, string firstName, string lastName)
         {
