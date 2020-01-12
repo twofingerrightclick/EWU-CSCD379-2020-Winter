@@ -31,7 +31,11 @@ namespace SecretSanta.Business
 >>>>>>> added a test for gift properties using reflection
 =======
             Gifts = new List<Gift>();
+<<<<<<< refs/remotes/IntelliTect-Samples/master
 >>>>>>> added null tests for Gift and User Constructors
+=======
+            //
+>>>>>>> testing pipeline
         }
     }
 }
