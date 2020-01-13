@@ -6,7 +6,7 @@
 
 trigger:
 - master
-- *
+- Assignment*
 
 pool:
   vmImage: 'windows-latest'
