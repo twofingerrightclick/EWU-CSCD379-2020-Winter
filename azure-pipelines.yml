@@ -7,7 +7,7 @@
 trigger:
   branches:
     include:
-    - Assignment*
+    - Assignment1
     
 pool:
   vmImage: 'windows-latest'
