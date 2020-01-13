@@ -8,7 +8,7 @@ namespace SecretSanta.Business
     public class User
     {
     
-        public int Id { get; private set; }
+        public int Id { get;}
         public string FirstName { get; set; }
         public string LastName { get; set; }
     
