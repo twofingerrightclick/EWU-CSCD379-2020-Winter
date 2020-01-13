@@ -7,7 +7,7 @@ namespace SecretSanta.Business
     public class Gift
     {
    
-        public int Id { get; set; }
+        public int Id { get; }
 
         public string Title { get; private set; }
         public string Description { get; private set; }
@@ -23,7 +23,7 @@ namespace SecretSanta.Business
             Description = description ?? throw new ArgumentNullException(nameof(description));
             Url = url ?? throw new ArgumentNullException(nameof(url));
             User = user ?? throw new ArgumentNullException(nameof(user));
-            string s = null;
+        
         }
     }
 }

@@ -19,7 +19,7 @@ namespace SecretSanta.Business.Tests
         //correct data
         [DataRow(1, "FirstName", "LastName", 1, "Title", "Description", "Url",false)]
         
-        public void All_Gift_Properties_Are_Filled_Correctly(int id, string firstName, string lastName, int giftId, string title, string description, string url, bool assert)
+        public void All_Gift_Properties_Are_Set_Correctly(int id, string firstName, string lastName, int giftId, string title, string description, string url, bool assert)
         {
             //arrange
             User sampleUser = new User(id,firstName,lastName);
