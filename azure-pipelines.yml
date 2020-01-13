@@ -5,8 +5,9 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
 trigger:
-- Assignment*
-- Assignment1
+- assignment*
+- assignment1
+- master
 
 pool:
   vmImage: 'windows-latest'
