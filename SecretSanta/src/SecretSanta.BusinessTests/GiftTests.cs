@@ -56,20 +56,17 @@ namespace SecretSanta.Business.Tests
 
         [DataTestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
-        //firstName null
-        [DataRow(1, null, "LastName", 1, "Title", "Description", "Url")]
-        //lastName null
-        [DataRow(1, "firstName", null, 1, "Title", "Description", "Url")]
+     
         //title null
-        [DataRow(1, "firstName", "LastName", 1, null, "Description", "Url")]
+        [DataRow( 1, null, "Description", "Url")]
         // description null
-        [DataRow(1, "FirstName", "LastName", 1, "Title", null, "Url")]
+        [DataRow( 1, "Title", null, "Url")]
         //url null
-        [DataRow(1, "FirstName", "LastName", 1, "Title", "Description", null)]
+        [DataRow( 1, "Title", "Description", null)]
 
-        public void All_Gift_Properties_Are_Filled_Correctly_No_Nulls_User_And_Gift_Constructors_Throw_Exceptions(int id, string firstName, string lastName, int giftId, string title, string description, string url)
+        public void All_Gift_Properties_Are_Filled_Correctly_No_Nulls_User_And_Gift_Constructors_Throw_Exceptions(int giftId, string title, string description, string url)
         {
-            User sampleUser = new User(id, firstName, lastName);
+            var sampleUser = new User(1, "string", "string");
 
             Gift sampleGift = new Gift(giftId, title, description, url, sampleUser);
 
