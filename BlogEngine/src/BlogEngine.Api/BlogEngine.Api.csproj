@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="..\..\GlobalSupression.cs" Link="GlobalSupression.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\BlogEngine.Business\BlogEngine.Business.csproj" />
   </ItemGroup>
 
