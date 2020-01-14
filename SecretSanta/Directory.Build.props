@@ -1,6 +1,6 @@
 ﻿
 <Project>
   <PropertyGroup>
-    <Nullable>enable</Nullable>
+    <Nullable Condition="$(Nullable)==''">enable</Nullable>
   </PropertyGroup>
 </Project>
