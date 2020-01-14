@@ -7,21 +7,26 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{62F520AB-FCF
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{E60ADCB7-F77D-4108-AF8C-39459A2D7D4F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlogEngine.Data", "src\BlogEngine.Data\BlogEngine.Data.csproj", "{22A605CF-8B17-44FE-91DF-FE9F5D63280E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlogEngine.Data", "src\BlogEngine.Data\BlogEngine.Data.csproj", "{22A605CF-8B17-44FE-91DF-FE9F5D63280E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlogEngine.Business", "src\BlogEngine.Business\BlogEngine.Business.csproj", "{CA527D53-8E4E-4B8C-838A-0EA03693ED07}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlogEngine.Business", "src\BlogEngine.Business\BlogEngine.Business.csproj", "{CA527D53-8E4E-4B8C-838A-0EA03693ED07}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlogEngine.Api", "src\BlogEngine.Api\BlogEngine.Api.csproj", "{A5832803-BB2E-4C70-B160-377496C2F015}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlogEngine.Api", "src\BlogEngine.Api\BlogEngine.Api.csproj", "{A5832803-BB2E-4C70-B160-377496C2F015}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlogEngine.Web", "src\BlogEngine.Web\BlogEngine.Web.csproj", "{A100FBBC-3E63-46CD-865A-1A67939E0A84}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlogEngine.Web", "src\BlogEngine.Web\BlogEngine.Web.csproj", "{A100FBBC-3E63-46CD-865A-1A67939E0A84}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlogEngine.Data.Tests", "test\BlogEngine.Data.Tests\BlogEngine.Data.Tests.csproj", "{B1CD2C5C-531D-41F4-BD4F-60A9190D67CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlogEngine.Data.Tests", "test\BlogEngine.Data.Tests\BlogEngine.Data.Tests.csproj", "{B1CD2C5C-531D-41F4-BD4F-60A9190D67CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlogEngine.Business.Tests", "test\BlogEngine.Business.Tests\BlogEngine.Business.Tests.csproj", "{D9E47A76-7EBA-46F0-829B-392DB5875FDE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlogEngine.Business.Tests", "test\BlogEngine.Business.Tests\BlogEngine.Business.Tests.csproj", "{D9E47A76-7EBA-46F0-829B-392DB5875FDE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlogEngine.Api.Tests", "test\BlogEngine.Api.Tests\BlogEngine.Api.Tests.csproj", "{3118BC5C-3DD3-4240-8D19-C0A1C50256B6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlogEngine.Api.Tests", "test\BlogEngine.Api.Tests\BlogEngine.Api.Tests.csproj", "{3118BC5C-3DD3-4240-8D19-C0A1C50256B6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlogEngine.Web.Tests", "test\BlogEngine.Web.Tests\BlogEngine.Web.Tests.csproj", "{40465DBB-424F-4556-AFAA-E0BD8985E49F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlogEngine.Web.Tests", "test\BlogEngine.Web.Tests\BlogEngine.Web.Tests.csproj", "{40465DBB-424F-4556-AFAA-E0BD8985E49F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{747740E7-BDCB-4E8F-AAC4-D41F0AA463B8}"
+	ProjectSection(SolutionItems) = preProject
+		GlobalSupression.cs = GlobalSupression.cs
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
