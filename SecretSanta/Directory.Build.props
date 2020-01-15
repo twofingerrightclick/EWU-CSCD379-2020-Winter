@@ -1,11 +1,8 @@
-﻿
 <Project>
   <PropertyGroup>
-    <Nullable Condition="$(Nullable)==''">enable</Nullable>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
-
-    <ItemGroup>
+  <ItemGroup>
     <PackageReference Include="IntelliTect.Analyzers" Version="0.1.5" />
   </ItemGroup>
-
-</Project>
+</Project> 
