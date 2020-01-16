@@ -1,6 +1,6 @@
 ﻿namespace BlogEngine.Data
 {
-    public class Comment
+    public class Comment : FingerPrintEntityBase
     {
         public Post Post { get; set; }
         public string Name { get; set; }
