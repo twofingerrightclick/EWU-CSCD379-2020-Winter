@@ -1,5 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SecretSanta.Business;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -7,28 +6,28 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace SecretSanta.Business.Tests
+namespace SecretSanta.Data.Tests
 {
     [TestClass()]
-    public class UserTests
+    public class GiftTests
 
     {
        
         //
         [DataTestMethod]
         //correct data
-        [DataRow(1, "FirstName", "LastName",false)]
+        [DataRow(1, "FirstName", "LastName", 1, "Title", "Description", "Url",false)]
         
-        public void All_UserTests_Properties_Are_Set_Correctly(int id, string firstName, string lastName, bool assert)
+        public void All_Gift_Properties_Are_Set_Correctly(int id, string firstName, string lastName, int giftId, string title, string description, string url, bool assert)
         {
             //arrange
             User sampleUser = new User(id,firstName,lastName);
-           
-            IEnumerable<PropertyInfo> userProperties = sampleUser.GetType().GetProperties();
+            Gift sampleGift = new Gift(giftId,title,description,url,sampleUser);
+            IEnumerable<PropertyInfo> giftProperties = sampleGift.GetType().GetProperties();
 
                //Act
-                bool GiftPropertiesFilledIncorrectly = userProperties
-                .Select(propertyInfo => { return (value: propertyInfo.GetValue(sampleUser)!, propertyInfo); })
+                bool GiftPropertiesFilledIncorrectly = giftProperties
+                .Select(propertyInfo => { return (value: propertyInfo.GetValue(sampleGift)!, propertyInfo); })
                 .Any((valueAndProperty) =>
                 {
                     //not concerned about empty string values here.
@@ -56,16 +55,19 @@ namespace SecretSanta.Business.Tests
 
         [DataTestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
-        //firstName null
-        [DataRow(1, null, "LastName")]
-        //lastName null
-        [DataRow(1, "firstName", null)]
      
-        public void All_User_Properties_Are_Filled_Correctly_No_Nulls_User_And_User_Constructors_Throw_Exceptions(int id, string firstName, string lastName)
-        {
-            User sampleUser = new User(id, firstName, lastName);
+        //title null
+        [DataRow( 1, null, "Description", "Url")]
+        // description null
+        [DataRow( 1, "Title", null, "Url")]
+        //url null
+        [DataRow( 1, "Title", "Description", null)]
 
-           
+        public void All_Gift_Properties_Are_Filled_Correctly_No_Nulls_User_And_Gift_Constructors_Throw_Exceptions(int giftId, string title, string description, string url)
+        {
+            var sampleUser = new User(1, "string", "string");
+
+            Gift sampleGift = new Gift(giftId, title, description, url, sampleUser);
 
 
         }

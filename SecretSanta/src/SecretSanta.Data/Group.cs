@@ -8,5 +8,7 @@ namespace SecretSanta.Data
     {
         public string Name { get; set; }
 
+        public List<UserGroup> Users { get; set; }
+
     }
 }

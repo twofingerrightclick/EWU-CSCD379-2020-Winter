@@ -13,12 +13,22 @@ namespace SecretSanta.Data
         private string _LastName = string.Empty;
         public ICollection<Gift> Gifts { get; }
 
+        public List<UserGroup> Groups { get; set; }
+
         public User(int id, string firstName, string lastName, List<Gift> gifts)
         {
             Id = id;
             FirstName = firstName;
             LastName = lastName;
             Gifts = gifts;
+        }
+
+        public User(int id, string firstName, string lastName)
+        {
+            Id = id;
+            FirstName = firstName;
+            LastName = lastName;
+            Gifts = new List<Gift>(); 
         }
     }
 }
