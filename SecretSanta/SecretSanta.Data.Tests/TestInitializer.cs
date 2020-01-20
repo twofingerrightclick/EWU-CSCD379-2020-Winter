@@ -1,20 +1,26 @@
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using Moq;
+using System.Security.Claims;
 
 namespace SecretSanta.Data.Tests
 {
-    [TestClass]
-    public class DataTests
+    public class TestInitializer
     {
+#nullable disable
         private SqliteConnection SqliteConnection { get; set; }
+
         protected DbContextOptions<ApplicationDbContext> Options { get; private set; }
 
+
+#nullable enable
+
+        protected IHttpContextAccessor _HttpContextAccessor = Mock.Of<IHttpContextAccessor>(hta =>
+               hta.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier) == new Claim(ClaimTypes.NameIdentifier, ""));
         private static ILoggerFactory GetLoggerFactory()
         {
             IServiceCollection serviceCollection = new ServiceCollection();
@@ -59,4 +65,3 @@ namespace SecretSanta.Data.Tests
         }
     }
 }
-

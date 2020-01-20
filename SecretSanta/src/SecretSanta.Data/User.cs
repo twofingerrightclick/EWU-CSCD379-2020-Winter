@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace SecretSanta.Data
@@ -11,24 +12,13 @@ namespace SecretSanta.Data
         private string _FirstName = string.Empty;
         public string LastName { get => _LastName; set => _LastName = value ?? throw new ArgumentNullException(nameof(LastName)); }
         private string _LastName = string.Empty;
-        public ICollection<Gift> Gifts { get; }
+        public ICollection<Gift> Gifts { set; get; }
+        
+        [AllowNull]
+        public User? Santa { get; set; }
 
-        public List<UserGroup> Groups { get; set; }
+        public List<UserGroup> UserGroups{ get; set; }
 
-        public User(int id, string firstName, string lastName, List<Gift> gifts)
-        {
-            Id = id;
-            FirstName = firstName;
-            LastName = lastName;
-            Gifts = gifts;
-        }
-
-        public User(int id, string firstName, string lastName)
-        {
-            Id = id;
-            FirstName = firstName;
-            LastName = lastName;
-            Gifts = new List<Gift>(); 
-        }
+    
     }
 }

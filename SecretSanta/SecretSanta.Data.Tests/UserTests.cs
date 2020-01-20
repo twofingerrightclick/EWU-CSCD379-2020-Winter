@@ -1,73 +1,94 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using AutoFixture;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace SecretSanta.Data.Tests
 {
     [TestClass()]
-    public class UserTests
+    public class UserTests:TestInitializer
 
     {
-       
-        [DataTestMethod]
-        //correct data
-        [DataRow(1, "FirstName", "LastName",false)]
-        
-        public void All_UserTests_Properties_Are_Set_Correctly(int id, string firstName, string lastName, bool assert)
+
+        [TestMethod]
+
+        public async Task Save_Gift_Retrieves_Gift_All_Properties_The_Same_Including_Associated_User()
         {
             //arrange
-            User sampleUser = new User(id,firstName,lastName);
-           
-            IEnumerable<PropertyInfo> userProperties = sampleUser.GetType().GetProperties();
+            var fixture = new Fixture();
 
-               //Act
-                bool GiftPropertiesFilledIncorrectly = userProperties
-                .Select(propertyInfo => { return (value: propertyInfo.GetValue(sampleUser)!, propertyInfo); })
-                .Any((valueAndProperty) =>
-                {
-                    //not concerned about empty string values here.
-                    if (valueAndProperty.value == null)
-                    {
-                        Trace.WriteLine($"Gift { valueAndProperty.propertyInfo} was null");
-                        return true;
-                    }
 
-                    if (valueAndProperty.propertyInfo.PropertyType == typeof(string))
-                    {
-                        if (valueAndProperty.propertyInfo.Name != (string)valueAndProperty.value)
-                        {
-                            Trace.WriteLine($"Gift { valueAndProperty.propertyInfo} was incorrectly assigned: {valueAndProperty.value}");
-                            return true;
-                        }
-                    }
-                    return false;
-                });
-            //assert
-                Assert.IsTrue(GiftPropertiesFilledIncorrectly == assert);
+            var user1 = new User
+            {
+                FirstName = "FirstName",
+                LastName = "LastName",
+                Santa = new User(),
+                Gifts = new List<Gift>(),
+                UserGroups = new List<UserGroup>()
+
+            };
+
+            
+
+            using (ApplicationDbContext dbContext = new ApplicationDbContext(Options, _HttpContextAccessor))
+            {
+
+                dbContext.Users.Add(user1);
+                await dbContext.SaveChangesAsync().ConfigureAwait(true);
 
             }
 
+            List<User> users;
 
-        [DataTestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
-        //firstName null
-        [DataRow(1, null, "LastName")]
-        //lastName null
-        [DataRow(1, "firstName", null)]
-     
-        public void All_User_Properties_Are_Filled_Correctly_No_Nulls_User_And_User_Constructors_Throw_Exceptions(int id, string firstName, string lastName)
-        {
-            User sampleUser = new User(id, firstName, lastName);
+            using (ApplicationDbContext dbContext = new ApplicationDbContext(Options, _HttpContextAccessor))
+            {
 
-           
+                users = await dbContext.Users.ToListAsync().ConfigureAwait(true);
 
+            }
+
+            var sampleUser = users.ElementAt(0);
+            Trace.WriteLine($"sampleUser { sampleUser.FirstName} ");
+
+            Assert.IsTrue(users.Count > 0) ;
+            //this is a really bulky all at once test
+
+            IEnumerable<PropertyInfo> userProperties = sampleUser.GetType().GetProperties();
+            FingerPrintEntityBase t = new FingerPrintEntityBase();
+            IEnumerable<string> fingerprintProperties = t.GetType().GetProperties().Select(PropertyInfo => PropertyInfo.Name);
+
+            //Act
+            bool UserPropertiesFilledIncorrectly = userProperties
+            .Select(propertyInfo => { return (value: propertyInfo.GetValue(sampleUser), propertyInfo); })
+            .Any((valueAndProperty) =>
+            {
+
+                if (valueAndProperty.value == null)
+                {
+                    Trace.WriteLine($"User { valueAndProperty.propertyInfo} was null");
+                    return true;
+                }
+
+                if (valueAndProperty.propertyInfo.PropertyType == typeof(string) && !fingerprintProperties.Contains(valueAndProperty.propertyInfo.Name))
+                {
+                    if (valueAndProperty.propertyInfo.Name != (string)valueAndProperty.value)
+                    {
+                        Trace.WriteLine($"User { valueAndProperty.propertyInfo} was incorrectly assigned: {valueAndProperty.value}");
+                        return true;
+                    }
+                }
+                return false;
+            });
+            //assert
+            Assert.IsFalse(UserPropertiesFilledIncorrectly);
 
         }
-
 
 
     }

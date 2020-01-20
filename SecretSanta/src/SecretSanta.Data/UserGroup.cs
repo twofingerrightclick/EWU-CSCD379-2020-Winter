@@ -7,8 +7,8 @@ namespace SecretSanta.Data
     public class UserGroup
     {
         public int UserId { get; set; }
-        public int User { get; set; }
+        public User User { get; set; }
         public int GroupId { get; set; }
-        public int Group { get; set; }
+        public Group Group { get; set; }
     }
 }
