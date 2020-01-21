@@ -6,23 +6,82 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SecretSanta.Data.Tests
 {
     [TestClass()]
-    public class UserTests:TestInitializer
+    public class UserTests : TestInitializer
 
     {
 
         [TestMethod]
 
-        public async Task Save_Gift_Retrieves_Gift_All_Properties_The_Same_Including_Associated_User()
+        public async Task Save_User_Retrieves_User_All_Properties_Preserved()
         {
             //arrange
             var fixture = new Fixture();
+            string firstName = "FirstName";
+            string lastName = "LastName";
 
+            var sampleUser = new User
+            {
+                FirstName = firstName,
+                LastName = lastName,
+                Santa = new User(),
+                Gifts = new List<Gift>(),
+                UserGroups = new List<UserGroup>()
+
+            };
+
+
+
+            var title = fixture.Create<string>();
+            var descrip = fixture.Create<string>();
+            var url = fixture.Create<string>();
+
+            Gift sampleGift = new Gift
+            {
+                Title=title,
+                Description=descrip,
+                Url=url
+
+            };
+
+            sampleUser.Gifts.Add(sampleGift);
+
+
+            using (ApplicationDbContext dbContext = new ApplicationDbContext(Options, _HttpContextAccessor))
+            {
+
+                dbContext.Users.Add(sampleUser);
+                await dbContext.SaveChangesAsync().ConfigureAwait(true);
+
+            }
+
+            User user;
+
+            using (ApplicationDbContext dbContext = new ApplicationDbContext(Options, _HttpContextAccessor))
+            {
+
+                user = await dbContext.Users.Where(u => u.LastName == "LastName").Include(user=>user.Gifts).SingleOrDefaultAsync().ConfigureAwait(true);
+
+            }
+
+            Assert.AreEqual<string>(user.FirstName,firstName);
+            Assert.AreEqual<string>(user.Gifts.ElementAt(0).User.LastName, lastName);
+
+
+        }
+
+
+
+      /*  [TestMethod]
+
+        public async Task Save_User_Retrieves_Users_Correct_GroupInfo()
+        {
+            //arrange
+            var fixture = new Fixture();
 
             var user1 = new User
             {
@@ -34,7 +93,26 @@ namespace SecretSanta.Data.Tests
 
             };
 
-            
+            UserGroup =
+
+
+
+            var title = fixture.Create<string>();
+            var descrip = fixture.Create<string>();
+            var url = fixture.Create<string>();
+
+            Gift sampleGift = new Gift
+            {
+                Title = title,
+                Description = descrip,
+                Url = url
+
+            };
+
+
+
+
+
 
             using (ApplicationDbContext dbContext = new ApplicationDbContext(Options, _HttpContextAccessor))
             {
@@ -44,19 +122,18 @@ namespace SecretSanta.Data.Tests
 
             }
 
-            List<User> users;
+            User sampleUser;
 
             using (ApplicationDbContext dbContext = new ApplicationDbContext(Options, _HttpContextAccessor))
             {
 
-                users = await dbContext.Users.ToListAsync().ConfigureAwait(true);
+                sampleUser = await dbContext.Users.Where(u => u.LastName == "LastName").SingleOrDefaultAsync().ConfigureAwait(true);
 
             }
 
-            var sampleUser = users.ElementAt(0);
+
             Trace.WriteLine($"sampleUser { sampleUser.FirstName} ");
 
-            Assert.IsTrue(users.Count > 0) ;
             //this is a really bulky all at once test
 
             IEnumerable<PropertyInfo> userProperties = sampleUser.GetType().GetProperties();
@@ -65,15 +142,11 @@ namespace SecretSanta.Data.Tests
 
             //Act
             bool UserPropertiesFilledIncorrectly = userProperties
-            .Select(propertyInfo => { return (value: propertyInfo.GetValue(sampleUser), propertyInfo); })
+            .Select(propertyInfo => { return (value: propertyInfo.GetValue(sampleUser)!, propertyInfo); })
             .Any((valueAndProperty) =>
             {
 
-                if (valueAndProperty.value == null)
-                {
-                    Trace.WriteLine($"User { valueAndProperty.propertyInfo} was null");
-                    return true;
-                }
+
 
                 if (valueAndProperty.propertyInfo.PropertyType == typeof(string) && !fingerprintProperties.Contains(valueAndProperty.propertyInfo.Name))
                 {
@@ -88,14 +161,11 @@ namespace SecretSanta.Data.Tests
             //assert
             Assert.IsFalse(UserPropertiesFilledIncorrectly);
 
-        }
+        }*/
+
 
 
     }
 
 
-
-    
-
-    
 }
