@@ -20,7 +20,7 @@ namespace SecretSanta.Data.Tests
 
         [TestMethod]
 
-        public async Task Initialize() {
+        public async Task Initialize_Passes_If_Entity_Constructors_Are_Working_Correctly() {
 
             var user = new User("FirstName", "LastName");
 
