@@ -6,6 +6,10 @@ MinimumVisualStudioVersion = 15.0.26124.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{62F520AB-FCFC-49CA-AAAE-874585943F17}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{E60ADCB7-F77D-4108-AF8C-39459A2D7D4F}"
+	ProjectSection(SolutionItems) = preProject
+		test\Directory.Build.props = test\Directory.Build.props
+		test\TestsSuppression.cs = test\TestsSuppression.cs
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlogEngine.Data", "src\BlogEngine.Data\BlogEngine.Data.csproj", "{22A605CF-8B17-44FE-91DF-FE9F5D63280E}"
 EndProject
@@ -25,7 +29,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlogEngine.Web.Tests", "tes
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{747740E7-BDCB-4E8F-AAC4-D41F0AA463B8}"
 	ProjectSection(SolutionItems) = preProject
-		GlobalSupression.cs = GlobalSupression.cs
+		Directory.Build.props = Directory.Build.props
+		SolutionSuppression.cs = SolutionSuppression.cs
 	EndProjectSection
 EndProject
 Global
