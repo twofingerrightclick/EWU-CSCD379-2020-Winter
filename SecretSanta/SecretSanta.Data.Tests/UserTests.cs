@@ -28,15 +28,23 @@ namespace SecretSanta.Data.Tests
             
            
 
-
-
             var title = fixture.Create<string>();
-            var descrip = fixture.Create<string>();
+            var description = fixture.Create<string>();
             var url = fixture.Create<string>();
 
-            Gift sampleGift = new Gift(title, descrip, url);
-            sampleGift.User = sampleUser;
+            Gift sampleGift = new Gift(title, description, url, sampleUser);
+
            
+
+            //var gift = new Gift("Title", "Description", "Url", user);
+
+           /* Gift sampleGift = new Gift
+            {
+                Title = title,
+                Description = description,
+                Url = url
+            };*/
+
 
             sampleUser.Gifts.Add(sampleGift);
 
@@ -63,7 +71,6 @@ namespace SecretSanta.Data.Tests
 
 
         }
-
 
 
       /*  [TestMethod]

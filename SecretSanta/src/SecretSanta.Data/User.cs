@@ -23,6 +23,7 @@ namespace SecretSanta.Data
 
         public List<UserGroup> UserGroups { get; } = new List<UserGroup>();
 
+        private User() { }
         public User(string firstName, string lastName)
         {
             FirstName = firstName;

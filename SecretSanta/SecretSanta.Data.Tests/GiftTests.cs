@@ -19,6 +19,31 @@ namespace SecretSanta.Data.Tests
     {
 
         [TestMethod]
+
+        public async Task Initialize() {
+
+            var user = new User("FirstName", "LastName");
+
+            var title = "Title";
+            var description = "Description";
+            var url = "Url";
+            var gift = new Gift(title, description, url, user);
+
+            using (ApplicationDbContext dbContext = new ApplicationDbContext(Options, _HttpContextAccessor))
+            {
+
+                dbContext.Gifts.Add(gift);
+                await dbContext.SaveChangesAsync().ConfigureAwait(false);
+
+            }
+
+
+          
+
+
+        }
+
+        [TestMethod]
     
         public async Task Save_Gift_Retrieves_Gift_All_Properties_The_Same()
         {
@@ -28,16 +53,23 @@ namespace SecretSanta.Data.Tests
 
             var user = new User( "FirstName", "LastName");
 
+            var title = "Title";
+            var description = "Description";
+            var url = "Url";
 
-            var gift = new Gift("Title", "Description", "Url");
-            gift.User = user;
+            var gift = new Gift(title, description, url, user);
+
+          /*  Gift gift = new Gift {
+                Title = title, Description = description, Url = url 
+            }; */
+           
           
 
             using (ApplicationDbContext dbContext = new ApplicationDbContext(Options, _HttpContextAccessor))
             {
                 
                     dbContext.Gifts.Add(gift);
-                    await dbContext.SaveChangesAsync().ConfigureAwait(true);
+                    await dbContext.SaveChangesAsync().ConfigureAwait(false);
              
             }
 
@@ -46,7 +78,7 @@ namespace SecretSanta.Data.Tests
             using (ApplicationDbContext dbContext = new ApplicationDbContext(Options, _HttpContextAccessor))
             {
 
-                gifts = await dbContext.Gifts.Include(p => p.User).ToListAsync().ConfigureAwait(true);
+                gifts = await dbContext.Gifts.Include(p => p.User).ToListAsync().ConfigureAwait(false);
 
             }
 

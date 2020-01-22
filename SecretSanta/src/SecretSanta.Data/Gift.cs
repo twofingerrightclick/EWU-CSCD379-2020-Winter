@@ -14,18 +14,25 @@ namespace SecretSanta.Data
         public string Url { get => _Url; set => _Url = value ?? throw new ArgumentNullException(nameof(Url)); }
         private string _Url = string.Empty;
 
-   //if every gift requires a user then this:     
+        //if every gift requires a user then this:     
 #pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
-
-        public User User { get=>User; set=>User=value?? throw new ArgumentNullException(nameof(User)); }
+        private User? _User;
+        public User User { get=>_User!; set=>_User=value?? throw new ArgumentNullException(nameof(User)); }
 #pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 
-        public Gift(string title, string description, string url) {
+       
+        private Gift(string title, string description, string url)
+        {
             Title = title;
             Description = description;
             Url = url;
-            //User = user;
         }
-      
+
+        public Gift(string title, string description, string url, User user) : this(title, description, url)
+        {
+
+            User = user;
+        }
+
     }
 }
