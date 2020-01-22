@@ -6,9 +6,10 @@ namespace SecretSanta.Data
 {
     public class Group : FingerPrintEntityBase
     {
+        private string _Name=string.Empty;
         public string Name {
-            get => Name;
-            set => Name=value ?? throw new ArgumentNullException(nameof(value), "Cannot set to null");
+            get => _Name;
+            set => _Name=value ?? throw new ArgumentNullException(nameof(value), "Cannot set to null");
         }
 
 #pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.

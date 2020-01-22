@@ -20,12 +20,13 @@ namespace SecretSanta.Data
 
 #pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
-#pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
+
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IHttpContextAccessor httpContextAccessor) : base(options)
         {
             HttpContextAccessor = httpContextAccessor;
         }
+#pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

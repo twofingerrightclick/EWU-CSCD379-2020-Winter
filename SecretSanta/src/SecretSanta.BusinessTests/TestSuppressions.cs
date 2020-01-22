@@ -6,3 +6,4 @@
 
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1054:Uri parameters should not be strings", Justification = "uri should be a string for assignment")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores", Justification = "Test methods named using underscores")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1051:Do not declare visible instance fields", Justification = "Testing", Scope = "member", Target = "~F:SecretSanta.Data.Tests.TestInitializer._HttpContextAccessor")]

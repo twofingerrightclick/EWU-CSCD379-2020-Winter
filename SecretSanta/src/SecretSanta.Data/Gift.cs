@@ -15,10 +15,10 @@ namespace SecretSanta.Data
         private string _Url = string.Empty;
 
         //if every gift requires a user then this:     
-#pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
+
         private User? _User;
         public User User { get=>_User!; set=>_User=value?? throw new ArgumentNullException(nameof(User)); }
-#pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
+
 
        
         private Gift(string title, string description, string url)
