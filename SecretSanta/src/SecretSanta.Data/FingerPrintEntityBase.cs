@@ -6,6 +6,7 @@ namespace SecretSanta.Data
 {
     public class FingerPrintEntityBase : EntityBase
     {
+        
         private string _CreatedBy = string.Empty;
         public string CreatedBy { get => _CreatedBy; set => _CreatedBy = value ?? throw new ArgumentNullException(nameof(CreatedBy)); }
         public DateTime CreatedOn { get; set; }

@@ -28,6 +28,7 @@ namespace SecretSanta.Data
         {
             FirstName = firstName;
             LastName = lastName;
+            
         }
     }
 }

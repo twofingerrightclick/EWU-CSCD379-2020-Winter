@@ -29,6 +29,11 @@ namespace SecretSanta.Data.Tests
             var url = "Url";
             var gift = new Gift(title, description, url, user);
 
+            User s = gift.User;
+
+       
+
+
             using (ApplicationDbContext dbContext = new ApplicationDbContext(Options, _HttpContextAccessor))
             {
 
