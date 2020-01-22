@@ -21,30 +21,13 @@ namespace BlogEngine.Data.Tests
             IHttpContextAccessor httpContextAccessor = Mock.Of<IHttpContextAccessor>(hta =>
                 hta.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier) == new Claim(ClaimTypes.NameIdentifier, "imontoya"));
 
-            var post = new Post
-            {
-                Title = "My Title",
-                Slug = "my-title",
-                Content = "Here is some basic content"
-            };
-            var author = new Author
-            {
-                FirstName = "Inigo",
-                LastName = "Montoya",
-                Email = "inigo@montoya.me"
-            };
-            var tag1 = new Tag
-            {
-                Name = "C#"
-            };
-            var tag2 = new Tag
-            {
-                Name = "Lecture"
-            };
+            var author = new Author("Inigo", "Montoya", "inigo@montoya.me");
+            var post = new Post("My Title", "Here is some basic content", author) { Slug = "my-title" };
+
+            var tag1 = new Tag(name: "C#");
+            var tag2 = new Tag(name: "Lecture");
 
             // Act
-            post.Author = author;
-            post.PostTags = new List<PostTag>();
             post.PostTags.Add(new PostTag { Post = post, Tag = tag1 });
             post.PostTags.Add(new PostTag { Post = post, Tag = tag2 });
 

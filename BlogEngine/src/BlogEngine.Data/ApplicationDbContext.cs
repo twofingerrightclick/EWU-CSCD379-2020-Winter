@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace BlogEngine.Data
@@ -18,15 +17,30 @@ namespace BlogEngine.Data
         public DbSet<PostTag> PostTags { get; set; }
         public IHttpContextAccessor HttpContextAccessor { get; set; }
 
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
+// Justifiction: Properties initialized by Entity Framework.
+#nullable disable // CS8618: Non-nullable field is uninitialized. Consider declaring as nullable.
+        public ApplicationDbContext(
+#nullable enable
+            DbContextOptions<ApplicationDbContext>? options) : base(options) { }
 
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IHttpContextAccessor httpContextAccessor) : base(options)
+        // Justifiction: Properties initialized by Entity Framework.
+#nullable disable // CS8618: Non-nullable field is uninitialized. Consider declaring as nullable.
+        public ApplicationDbContext(
+#nullable enable
+
+                DbContextOptions<ApplicationDbContext> options, IHttpContextAccessor httpContextAccessor) : 
+            base(options)
         {
             HttpContextAccessor = httpContextAccessor;
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            if (modelBuilder is null)
+            {
+                throw new ArgumentNullException(nameof(modelBuilder));
+            }
+
             modelBuilder.Entity<PostTag>().HasKey(pt => new { pt.PostId, pt.TagId });
 
             modelBuilder.Entity<PostTag>()
@@ -46,7 +60,7 @@ namespace BlogEngine.Data
             return base.SaveChanges();
         }
 
-        public override Task<int> SaveChangesAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public override Task<int> SaveChangesAsync(System.Threading.CancellationToken cancellationToken = default)
         {
             AddFingerPrinting();
             return base.SaveChangesAsync(cancellationToken);
@@ -59,8 +73,7 @@ namespace BlogEngine.Data
 
             foreach (var entry in added)
             {
-                var fingerPrintEntry = entry.Entity as FingerPrintEntityBase;
-                if (fingerPrintEntry != null)
+                if (entry.Entity is FingerPrintEntityBase fingerPrintEntry)
                 {
                     fingerPrintEntry.CreatedOn = DateTime.UtcNow;
                     fingerPrintEntry.CreatedBy = HttpContextAccessor?.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier).Value ?? "";
@@ -71,8 +84,7 @@ namespace BlogEngine.Data
 
             foreach (var entry in modified)
             {
-                var fingerPrintEntry = entry.Entity as FingerPrintEntityBase;
-                if (fingerPrintEntry != null)
+                if (entry.Entity is FingerPrintEntityBase fingerPrintEntry)
                 {
                     fingerPrintEntry.ModifiedOn = DateTime.UtcNow;
                     fingerPrintEntry.ModifiedBy = HttpContextAccessor?.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier).Value ?? "";

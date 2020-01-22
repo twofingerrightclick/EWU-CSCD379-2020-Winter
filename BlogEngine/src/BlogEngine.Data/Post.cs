@@ -7,18 +7,43 @@ namespace BlogEngine.Data
 {
     public class Post : FingerPrintEntityBase
     {
-        public DateTime PostedOn { get; set; }
+        public DateTime PostedOn { get; private set; }
         public bool IsPublished { get; set; }
 
         public string Title { get; set; }
 
         public string Content { get; set; }
-        
-        public List<Comment> Comments { get; set; }
+
+        public List<Comment> Comments { get; } = new List<Comment>();
         public Author Author { get; set; }
         public int AuthorId { get; set; }
-        public string Slug { get; set; }
+        public string? Slug { get; set; }
 
-        public List<PostTag> PostTags { get; set; }
+        public List<PostTag> PostTags { get; } = new List<PostTag>();
+
+        public Post(string title, string content, Author author) :
+            this(title, content,
+// Justification: There is no way to check for nullability with constructor chaining.
+#pragma warning disable CA1062 // Validate arguments of public methods
+                author.Id)
+#pragma warning restore CA1062 // Validate arguments of public methods
+        {
+            Title = title;
+            Content = content;
+            Author = author;
+        }
+
+// Justification: Used by entity framework to instantiate object from the database.
+#pragma warning disable IDE0051 // Remove unused private members.  Ignore because the constructor is used by entity framework.
+#nullable disable // CS8618: Non-nullable field is uninitialized. Consider declaring as nullable.
+        private Post(
+#nullable enable
+#pragma warning restore IDE0051 // Remove unused private members
+            string title, string content, int authorId)
+        {
+            Title = title;
+            Content = content;
+            AuthorId = authorId;
+        }
     }
 }

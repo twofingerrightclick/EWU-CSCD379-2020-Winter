@@ -21,23 +21,14 @@ namespace BlogEngine.Data.Tests
             // Arrange
             using (var applicationDbContext = new ApplicationDbContext(Options))
             {
-                var author = new Author
-                {
-                    FirstName = "Inigo",
-                    LastName = "Montoya",
-                    Email = "inigo@montoya.me"
-                };
+                var author = new Author("Inigo", "Montoya", "inigo@montoya.me");
                 applicationDbContext.Authors.Add(author);
 
-                var author2 = new Author
-                {
-                    FirstName = "Inigo",
-                    LastName = "Montoya",
-                    Email = "inigo@montoya.me"
-                };
+                var author2 = new Author("Inigo", "Montoya", "inigo@montoya.me");
+
                 applicationDbContext.Authors.Add(author2);
 
-                await applicationDbContext.SaveChangesAsync();
+                await applicationDbContext.SaveChangesAsync().ConfigureAwait(false);
 
                 authorId = author.Id;
             }
@@ -46,7 +37,8 @@ namespace BlogEngine.Data.Tests
             // Assert
             using (var applicationDbContext = new ApplicationDbContext(Options))
             {
-                var author = await applicationDbContext.Authors.Where(a => a.Id == authorId).SingleOrDefaultAsync();
+                Author author = 
+                    await applicationDbContext.Authors.Where(a => a.Id == authorId).SingleOrDefaultAsync();
 
                 Assert.IsNotNull(author);
                 Assert.AreEqual("Inigo", author.FirstName);
@@ -54,7 +46,7 @@ namespace BlogEngine.Data.Tests
         }
 
         [TestMethod]
-        public async Task CreateAuthor_ShouldSetFingerPrintDataOnInitialSave()
+        public async Task CreateAuthor_ShouldSetFingerPrintDataOnInitialSave()  
         {
             IHttpContextAccessor httpContextAccessor = Mock.Of<IHttpContextAccessor>(hta =>
                 hta.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier) == new Claim(ClaimTypes.NameIdentifier, "imontoya"));
@@ -63,23 +55,13 @@ namespace BlogEngine.Data.Tests
             // Arrange
             using (var applicationDbContext = new ApplicationDbContext(Options, httpContextAccessor))
             {
-                var author = new Author
-                {
-                    FirstName = "Inigo",
-                    LastName = "Montoya",
-                    Email = "inigo@montoya.me"
-                };
+                var author = new Author("Inigo", "Montoya", "inigo@montoya.me");
                 applicationDbContext.Authors.Add(author);
 
-                var author2 = new Author
-                {
-                    FirstName = "Inigo",
-                    LastName = "Montoya",
-                    Email = "inigo@montoya.me"
-                };
+                var author2 = new Author("Inigo", "Montoya", "inigo@montoya.me");
                 applicationDbContext.Authors.Add(author2);
 
-                await applicationDbContext.SaveChangesAsync();
+                await applicationDbContext.SaveChangesAsync().ConfigureAwait(false);
 
                 authorId = author.Id;
             }
@@ -93,6 +75,8 @@ namespace BlogEngine.Data.Tests
                 Assert.IsNotNull(author);
                 Assert.AreEqual("imontoya", author.CreatedBy);
                 Assert.AreEqual("imontoya", author.ModifiedBy);
+                Assert.AreEqual("Inigo", author.FirstName);
+
             }
         }
 
@@ -106,20 +90,12 @@ namespace BlogEngine.Data.Tests
             // Arrange
             using (var applicationDbContext = new ApplicationDbContext(Options, httpContextAccessor))
             {
-                var author = new Author
-                {
-                    FirstName = "Inigo",
-                    LastName = "Montoya",
-                    Email = "inigo@montoya.me"
-                };
+                var author = new Author("Inigo", "Montoya", "inigo@montoya.me");
+
                 applicationDbContext.Authors.Add(author);
 
-                var author2 = new Author
-                {
-                    FirstName = "Inigo",
-                    LastName = "Montoya",
-                    Email = "inigo@montoya.me"
-                };
+                var author2 = new Author("Inigo", "Montoya", "inigo@montoya.me");
+
                 applicationDbContext.Authors.Add(author2);
 
                 await applicationDbContext.SaveChangesAsync();
