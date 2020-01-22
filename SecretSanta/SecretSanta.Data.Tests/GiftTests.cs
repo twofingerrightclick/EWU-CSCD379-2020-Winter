@@ -26,25 +26,12 @@ namespace SecretSanta.Data.Tests
             var fixture = new Fixture();
 
 
-            var user = new User
-            {
-                FirstName = "FirstName",
-                LastName = "LastName",
-                Santa = null,
-                Gifts = new List<Gift>(),
-                UserGroups = new List<UserGroup>()
+            var user = new User( "FirstName", "LastName");
 
 
-            };
-
-            var gift = new Gift
-            {
-                Id = fixture.Create<int>(),
-                Title = "Title",
-                Description = "Description",
-                Url = "Url",
-                User = user
-            };
+            var gift = new Gift("Title", "Description", "Url");
+            gift.User = user;
+          
 
             using (ApplicationDbContext dbContext = new ApplicationDbContext(Options, _HttpContextAccessor))
             {

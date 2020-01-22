@@ -24,15 +24,9 @@ namespace SecretSanta.Data.Tests
             string firstName = "FirstName";
             string lastName = "LastName";
 
-            var sampleUser = new User
-            {
-                FirstName = firstName,
-                LastName = lastName,
-                Santa = new User(),
-                Gifts = new List<Gift>(),
-                UserGroups = new List<UserGroup>()
-
-            };
+            var sampleUser = new User(firstName, lastName);
+            
+           
 
 
 
@@ -40,13 +34,9 @@ namespace SecretSanta.Data.Tests
             var descrip = fixture.Create<string>();
             var url = fixture.Create<string>();
 
-            Gift sampleGift = new Gift
-            {
-                Title=title,
-                Description=descrip,
-                Url=url
-
-            };
+            Gift sampleGift = new Gift(title, descrip, url);
+            sampleGift.User = sampleUser;
+           
 
             sampleUser.Gifts.Add(sampleGift);
 
@@ -55,7 +45,7 @@ namespace SecretSanta.Data.Tests
             {
 
                 dbContext.Users.Add(sampleUser);
-                await dbContext.SaveChangesAsync().ConfigureAwait(true);
+                await dbContext.SaveChangesAsync().ConfigureAwait(false);
 
             }
 
@@ -64,7 +54,7 @@ namespace SecretSanta.Data.Tests
             using (ApplicationDbContext dbContext = new ApplicationDbContext(Options, _HttpContextAccessor))
             {
 
-                user = await dbContext.Users.Where(u => u.LastName == "LastName").Include(user=>user.Gifts).SingleOrDefaultAsync().ConfigureAwait(true);
+                user = await dbContext.Users.Where(u => u.LastName == "LastName").Include(user=>user.Gifts).SingleOrDefaultAsync().ConfigureAwait(false);
 
             }
 
