@@ -10,10 +10,10 @@ namespace BlogEngine.Data
         [Required]
         public string? CreatedBy { get; internal set; }
         [Required]
-        public DateTime? CreatedOn { get; set; }
+        public DateTime? CreatedOn { get; internal set; }
         [Required]
-        public string? ModifiedBy { get; set; }
+        public string? ModifiedBy { get; internal set; }
         [Required]
-        public DateTime? ModifiedOn { get; set; }
+        public DateTime? ModifiedOn { get; internal set; }
     }
 }

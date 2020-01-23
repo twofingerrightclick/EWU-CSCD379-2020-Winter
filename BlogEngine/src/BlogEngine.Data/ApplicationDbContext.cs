@@ -10,18 +10,18 @@ namespace BlogEngine.Data
 {
     public class ApplicationDbContext : DbContext
     {
-        public DbSet<Post> Posts { get; set; }
-        public DbSet<Author> Authors { get; set; }
-        public DbSet<Comment> Comments { get; set; }
-        public DbSet<Tag> Tags { get; set; }
-        public DbSet<PostTag> PostTags { get; set; }
-        public IHttpContextAccessor HttpContextAccessor { get; set; }
+        public DbSet<Post> Posts { get; private set; }
+        public DbSet<Author> Authors { get; private set; }
+        public DbSet<Comment> Comments { get; private set; }
+        public DbSet<Tag> Tags { get; private set; }
+        public DbSet<PostTag> PostTags { get; private set; }
+        public IHttpContextAccessor HttpContextAccessor { get; private set; }
 
 // Justifiction: Properties initialized by Entity Framework.
 #nullable disable // CS8618: Non-nullable field is uninitialized. Consider declaring as nullable.
         public ApplicationDbContext(
 #nullable enable
-            DbContextOptions<ApplicationDbContext>? options) : base(options) { }
+            DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
 // Justifiction: Properties initialized by Entity Framework.
 #nullable disable // CS8618: Non-nullable field is uninitialized. Consider declaring as nullable.

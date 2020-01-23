@@ -16,17 +16,12 @@ namespace BlogEngine.Data
 
         public List<Comment> Comments { get; } = new List<Comment>();
         public Author Author { get; set; }
-        public int AuthorId { get; set; }
         public string? Slug { get; set; }
 
         public List<PostTag> PostTags { get; } = new List<PostTag>();
 
         public Post(string title, string content, Author author) :
-            this(title, content,
-// Justification: There is no way to check for nullability with constructor chaining.
-#pragma warning disable CA1062 // Validate arguments of public methods
-                author.Id)
-#pragma warning restore CA1062 // Validate arguments of public methods
+            this(title, content)
         {
             Author = author;
         }
@@ -37,11 +32,11 @@ namespace BlogEngine.Data
         private Post(
 #nullable enable
 #pragma warning restore IDE0051 // Remove unused private members
-            string title, string content, int authorId)
+            string title, string content)
         {
             Title = title;
             Content = content;
-            AuthorId = authorId;
+            //AuthorId = authorId;
         }
     }
 }

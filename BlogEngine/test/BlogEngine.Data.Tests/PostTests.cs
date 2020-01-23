@@ -38,8 +38,8 @@ namespace BlogEngine.Data.Tests
                 //var posts = await dbContext.Posts.ToListAsync();
                 Assert.AreEqual(1, posts.Count);
                 Assert.AreEqual(post.Title, posts[0].Title);
-                Assert.AreNotEqual(0, posts[0].AuthorId);
-                //Assert.IsNotNull(posts[0].Author);
+                Assert.IsNotNull(posts[0].Author);
+                Assert.AreNotEqual(0, posts[0].Author.Id);
             }
         }
     }

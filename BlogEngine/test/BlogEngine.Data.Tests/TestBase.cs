@@ -41,10 +41,8 @@ namespace BlogEngine.Data.Tests
                 .EnableSensitiveDataLogging()
                 .Options;
 
-            using (var context = new ApplicationDbContext(Options))
-            {
-                context.Database.EnsureCreated();
-            }
+            using var context = new ApplicationDbContext(Options);
+            context.Database.EnsureCreated();
         }
 
         [TestCleanup]

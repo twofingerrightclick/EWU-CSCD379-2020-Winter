@@ -17,7 +17,7 @@ namespace BlogEngine.Data.Tests
         [TestMethod]
         public async Task CreateAuthor_ShouldSaveIntoDatabase()
         {
-            int authorId = -1;
+            int? authorId = null;
             // Arrange
             using (var applicationDbContext = new ApplicationDbContext(Options))
             {
@@ -51,7 +51,7 @@ namespace BlogEngine.Data.Tests
             IHttpContextAccessor httpContextAccessor = Mock.Of<IHttpContextAccessor>(hta =>
                 hta.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier) == new Claim(ClaimTypes.NameIdentifier, "imontoya"));
 
-            int authorId = -1;
+            int? authorId;
             // Arrange
             using (var applicationDbContext = new ApplicationDbContext(Options, httpContextAccessor))
             {
@@ -86,7 +86,7 @@ namespace BlogEngine.Data.Tests
             IHttpContextAccessor httpContextAccessor = Mock.Of<IHttpContextAccessor>(hta =>
                 hta.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier) == new Claim(ClaimTypes.NameIdentifier, "imontoya"));
 
-            int authorId = -1;
+            int? authorId;
             // Arrange
             using (var applicationDbContext = new ApplicationDbContext(Options, httpContextAccessor))
             {
