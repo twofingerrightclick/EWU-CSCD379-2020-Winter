@@ -30,7 +30,7 @@ namespace BlogEngine.Data.Tests
         }
 
         [TestInitialize]
-        public void OpenConnection()
+        virtual public void TestInitialize()
         {
             SqliteConnection = new SqliteConnection("DataSource=:memory:");
             SqliteConnection.Open();
@@ -46,7 +46,7 @@ namespace BlogEngine.Data.Tests
         }
 
         [TestCleanup]
-        public void CloseConnection()
+        virtual  public void TestCleanup()
         {
             SqliteConnection.Close();
         }

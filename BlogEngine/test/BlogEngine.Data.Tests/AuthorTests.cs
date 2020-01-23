@@ -2,11 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace BlogEngine.Data.Tests
@@ -24,7 +21,7 @@ namespace BlogEngine.Data.Tests
                 var author = SampleData.CreateInigoMontoya();
                 applicationDbContext.Authors.Add(author);
 
-                var author2 = new Author("Inigo", "Montoya", "inigo@montoya.me");
+                var author2 = SampleData.CreateInigoMontoya();
 
                 applicationDbContext.Authors.Add(author2);
 
@@ -55,13 +52,13 @@ namespace BlogEngine.Data.Tests
             // Arrange
             using (var applicationDbContext = new ApplicationDbContext(Options, httpContextAccessor))
             {
-                var author = new Author("Inigo", "Montoya", "inigo@montoya.me");
+                var author = SampleData.CreateInigoMontoya();
                 applicationDbContext.Authors.Add(author);
 
-                var author2 = new Author("Inigo", "Montoya", "inigo@montoya.me");
+                var author2 = SampleData.CreateInigoMontoya();
                 applicationDbContext.Authors.Add(author2);
 
-                await applicationDbContext.SaveChangesAsync().ConfigureAwait(false);
+                await applicationDbContext.SaveChangesAsync();
 
                 authorId = author.Id;
             }

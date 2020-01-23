@@ -1,24 +1,17 @@
-﻿using BlogEngine.Data;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
+﻿using AutoMapper;
+using BlogEngine.Data;
+using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace BlogEngine.Business
 {
-    public class AuthorService
+    public class AuthorService : EntityService<Author>, IAuthorService
     {
-        private ApplicationDbContext DbContext { get; }
-
-        public AuthorService(ApplicationDbContext dbContext)
-        {
-            DbContext = dbContext;
-        }
-
-        public async Task<Author> InsertAsync(Author author)
-        {
-            EntityEntry<Author> insertedEntity = DbContext.Authors.Add(author);
-            await DbContext.SaveChangesAsync();
-            return insertedEntity.Entity;
-        }
+        public AuthorService(ApplicationDbContext context, IMapper mapper):
+            base(context, mapper)
+        { }
     }
 }

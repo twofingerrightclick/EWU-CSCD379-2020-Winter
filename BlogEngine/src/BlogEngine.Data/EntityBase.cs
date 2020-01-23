@@ -8,6 +8,6 @@ namespace BlogEngine.Data
     public class EntityBase
     {
         [Required]
-        public int Id { get; protected set; }
+        public int? Id { get; protected set; }
     }
 }
