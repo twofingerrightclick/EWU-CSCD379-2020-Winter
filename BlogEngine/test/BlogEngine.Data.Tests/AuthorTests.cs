@@ -21,7 +21,7 @@ namespace BlogEngine.Data.Tests
             // Arrange
             using (var applicationDbContext = new ApplicationDbContext(Options))
             {
-                var author = new Author("Inigo", "Montoya", "inigo@montoya.me");
+                var author = SampleData.CreateInigoMontoya();
                 applicationDbContext.Authors.Add(author);
 
                 var author2 = new Author("Inigo", "Montoya", "inigo@montoya.me");
@@ -41,7 +41,7 @@ namespace BlogEngine.Data.Tests
                     await applicationDbContext.Authors.Where(a => a.Id == authorId).SingleOrDefaultAsync();
 
                 Assert.IsNotNull(author);
-                Assert.AreEqual("Inigo", author.FirstName);
+                Assert.AreEqual(SampleData.Inigo, author.FirstName);
             }
         }
 

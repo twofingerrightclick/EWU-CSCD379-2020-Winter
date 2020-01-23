@@ -28,8 +28,6 @@ namespace BlogEngine.Data
                 author.Id)
 #pragma warning restore CA1062 // Validate arguments of public methods
         {
-            Title = title;
-            Content = content;
             Author = author;
         }
 

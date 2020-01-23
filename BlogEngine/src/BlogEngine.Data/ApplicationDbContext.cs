@@ -23,7 +23,7 @@ namespace BlogEngine.Data
 #nullable enable
             DbContextOptions<ApplicationDbContext>? options) : base(options) { }
 
-        // Justifiction: Properties initialized by Entity Framework.
+// Justifiction: Properties initialized by Entity Framework.
 #nullable disable // CS8618: Non-nullable field is uninitialized. Consider declaring as nullable.
         public ApplicationDbContext(
 #nullable enable

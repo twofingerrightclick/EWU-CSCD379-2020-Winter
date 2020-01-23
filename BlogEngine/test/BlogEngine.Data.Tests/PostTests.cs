@@ -16,16 +16,11 @@ namespace BlogEngine.Data.Tests
         [TestMethod]
         public async Task AddPost_WithAuthor_ShouldCreateForeignRelationship()
         {
-            var author = new Author("Inigo", "Montoya", "inigo@montoya.me")
-            {
-                CreatedBy = "imontoya",
-                ModifiedBy = "imontoya"
-            };
+            var author = new Author("Inigo", "Montoya", "inigo@montoya.me");
+
             var post = new Post("My Title", "Here is some basic content", author)
             { 
-                Slug = "my-title",
-                ModifiedBy = "imontoya",
-                CreatedBy = "imontoya"
+                Slug = "my-title"
             };
             // Arrange
             using (ApplicationDbContext dbContext = new ApplicationDbContext(Options))
