@@ -9,7 +9,7 @@ using System.Security.Claims;
 
 namespace SecretSanta.Data.Tests
 {
-    public class TestInitializer
+    public class TestBase
     {
 #nullable disable
         private SqliteConnection SqliteConnection { get; set; }

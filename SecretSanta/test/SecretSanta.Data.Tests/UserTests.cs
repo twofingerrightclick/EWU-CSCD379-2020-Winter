@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace SecretSanta.Data.Tests
 {
     [TestClass()]
-    public class UserTests : TestInitializer
+    public class UserTests : TestBase
 
     {
 
