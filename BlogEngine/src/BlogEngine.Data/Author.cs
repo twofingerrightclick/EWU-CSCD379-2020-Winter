@@ -9,11 +9,9 @@ namespace BlogEngine.Data
         public string FirstName
         {
             get { return _FirstName; }
-            set {
-                if (string.IsNullOrWhiteSpace(value))
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
+            set 
+            {
+                AssertIsNotNullOrWhitespace(value);
                 _FirstName = value;
             }
         }
@@ -24,10 +22,7 @@ namespace BlogEngine.Data
             get { return _LastName; }
             set
             {
-                if (string.IsNullOrWhiteSpace(value))
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
+                AssertIsNotNullOrWhitespace(value);
                 _LastName = value;
             }
         }
@@ -37,10 +32,7 @@ namespace BlogEngine.Data
             get { return _Email; }
             set
             {
-                if (string.IsNullOrWhiteSpace(value))
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
+                AssertIsNotNullOrWhitespace(value);
                 _Email = value;
             }
         }

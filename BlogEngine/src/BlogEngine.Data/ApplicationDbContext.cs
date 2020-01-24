@@ -41,17 +41,17 @@ namespace BlogEngine.Data
                 throw new ArgumentNullException(nameof(modelBuilder));
             }
 
-            modelBuilder.Entity<PostTag>().HasKey(pt => new { pt.PostId, pt.TagId });
+            modelBuilder.Entity<PostTag>().HasKey(postTag => new { postTag.PostId, postTag.TagId });
 
             modelBuilder.Entity<PostTag>()
-                .HasOne(pt => pt.Post)
-                .WithMany(p => p.PostTags)
-                .HasForeignKey(pt => pt.PostId);
+                .HasOne(postTag => postTag.Post)
+                .WithMany(post => post!.PostTags)
+                .HasForeignKey(postTag => postTag.PostId);
 
             modelBuilder.Entity<PostTag>()
-                .HasOne(pt => pt.Tag)
-                .WithMany(t => t.PostTags)
-                .HasForeignKey(pt => pt.TagId);
+                .HasOne(postTag => postTag.Tag)
+                .WithMany(tag => tag!.PostTags)
+                .HasForeignKey(postTag => postTag.TagId);
         }
 
         public override int SaveChanges()

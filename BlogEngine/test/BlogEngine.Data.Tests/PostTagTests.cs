@@ -28,8 +28,8 @@ namespace BlogEngine.Data.Tests
             var tag2 = new Tag(name: "Lecture");
 
             // Act
-            post.PostTags.Add(new PostTag { Post = post, Tag = tag1 });
-            post.PostTags.Add(new PostTag { Post = post, Tag = tag2 });
+            post.PostTags.Add(new PostTag( post, tag1));
+            post.PostTags.Add(new PostTag( post, tag2));
 
             using (ApplicationDbContext dbContext = new ApplicationDbContext(Options, httpContextAccessor))
             {
