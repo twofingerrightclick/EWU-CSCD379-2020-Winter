@@ -28,5 +28,6 @@ namespace SecretSanta.Data
             User = user ?? throw new ArgumentNullException(nameof(user)); ;
             UserId = user!.Id;
         }
+        
     }
 }
