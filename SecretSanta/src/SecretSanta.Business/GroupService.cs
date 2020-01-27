@@ -4,7 +4,7 @@ using System.Text;
 
 namespace SecretSanta.Business
 {
-    class GroupServices
+    class GroupService
     {
     }
 }
