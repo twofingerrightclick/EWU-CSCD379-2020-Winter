@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -19,7 +18,9 @@ namespace SecretSanta.Data
         public DbSet<UserGroup> UserGroups { get; set; }
         private IHttpContextAccessor HttpContextAccessor { get; set; }
 #nullable enable
+        
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> dbContext) : base(dbContext) { }
+        
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> dbContext, IHttpContextAccessor httpContextAccessor) : base(dbContext)
         {
             HttpContextAccessor = httpContextAccessor;
@@ -38,6 +39,7 @@ namespace SecretSanta.Data
             AddFingerPrinting();
             return base.SaveChanges();
         }
+
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             AddFingerPrinting();
@@ -49,7 +51,7 @@ namespace SecretSanta.Data
             var modified = ChangeTracker.Entries().Where(e => e.State == EntityState.Modified);
             var added = ChangeTracker.Entries().Where(e => e.State == EntityState.Added);
 
-            foreach (var entry in added)
+            foreach (EntityEntry entry in added)
             {
                 if (entry.Entity is FingerPrintEntityBase fingerPrintEntry)
                 {
@@ -60,7 +62,7 @@ namespace SecretSanta.Data
                 }
             }
 
-            foreach (var entry in modified)
+            foreach (EntityEntry entry in modified)
             {
                 if (entry.Entity is FingerPrintEntityBase fingerPrintEntry)
                 {
