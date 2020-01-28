@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace SecretSanta.Business
 {
-    public class IgnoreIDAutomapperConfigurationProfile<TEntity> : Profile where TEntity : EntityBase 
+    public class IgnoreIDAutomapperConfigurationProfile<TEntity> where TEntity : EntityBase 
     {
         private MapperConfiguration _MapperConfiguration;
 
