@@ -11,11 +11,10 @@ namespace SecretSanta.Business.Tests
     [TestClass]
     public class GiftServiceTest : TestBase
     {
-
-        string _Title = "Ring Doorbell";
-        string _Url = "www.ring.com";
-        string _Description = "The doorbell that saw too much";
-        User _SampleUser = new User("Inigo", "Montoya");
+        readonly string _Title = "Ring Doorbell";
+        readonly string _Url = "www.ring.com";
+        readonly string _Description = "The doorbell that saw too much";
+        readonly User _SampleUser = new User("Inigo", "Montoya");
 
 
 
