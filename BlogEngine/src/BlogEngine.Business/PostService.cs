@@ -1,17 +1,14 @@
 ﻿using AutoMapper;
 using BlogEngine.Data;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace BlogEngine.Business
 {
     public class PostService : EntityService<Post>, IPostService
     {
-        public PostService(ApplicationDbContext applicationDbContext, IMapper mapper) :
-            base(applicationDbContext, mapper)
+        public PostService(ApplicationDbContext applicationDbContext, IMapper mapper) 
+            : base(applicationDbContext, mapper)
         {
         }
 
