@@ -1,17 +1,17 @@
 ﻿using AutoMapper;
-using BlogEngine.Data;
 using Microsoft.EntityFrameworkCore;
+using SecretSanta.Data;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace BlogEngine.Business
+namespace SecretSanta.Business
 {
     public abstract class EntityService<TEntity> : IEntityService<TEntity>
         where TEntity : EntityBase
     {
         protected ApplicationDbContext ApplicationDbContext { get; }
-        protected IMapper Mapper { get; }
+        protected IMapper Mapper { get; } 
 
         public EntityService(ApplicationDbContext applicationDbContext, IMapper mapper)
         {
@@ -26,8 +26,12 @@ namespace BlogEngine.Business
         public async Task<List<TEntity>> FetchAllAsync() =>
             await ApplicationDbContext.Set<TEntity>().ToListAsync();
 
-        virtual public async Task<TEntity> FetchByIdAsync(int id) =>
-            await ApplicationDbContext.Set<TEntity>().SingleAsync(item => item.Id == id);
+        virtual public async Task<TEntity> FetchByIdAsync(int id)
+        {
+            return await (ApplicationDbContext.Set<TEntity>().SingleAsync(item => item.Id == id));
+
+            
+        }
 
         public async Task<TEntity> InsertAsync(TEntity entity)
         {

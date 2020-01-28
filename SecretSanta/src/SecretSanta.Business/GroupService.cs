@@ -1,10 +1,23 @@
-﻿using System;
+﻿using AutoMapper;
+using SecretSanta.Data;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace SecretSanta.Business
 {
-    class GroupService
+    public class GroupService : EntityService<Group>, IEntityService<Group>
     {
+
+        public GroupService(ApplicationDbContext applicationDbContext, IMapper mapper) :
+       base(applicationDbContext, mapper)
+        {
+
+
+        }
+
+
+
+
     }
 }
