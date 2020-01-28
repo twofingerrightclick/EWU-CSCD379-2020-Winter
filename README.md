@@ -26,10 +26,10 @@ For this assignment you will be setting up the SecretSanta.Api project.
 - Creating test doubles can be strealined by using a mocking framework (such as Moq). Rather than writing your own test doubles use a mocking framewokr to create them.
 
 ## Relevant Docs
-[S.O.L.I.D.](https://deviq.com/solid/)
-[Dependency Inversion Principle](https://deviq.com/dependency-inversion-principle/)
-[New is glue](https://ardalis.com/new-is-glue)
-[Use web API analyzers](https://docs.microsoft.com/en-us/aspnet/core/web-api/advanced/analyzers)
-[Dependency injection in ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection)
-[Controller action return types in ASP.NET Core web API](https://docs.microsoft.com/aspnet/core/web-api/action-return-types)
-[Get started with NSwag and ASP.NET Core](https://docs.microsoft.com/aspnet/core/tutorials/getting-started-with-nswag)
+* [S.O.L.I.D.](https://deviq.com/solid/)
+* [Dependency Inversion Principle](https://deviq.com/dependency-inversion-principle/)
+* [New is glue](https://ardalis.com/new-is-glue)
+* [Use web API analyzers](https://docs.microsoft.com/en-us/aspnet/core/web-api/advanced/analyzers)
+* [Dependency injection in ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection)
+* [Controller action return types in ASP.NET Core web API](https://docs.microsoft.com/aspnet/core/web-api/action-return-types)
+* [Get started with NSwag and ASP.NET Core](https://docs.microsoft.com/aspnet/core/tutorials/getting-started-with-nswag)
