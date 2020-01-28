@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using SecretSanta.Data;
 using System;
 using System.Collections.Generic;
@@ -18,9 +19,18 @@ namespace SecretSanta.Business
             ApplicationDbContext = applicationDbContext ?? throw new ArgumentNullException(nameof(applicationDbContext));
             Mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
-        public Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            bool deleteResult = false;
+            TEntity entity = await FetchByIdAsync(id);
+            EntityEntry recieved = ApplicationDbContext.Set<TEntity>().Remove(entity);
+            if (recieved.State == EntityState.Deleted)
+            {
+                deleteResult = true;
+                await ApplicationDbContext.SaveChangesAsync();
+            }
+
+            return deleteResult;
         }
 
         public async Task<List<TEntity>> FetchAllAsync() =>
@@ -55,5 +65,7 @@ namespace SecretSanta.Business
             await ApplicationDbContext.SaveChangesAsync();
             return result;
         }
+
+       
     }
 }
