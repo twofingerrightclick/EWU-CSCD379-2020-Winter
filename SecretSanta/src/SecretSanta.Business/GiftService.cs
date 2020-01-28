@@ -1,28 +1,26 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using SecretSanta.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-using System.Text;
+using System.Threading.Tasks;
 
 namespace SecretSanta.Business
 {
-    class GiftService
+    public class GiftService : EntityService<Gift>, IEntityService<Gift>
     {
-        static MapperConfiguration InitializeGiftNoIdMapper()
+
+
+
+        public GiftService(ApplicationDbContext applicationDbContext, IMapper mapper) :
+            base(applicationDbContext, mapper)
         {
-            var config = new MapperConfiguration(cfg => {
-               
-                cfg.CreateMap<Gift,Gift >().Ignore(gift=>gift.Id);
-            });
-            return config;
+
         }
 
-        MapperConfiguration _MapperConfiguration = InitializeGiftNoIdMapper();
+        public override async Task<Gift> FetchByIdAsync(int id) =>
+          await ApplicationDbContext.Set<Gift>().Include(nameof(Gift.User)).SingleAsync(item => item.Id == id);
 
 
-
-
+      
 
     }
 }

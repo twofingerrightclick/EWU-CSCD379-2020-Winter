@@ -11,6 +11,11 @@ namespace SecretSanta.Business
                             Expression<Func<TDestination, object>> selector)
 
         {
+            if (map is null)
+            {
+                throw new ArgumentNullException(nameof(map));
+            }
+
             map.ForMember(selector, config => config.Ignore());
             return map;
         }
