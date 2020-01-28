@@ -49,7 +49,9 @@ namespace SecretSanta.Business.Tests
             {
 
                 //setup
-                var mapper = new IgnoreIDAutomapperConfigurationProfile<Gift>().Mapper;
+                //var mapper = new IgnoreIDAutomapperConfigurationProfile<Gift>().Mapper;
+                
+                var mapper = AutoMapperProfileConfiguration.CreateMapper();
 
                 GiftService giftService = new GiftService(dbContext, mapper);
 
