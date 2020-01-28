@@ -22,13 +22,20 @@ namespace SecretSanta.Business
         public async Task<bool> DeleteAsync(int id)
         {
             bool deleteResult = false;
-            TEntity entity = await FetchByIdAsync(id);
-            EntityEntry recieved = ApplicationDbContext.Set<TEntity>().Remove(entity);
-            if (recieved.State == EntityState.Deleted)
+
+            TEntity entity = ApplicationDbContext.Set<TEntity>().Find(id);
+
+            if (entity != null)
             {
-                deleteResult = true;
-                await ApplicationDbContext.SaveChangesAsync();
+
+                EntityEntry recieved = ApplicationDbContext.Set<TEntity>().Remove(entity);
+                if (recieved.State == EntityState.Deleted)
+                {
+                    deleteResult = true;
+                    await ApplicationDbContext.SaveChangesAsync();
+                }
             }
+          
 
             return deleteResult;
         }
