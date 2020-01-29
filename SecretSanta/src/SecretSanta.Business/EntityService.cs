@@ -12,7 +12,7 @@ namespace SecretSanta.Business
         where TEntity : EntityBase
     {
         protected ApplicationDbContext ApplicationDbContext { get; }
-        protected IMapper Mapper { get; } 
+        protected IMapper Mapper { get; }
 
         public EntityService(ApplicationDbContext applicationDbContext, IMapper mapper)
         {
@@ -21,23 +21,23 @@ namespace SecretSanta.Business
         }
         public async Task<bool> DeleteAsync(int id)
         {
-            bool deleteResult = false;
 
             TEntity entity = ApplicationDbContext.Set<TEntity>().Find(id);
+            
 
-            if (entity != null)
+            if (entity!=null)
             {
 
-                EntityEntry recieved = ApplicationDbContext.Set<TEntity>().Remove(entity);
-                if (recieved.State == EntityState.Deleted)
-                {
-                    deleteResult = true;
-                    await ApplicationDbContext.SaveChangesAsync();
-                }
-            }
-          
+                ApplicationDbContext.Set<TEntity>().Remove(entity);
 
-            return deleteResult;
+
+                await ApplicationDbContext.SaveChangesAsync();
+                return true;
+
+            }
+
+
+            return false;
         }
 
         public async Task<List<TEntity>> FetchAllAsync() =>
@@ -47,7 +47,7 @@ namespace SecretSanta.Business
         {
             return await (ApplicationDbContext.Set<TEntity>().SingleAsync(item => item.Id == id));
 
-            
+
         }
 
         public async Task<TEntity> InsertAsync(TEntity entity)
@@ -74,6 +74,6 @@ namespace SecretSanta.Business
             return result;
         }
 
-       
+
     }
 }
