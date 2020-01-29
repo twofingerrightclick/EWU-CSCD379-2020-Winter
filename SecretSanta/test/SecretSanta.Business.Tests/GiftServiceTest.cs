@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SecretSanta.Data;
 using SecretSanta.Data.Tests;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using static SampleData;
@@ -21,19 +22,20 @@ namespace SecretSanta.Business.Tests
             using (var dbContext = new ApplicationDbContext(Options))
             {
                 //setup
-                var mapper = new IgnoreIDAutomapperConfigurationProfile<Gift>().Mapper;
+                var mapper = AutoMapperProfileConfiguration.CreateMapper();
 
                 GiftService giftService = new GiftService(dbContext, mapper);
 
                 var sampleGift = CreateGift();
 
-                await giftService.InsertAsync(sampleGift);
+                var insertResult=await giftService.InsertAsync(sampleGift);
 
                 //act
-                Gift sampleGift2 = await giftService.FetchByIdAsync(1);
+                Gift fetchResult = await giftService.FetchByIdAsync(1);
 
                 //assert
-                Assert.IsNotNull(sampleGift2.User.LastName);
+                Assert.AreEqual<DateTime?>(insertResult.CreatedOn,fetchResult.CreatedOn);
+                Assert.AreEqual<string>(insertResult.Description, fetchResult.Description);
 
 
             }
@@ -76,7 +78,7 @@ namespace SecretSanta.Business.Tests
             using (var dbContext = new ApplicationDbContext(Options))
             {
                 //setup
-                var mapper = new IgnoreIDAutomapperConfigurationProfile<Gift>().Mapper;
+                var mapper = AutoMapperProfileConfiguration.CreateMapper();
 
                 GiftService giftService = new GiftService(dbContext, mapper);
 
@@ -90,16 +92,17 @@ namespace SecretSanta.Business.Tests
 
                 }
 
-                await giftService.InsertAsync(gifts.ToArray());
+                Gift[] result =  await giftService.InsertAsync(gifts.ToArray());
 
 
                 //act
-                var fetchedGifts = await giftService.FetchAllAsync();
+                //var fetchedGifts = await giftService.FetchAllAsync();
 
                 //assert
-                Assert.IsTrue(fetchedGifts.Count == numberOfGifts);
+                Assert.IsNotNull(result);
+                Assert.IsTrue(result.Length == numberOfGifts);
 
-                foreach (var gift in fetchedGifts)
+                foreach (var gift in result)
                 {
                     Assert.IsNotNull(gift.User.LastName);
                 }
@@ -167,7 +170,7 @@ namespace SecretSanta.Business.Tests
             {
 
                 //setup
-                var mapper = new IgnoreIDAutomapperConfigurationProfile<Gift>().Mapper;
+                var mapper = AutoMapperProfileConfiguration.CreateMapper();
 
                 GiftService giftService = new GiftService(dbContext, mapper);
 
