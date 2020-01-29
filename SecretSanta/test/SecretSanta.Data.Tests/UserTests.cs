@@ -3,10 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
-using System.Collections.Generic;
 using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
+
 
 namespace SecretSanta.Data.Tests
 {
@@ -22,7 +21,9 @@ namespace SecretSanta.Data.Tests
                 dbContext.Users.Add(new User("Inigo", "Montoya"));
                 await dbContext.SaveChangesAsync().ConfigureAwait(false);
             }
+
             // Act
+
             // Assert
             using (var dbContext = new ApplicationDbContext(Options))
             {
@@ -46,7 +47,9 @@ namespace SecretSanta.Data.Tests
                 dbContext.Users.Add(new User("Inigo","Montoya"));
                 await dbContext.SaveChangesAsync().ConfigureAwait(false);
             }
+
             // Act
+
             // Assert
             using (var dbContext = new ApplicationDbContext(Options, httpContextAccessor))
             {
@@ -70,6 +73,7 @@ namespace SecretSanta.Data.Tests
                 dbContext.Users.Add(new User("Inigo", "Montoya"));
                 await dbContext.SaveChangesAsync().ConfigureAwait(false);
             }
+
             // Act
             httpContextAccessor = Mock.Of<IHttpContextAccessor>(hta =>
                     hta.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier) == new Claim(ClaimTypes.NameIdentifier, "pbuttercup"));
@@ -105,13 +109,15 @@ namespace SecretSanta.Data.Tests
             // Arrange
             using (var dbContext = new ApplicationDbContext(Options, httpContextAccessor))
             {
-                var group = new Group("Enchanted Forest");
-                var user = new User("Inigo", "Montoya");
+                var group = SampleData.CreateGroup1();
+                var user = SampleData.CreateUser1();
                 user.UserGroups.Add(new UserGroup { User = user, Group = group });
                 dbContext.Users.Add(user);
                 await dbContext.SaveChangesAsync().ConfigureAwait(false);
             }
+
             // Act
+
             // Assert
             using (var dbContext = new ApplicationDbContext(Options, httpContextAccessor))
             {
@@ -119,7 +125,7 @@ namespace SecretSanta.Data.Tests
 
                 Assert.AreEqual(1, users.Count);
                 Assert.AreEqual(1, users[0].UserGroups.Count);
-                Assert.AreEqual("Enchanted Forest", users[0].UserGroups[0].Group.Title);
+                Assert.AreEqual(SampleData._SAMPLE_TITLE1, users[0].UserGroups[0].Group.Title);
             }
         }
 
