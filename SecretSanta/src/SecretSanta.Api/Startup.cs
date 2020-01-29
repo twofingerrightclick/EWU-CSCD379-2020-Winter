@@ -21,7 +21,7 @@ namespace SecretSanta.Api
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                _ = app.UseDeveloperExceptionPage();
             }
 
             app.UseRouting();
