@@ -1,10 +1,6 @@
 ﻿using AutoMapper;
 using BlogEngine.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 
 namespace BlogEngine.Business
 {
@@ -16,7 +12,7 @@ namespace BlogEngine.Business
             CreateMap<Tag, Tag>().ForMember(property => property.Id, option => option.Ignore());
         }
 
-        static public IMapper CreateMapper()
+        public static IMapper CreateMapper()
         {
             var mapperConfiguration = new MapperConfiguration(cfg =>
             {

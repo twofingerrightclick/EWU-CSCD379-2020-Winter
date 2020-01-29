@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\BlogEngine.Api\BlogEngine.Api.csproj" />
+    <ProjectReference Include="..\BlogEngine.Data.Tests\BlogEngine.Data.Tests.csproj" />
   </ItemGroup>
 
 </Project>
