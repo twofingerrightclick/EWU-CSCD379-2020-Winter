@@ -16,7 +16,7 @@ namespace SecretSanta.Business.Tests
         {
             //arrange
             using var dbContext = new ApplicationDbContext(Options);
-            var mapper = new IgnoreIDAutomapperConfigurationProfile<Group>().Mapper;
+            var mapper = AutoMapperProfileConfiguration.CreateMapper();
             var groupService = new GroupService(dbContext, mapper);
             var sampleGroup1 = SampleData.CreateGroup1();
             var sampleGroup2 = SampleData.CreateGroup2();

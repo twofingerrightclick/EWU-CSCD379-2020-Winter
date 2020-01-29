@@ -17,7 +17,7 @@ namespace SecretSanta.Business.Tests
         {
             //arrange
             using var dbContext = new ApplicationDbContext(Options);
-            var mapper = new IgnoreIDAutomapperConfigurationProfile<Gift>().Mapper;
+            var mapper = AutoMapperProfileConfiguration.CreateMapper();
             var userService = new UserService(dbContext, mapper);
             var sampleUser = SampleData.CreateUser1();
             await userService.InsertAsync(sampleUser);
@@ -34,7 +34,6 @@ namespace SecretSanta.Business.Tests
         {
             //arrange
             using var dbContext = new ApplicationDbContext(Options);
-            //var mapper = new IgnoreIDAutomapperConfigurationProfile<Gift>().Mapper;
             var mapper = AutoMapperProfileConfiguration.CreateMapper();
             var userService = new UserService(dbContext, mapper);
             await userService.InsertAsync(SampleData.CreateUser1());
@@ -49,7 +48,7 @@ namespace SecretSanta.Business.Tests
         {
             //arrange
             using var dbContextInsert = new ApplicationDbContext(Options);
-            var mapper = new IgnoreIDAutomapperConfigurationProfile<Gift>().Mapper;
+            var mapper = AutoMapperProfileConfiguration.CreateMapper();
             var userService = new UserService(dbContextInsert, mapper);
             var sampleUser1 = SampleData.CreateUser1();
             var sampleUser2 = SampleData.CreateUser2();
