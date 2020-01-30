@@ -33,3 +33,4 @@ For this assignment you will be setting up the SecretSanta.Api project.
 * [Dependency injection in ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection)
 * [Controller action return types in ASP.NET Core web API](https://docs.microsoft.com/aspnet/core/web-api/action-return-types)
 * [Get started with NSwag and ASP.NET Core](https://docs.microsoft.com/aspnet/core/tutorials/getting-started-with-nswag)
+* [Move database initialization code](https://docs.microsoft.com/en-us/aspnet/core/migration/1x-to-2x/?view=aspnetcore-3.1#move-database-initialization-code)
