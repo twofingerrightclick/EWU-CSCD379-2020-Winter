@@ -31,6 +31,8 @@ namespace SecretSanta.Business.Tests
                 var sampleGift = CreateGift();
 
                 var insertResult=await giftService.InsertAsync(sampleGift);
+                
+
 
                 //act
                 Gift fetchResult = await giftService.FetchByIdAsync(1);
@@ -52,6 +54,8 @@ namespace SecretSanta.Business.Tests
             var mapper = AutoMapperProfileConfiguration.CreateMapper();
             var giftService = new GiftService(dbContext, mapper);
             await giftService.InsertAsync(CreateGift());
+            
+
 
             //act & assert
             Assert.IsTrue(await giftService.DeleteAsync(1));
@@ -81,6 +85,7 @@ namespace SecretSanta.Business.Tests
                 }
 
                 Gift[] result =  await giftService.InsertAsync(gifts.ToArray());
+                
 
 
 
@@ -112,6 +117,8 @@ namespace SecretSanta.Business.Tests
             var sampleGift2 = CreateGift();
             await giftService.InsertAsync(sampleGift1);
             await giftService.InsertAsync(sampleGift2);
+            
+
 
             //act
             sampleGift2 = await giftService.FetchByIdAsync(2);
@@ -144,6 +151,7 @@ namespace SecretSanta.Business.Tests
                 await giftService.InsertAsync(sampleGift);
 
                 await giftService.InsertAsync(sampleGift2);
+                
 
                 //act
                 sampleGift2 = await giftService.FetchByIdAsync(2);

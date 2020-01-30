@@ -27,15 +27,11 @@ namespace SecretSanta.Business
 
             if (entity!=null)
             {
-
                 ApplicationDbContext.Set<TEntity>().Remove(entity);
-
-
                 await ApplicationDbContext.SaveChangesAsync();
                 return true;
 
             }
-
 
             return false;
         }

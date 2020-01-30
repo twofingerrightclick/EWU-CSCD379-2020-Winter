@@ -25,7 +25,7 @@ namespace SecretSanta.Business.Tests
             var sampleGroup2 = SampleData.CreateGroup2();
             await groupService.InsertAsync(sampleGroup1);
             await groupService.InsertAsync(sampleGroup2);
-            await dbContext.SaveChangesAsync().ConfigureAwait(false);
+            
 
             //act
             using var dbContextFetch = new ApplicationDbContext(Options);
@@ -193,6 +193,8 @@ namespace SecretSanta.Business.Tests
                 await groupService.InsertAsync(sampleGroup);
 
                 await groupService.InsertAsync(sampleGroup2);
+
+
 
                 //act
                 sampleGroup2 = await groupService.FetchByIdAsync(2);
