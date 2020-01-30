@@ -65,7 +65,7 @@ namespace SecretSanta.Business
             return entities;
         }
 
-        // TODO: might not be working correct, ref: UserServiceTest.UpdateUserProperty_ShouldSaveIntoDatabase_ExpectingFetchedValueEqualsTestValue line 71
+       
         public async Task<TEntity> UpdateAsync(int id, TEntity entity)
         {
             TEntity result = await ApplicationDbContext.Set<TEntity>().SingleAsync(item => item.Id == id);
