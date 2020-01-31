@@ -42,15 +42,23 @@ namespace BlogEngine.Api.Controllers
 
         // POST: api/Author
         [HttpPost]
-        public void Post([FromBody] Author value)
+        public async Task<Author> Post(Author value)
         {
-
+            return await AuthorService.InsertAsync(value);
         }
 
         // PUT: api/Author/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] Author value)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult<Author>> Put(int id, Author value)
         {
+            if (await AuthorService.UpdateAsync(id, value) is Author author)
+            {
+                return author;
+            }
+            return NotFound();
         }
 
         // DELETE: api/ApiWithActions/5

@@ -98,14 +98,15 @@ namespace BlogEngine.Api.Tests.Controllers
         {
             throw new NotImplementedException();
         }
-    }
 
-    public class  TestAuthor : Author
-    {
-        public TestAuthor(Author author, int id)
-            : base(author.FirstName, author.LastName, author.Email)
+        private class TestAuthor : Author
         {
-            Id = id;
+            public TestAuthor(Author author, int id)
+                : base((author ?? throw new ArgumentNullException(nameof(author))).FirstName, 
+                      author.LastName, author.Email)
+            {
+                Id = id;
+            }
         }
     }
 }
