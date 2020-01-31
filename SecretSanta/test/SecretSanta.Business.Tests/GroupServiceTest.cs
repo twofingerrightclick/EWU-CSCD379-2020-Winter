@@ -44,7 +44,7 @@ namespace SecretSanta.Business.Tests
 
 
         [TestMethod]
-        public async Task InsertGroup_GroupPropertiesCorrectAndIdSet_()
+        public async Task InsertAsync_GroupIdChanged()
         {
             //arrange
             using var dbContext = new ApplicationDbContext(Options);
@@ -52,7 +52,8 @@ namespace SecretSanta.Business.Tests
             var groupService = new GroupService(dbContext, mapper);
             var sampleGroup1 = SampleData.CreateGroup1();
 
-            var notInsertedGroup = new Group();
+
+            int sampleGroup1OrdiginalId = sampleGroup1.Id;
 
 
             Trace.WriteLine("sampleId before insert: " + sampleGroup1.Id);
@@ -62,32 +63,39 @@ namespace SecretSanta.Business.Tests
             Trace.WriteLine("sampleId after insert: " + sampleGroup1.Id);
             //assert
             Assert.AreEqual<string>(sampleGroup1.Title, insertedGroup.Title);
-            Assert.IsTrue(sampleGroup1.Id != notInsertedGroup.Id);
+            Assert.IsTrue(sampleGroup1.Id!= sampleGroup1OrdiginalId);
 
         }
 
 
+       
+
         [TestMethod]
-        public async Task AddUsers()
+        public async Task FetchByIdAsync_AfterInsertingGroup_ExpectingFetchedGroupIdChanged()
         {
             //arrange
-            using var dbContext = new ApplicationDbContext(Options);
-            var mapper = AutoMapperProfileConfiguration.CreateMapper();
-            var groupService = new GroupService(dbContext, mapper);
-            var sampleGroup1 = SampleData.CreateGroup1();
 
-            var notInsertedGroup = new Group();
+            using (var dbContext = new ApplicationDbContext(Options))
+            {
+                //setup
+                var mapper = AutoMapperProfileConfiguration.CreateMapper();
+
+                GroupService groupService = new GroupService(dbContext, mapper);
+
+                var sampleGroup = CreateGroup1();
+                int originalId = sampleGroup.Id;
+
+                var insertResult = await groupService.InsertAsync(sampleGroup);
+               
 
 
-            Trace.WriteLine("sampleId before insert: " + sampleGroup1.Id);
-            //act
-            Group insertedGroup = await groupService.InsertAsync(sampleGroup1);
+                //act
+                Group fetchResult = await groupService.FetchByIdAsync(1);
 
-            Trace.WriteLine("sampleId after insert: " + sampleGroup1.Id);
-            //assert
-            Assert.AreEqual<string>(sampleGroup1.Title, insertedGroup.Title);
-            Assert.IsTrue(sampleGroup1.Id != notInsertedGroup.Id);
+                //assert
+                Assert.IsTrue(fetchResult.Id != originalId);
 
+            }
         }
 
 
@@ -137,6 +145,11 @@ namespace SecretSanta.Business.Tests
 
                 //assert
                 Assert.IsNotNull(result);
+
+                foreach (var group in result)
+                {
+                    Assert.IsNotNull(group);
+                }
                 Assert.IsTrue(result.Length == numberOfGroups);
 
 
@@ -145,6 +158,51 @@ namespace SecretSanta.Business.Tests
 
             }
         }
+
+
+
+        [TestMethod]
+        public async Task FetchAllAsync_AfterInsertingGroups_ExpectingSameCountAndNotNullAndUserNotNull()
+        {
+            //arrange
+
+            using (var dbContext = new ApplicationDbContext(Options))
+            {
+                //setup
+                var mapper = AutoMapperProfileConfiguration.CreateMapper();
+
+                GroupService groupService = new GroupService(dbContext, mapper);
+
+                List<Group> groups = new List<Group>();
+
+                int numberOfGroups = 3;
+
+                for (int i = 0; i < numberOfGroups; i++)
+                {
+                    groups.Add(CreateGroup1());
+
+                }
+
+                await groupService.InsertAsync(groups.ToArray());
+
+                List<Group> result = await groupService.FetchAllAsync();
+
+                //assert
+                Assert.IsNotNull(result);
+                Assert.IsTrue(result.Count == numberOfGroups);
+
+                foreach (var group in result)
+                {
+                    Assert.IsNotNull(group);
+                    //the toListAsync method includes the User! 
+                }
+
+
+
+            }
+        }
+
+
 
         [TestMethod]
         [ExpectedException(typeof(System.InvalidOperationException))]

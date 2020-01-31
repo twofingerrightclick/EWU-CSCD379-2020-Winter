@@ -2,12 +2,10 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SecretSanta.Data;
 using SecretSanta.Data.Tests;
-using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
-using System.Linq;
 using static SampleData;
-
 
 namespace SecretSanta.Business.Tests
 {
@@ -15,11 +13,13 @@ namespace SecretSanta.Business.Tests
     public class GiftServiceTest : TestBase
     {
         // MethodBeingTested_ConditionBeingTested_WhatWeExpectedToHappen
+
+
         [TestMethod]
-        public async Task InsertGiftIntoGiftService_ByCheckingAsyncGiftId_ExpectingGiftIdNotNull()
+        public async Task InsertAsyncGift_ExpectingGiftIdChanged_UserNotNull()
         {
             //arrange
-            
+
 
             using (var dbContext = new ApplicationDbContext(Options))
             {
@@ -29,17 +29,71 @@ namespace SecretSanta.Business.Tests
                 GiftService giftService = new GiftService(dbContext, mapper);
 
                 var sampleGift = CreateGift();
+                int originalId = sampleGift.Id;
 
-                var insertResult=await giftService.InsertAsync(sampleGift);
-                
+                //act
+                var insertResult = await giftService.InsertAsync(sampleGift);
+
+                //assert
+                Assert.IsTrue(insertResult.Id != originalId);
+                Assert.IsNotNull(insertResult.User);
+
+
+            }
+        }
+
+        [TestMethod]
+        public async Task FetchByIdAsync_ExpectingGiftIdChanged_UserNotNull()
+        {
+            //arrange
+
+
+            using (var dbContext = new ApplicationDbContext(Options))
+            {
+                //setup
+                var mapper = AutoMapperProfileConfiguration.CreateMapper();
+
+                GiftService giftService = new GiftService(dbContext, mapper);
+
+                var sampleGift = CreateGift();
+                int originalId = sampleGift.Id;
+
+                var insertResult = await giftService.InsertAsync(sampleGift);
+               
 
 
                 //act
                 Gift fetchResult = await giftService.FetchByIdAsync(1);
 
                 //assert
-                Assert.AreEqual<DateTime?>(insertResult.CreatedOn,fetchResult.CreatedOn);
-                Assert.AreEqual<string>(insertResult.Description, fetchResult.Description);
+                Assert.IsTrue(fetchResult.Id != originalId);
+                Assert.IsNotNull(fetchResult.User);
+
+
+            }
+        }
+
+
+        [TestMethod]
+        [ExpectedException(typeof(System.InvalidOperationException))]
+        public async Task FetchByIdAsync_InvalidID_ThrowsException()
+        {
+            //arrange
+
+
+            using (var dbContext = new ApplicationDbContext(Options))
+            {
+                //setup
+                var mapper = AutoMapperProfileConfiguration.CreateMapper();
+
+                GiftService giftService = new GiftService(dbContext, mapper);
+
+                //act
+                Gift fetchResult = await giftService.FetchByIdAsync(1);
+
+                //assert
+                //Assert.IsNull(fetchResult);
+                
 
 
             }
@@ -50,11 +104,11 @@ namespace SecretSanta.Business.Tests
         {
             //arrange
             using var dbContext = new ApplicationDbContext(Options);
-      
+
             var mapper = AutoMapperProfileConfiguration.CreateMapper();
             var giftService = new GiftService(dbContext, mapper);
             await giftService.InsertAsync(CreateGift());
-            
+
 
 
             //act & assert
@@ -63,10 +117,10 @@ namespace SecretSanta.Business.Tests
         }
 
         [TestMethod]
-        public async Task InsertGiftListIntoGiftService_ByFetchingAllAsync_ExpectingSameCountAndNotNull()
+        public async Task InsertGiftListIntoGiftService_InsertArrayOfGifts_ExpectingSameCountAndNotNull()
         {
             //arrange
-            
+
             using (var dbContext = new ApplicationDbContext(Options))
             {
                 //setup
@@ -84,8 +138,7 @@ namespace SecretSanta.Business.Tests
 
                 }
 
-                Gift[] result =  await giftService.InsertAsync(gifts.ToArray());
-                
+                Gift[] result = await giftService.InsertAsync(gifts.ToArray());
 
 
 
@@ -95,7 +148,49 @@ namespace SecretSanta.Business.Tests
 
                 foreach (var gift in result)
                 {
-                    Assert.IsNotNull(gift.User.LastName);
+                    Assert.IsNotNull(gift.User);
+                }
+
+
+
+            }
+        }
+
+
+        [TestMethod]
+        public async Task FetchAllAsync_AfterInsertingGifts_ExpectingSameCountAndNotNullAndUserNotNull()
+        {
+            //arrange
+
+            using (var dbContext = new ApplicationDbContext(Options))
+            {
+                //setup
+                var mapper = AutoMapperProfileConfiguration.CreateMapper();
+
+                GiftService giftService = new GiftService(dbContext, mapper);
+
+                List<Gift> gifts = new List<Gift>();
+
+                int numberOfGifts = 3;
+
+                for (int i = 0; i < numberOfGifts; i++)
+                {
+                    gifts.Add(CreateGift());
+
+                }
+
+                await giftService.InsertAsync(gifts.ToArray());
+
+                List<Gift> result = await giftService.FetchAllAsync();
+
+                //assert
+                Assert.IsNotNull(result);
+                Assert.IsTrue(result.Count == numberOfGifts);
+
+                foreach (var gift in result)
+                {
+                    Assert.IsNotNull(gift.User);
+                    //the toListAsync method includes the User! 
                 }
 
 
@@ -109,7 +204,8 @@ namespace SecretSanta.Business.Tests
         {
             //arrange
             using var dbContext = new ApplicationDbContext(Options);
-            var mapper = new MapperConfiguration(cfg => {
+            var mapper = new MapperConfiguration(cfg =>
+            {
                 cfg.CreateMap<Gift, Gift>();
             }).CreateMapper();
             var giftService = new GiftService(dbContext, mapper);
@@ -117,16 +213,18 @@ namespace SecretSanta.Business.Tests
             var sampleGift2 = CreateGift();
             await giftService.InsertAsync(sampleGift1);
             await giftService.InsertAsync(sampleGift2);
-            
+
 
 
             //act
             sampleGift2 = await giftService.FetchByIdAsync(2);
             sampleGift2.Title = "updated_title";
-            await giftService.UpdateAsync(1, sampleGift2);
+            var gift = await giftService.UpdateAsync(1, sampleGift2);
 
+            string name = gift.User.FirstName;
+            Trace.WriteLine(name);
             //assert
-                // (check method attribute)
+            // (check method attribute)
         }
 
 
@@ -151,7 +249,7 @@ namespace SecretSanta.Business.Tests
                 await giftService.InsertAsync(sampleGift);
 
                 await giftService.InsertAsync(sampleGift2);
-                
+
 
                 //act
                 sampleGift2 = await giftService.FetchByIdAsync(2);

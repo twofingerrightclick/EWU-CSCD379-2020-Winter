@@ -60,5 +60,14 @@ namespace SecretSanta.Data.Tests
             _ = new Gift(_Title, _Description, null!, _SampleUser);
 
         }
+
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void Gift_SetUserToNull_ThrowsArgumentNullException()
+        {
+            _ = new Gift(_Title, _Description, _Url, null!);
+
+        }
     }
 }
