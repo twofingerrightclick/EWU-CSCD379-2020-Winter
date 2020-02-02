@@ -3,7 +3,7 @@
 
 namespace SecretSanta.Business
 {
-    public interface IGiftService : IEntityService<Gift>
+    public interface IUserService : IEntityService<User>
     {
 
     }

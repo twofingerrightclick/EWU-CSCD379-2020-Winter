@@ -5,11 +5,8 @@ using System.Threading.Tasks;
 
 namespace SecretSanta.Business
 {
-    public class GiftService : EntityService<Gift>, IEntityService<Gift>
+    public class GiftService : EntityService<Gift>, IGiftService
     {
-
-
-
         public GiftService(ApplicationDbContext applicationDbContext, IMapper mapper) :
             base(applicationDbContext, mapper)
         {
@@ -18,9 +15,5 @@ namespace SecretSanta.Business
 
         public override async Task<Gift> FetchByIdAsync(int id) =>
           await ApplicationDbContext.Set<Gift>().Include(nameof(Gift.User)).SingleAsync(item => item.Id == id);
-
-
-      
-
     }
 }
