@@ -75,8 +75,8 @@ namespace SecretSanta.Business.Tests
 
 
         [TestMethod]
-        [ExpectedException(typeof(System.InvalidOperationException))]
-        public async Task FetchByIdAsync_InvalidID_ThrowsException()
+        //[ExpectedException(typeof(System.InvalidOperationException))]
+        public async Task FetchByIdAsync_InvalidID_Returns_Null()
         {
             //arrange
 
@@ -92,7 +92,7 @@ namespace SecretSanta.Business.Tests
                 Gift fetchResult = await giftService.FetchByIdAsync(1);
 
                 //assert
-                //Assert.IsNull(fetchResult);
+                Assert.IsNull(fetchResult);
                 
 
 
