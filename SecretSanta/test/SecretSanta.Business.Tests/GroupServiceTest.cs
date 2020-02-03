@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading.Tasks;
 using SecretSanta.Data;
-using SecretSanta.Data.Tests;
+using SecretSanta.Business.Services;
 using System.Diagnostics;
 using AutoMapper;
 using System.Collections.Generic;
@@ -19,7 +19,7 @@ namespace SecretSanta.Business.Tests
         {
             //arrange
             using var dbContext = new ApplicationDbContext(Options);
-            var mapper = AutoMapperProfileConfiguration.CreateMapper();
+            var mapper = AutomapperConfigurationProfile.CreateMapper();
             var groupService = new GroupService(dbContext, mapper);
             var sampleGroup1 = SampleData.CreateGroup1();
             var sampleGroup2 = SampleData.CreateGroup2();
@@ -48,7 +48,7 @@ namespace SecretSanta.Business.Tests
         {
             //arrange
             using var dbContext = new ApplicationDbContext(Options);
-            var mapper = AutoMapperProfileConfiguration.CreateMapper();
+            var mapper = AutomapperConfigurationProfile.CreateMapper();
             var groupService = new GroupService(dbContext, mapper);
             var sampleGroup1 = SampleData.CreateGroup1();
 
@@ -78,7 +78,7 @@ namespace SecretSanta.Business.Tests
             using (var dbContext = new ApplicationDbContext(Options))
             {
                 //setup
-                var mapper = AutoMapperProfileConfiguration.CreateMapper();
+                var mapper = AutomapperConfigurationProfile.CreateMapper();
 
                 GroupService groupService = new GroupService(dbContext, mapper);
 
@@ -108,7 +108,7 @@ namespace SecretSanta.Business.Tests
             //arrange
             using var dbContext = new ApplicationDbContext(Options);
 
-            var mapper = AutoMapperProfileConfiguration.CreateMapper();
+            var mapper = AutomapperConfigurationProfile.CreateMapper();
             var groupService = new GroupService(dbContext, mapper);
             await groupService.InsertAsync(CreateGroup1());
 
@@ -116,8 +116,8 @@ namespace SecretSanta.Business.Tests
             Assert.IsTrue(await groupService.DeleteAsync(1));
             Assert.IsFalse(await groupService.DeleteAsync(1));
         }
-
-        [TestMethod]
+        // no more insert array in Entity Service
+        /*[TestMethod]
         public async Task InsertGroupListIntoGroupService_ByFetchingAllAsync_ExpectingSameCountAndNotNull()
         {
             //arrange
@@ -125,7 +125,7 @@ namespace SecretSanta.Business.Tests
             using (var dbContext = new ApplicationDbContext(Options))
             {
                 //setup
-                var mapper = AutoMapperProfileConfiguration.CreateMapper();
+                var mapper = AutomapperConfigurationProfile.CreateMapper();
 
                 GroupService groupService = new GroupService(dbContext, mapper);
 
@@ -157,11 +157,11 @@ namespace SecretSanta.Business.Tests
 
 
             }
-        }
+        }*/
 
 
 
-        [TestMethod]
+/*        [TestMethod]
         public async Task FetchAllAsync_AfterInsertingGroups_ExpectingSameCountAndNotNullAndUserNotNull()
         {
             //arrange
@@ -169,7 +169,7 @@ namespace SecretSanta.Business.Tests
             using (var dbContext = new ApplicationDbContext(Options))
             {
                 //setup
-                var mapper = AutoMapperProfileConfiguration.CreateMapper();
+                var mapper = AutomapperConfigurationProfile.CreateMapper();
 
                 GroupService groupService = new GroupService(dbContext, mapper);
 
@@ -201,7 +201,7 @@ namespace SecretSanta.Business.Tests
 
             }
         }
-
+*/
 
 
         [TestMethod]
@@ -239,7 +239,7 @@ namespace SecretSanta.Business.Tests
             {
 
                 //setup
-                var mapper = AutoMapperProfileConfiguration.CreateMapper();
+                var mapper = AutomapperConfigurationProfile.CreateMapper();
 
                 GroupService groupService = new GroupService(dbContext, mapper);
 

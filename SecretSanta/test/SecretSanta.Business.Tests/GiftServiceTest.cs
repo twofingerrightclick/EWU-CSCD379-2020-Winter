@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SecretSanta.Business.Services;
 using SecretSanta.Data;
-using SecretSanta.Data.Tests;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -24,7 +24,7 @@ namespace SecretSanta.Business.Tests
             using (var dbContext = new ApplicationDbContext(Options))
             {
                 //setup
-                var mapper = AutoMapperProfileConfiguration.CreateMapper();
+                var mapper = AutomapperConfigurationProfile.CreateMapper();
 
                 GiftService giftService = new GiftService(dbContext, mapper);
 
@@ -51,7 +51,7 @@ namespace SecretSanta.Business.Tests
             using (var dbContext = new ApplicationDbContext(Options))
             {
                 //setup
-                var mapper = AutoMapperProfileConfiguration.CreateMapper();
+                var mapper = AutomapperConfigurationProfile.CreateMapper();
 
                 GiftService giftService = new GiftService(dbContext, mapper);
 
@@ -84,7 +84,7 @@ namespace SecretSanta.Business.Tests
             using (var dbContext = new ApplicationDbContext(Options))
             {
                 //setup
-                var mapper = AutoMapperProfileConfiguration.CreateMapper();
+                var mapper = AutomapperConfigurationProfile.CreateMapper();
 
                 GiftService giftService = new GiftService(dbContext, mapper);
 
@@ -105,7 +105,7 @@ namespace SecretSanta.Business.Tests
             //arrange
             using var dbContext = new ApplicationDbContext(Options);
 
-            var mapper = AutoMapperProfileConfiguration.CreateMapper();
+            var mapper = AutomapperConfigurationProfile.CreateMapper();
             var giftService = new GiftService(dbContext, mapper);
             await giftService.InsertAsync(CreateGift());
 
@@ -116,7 +116,8 @@ namespace SecretSanta.Business.Tests
             Assert.IsFalse(await giftService.DeleteAsync(1));
         }
 
-        [TestMethod]
+        //no more insert array in EntityService
+       /* [TestMethod]
         public async Task InsertGiftListIntoGiftService_InsertArrayOfGifts_ExpectingSameCountAndNotNull()
         {
             //arrange
@@ -124,7 +125,7 @@ namespace SecretSanta.Business.Tests
             using (var dbContext = new ApplicationDbContext(Options))
             {
                 //setup
-                var mapper = AutoMapperProfileConfiguration.CreateMapper();
+                var mapper = AutomapperConfigurationProfile.CreateMapper();
 
                 GiftService giftService = new GiftService(dbContext, mapper);
 
@@ -154,10 +155,10 @@ namespace SecretSanta.Business.Tests
 
 
             }
-        }
+        }*/
 
-
-        [TestMethod]
+        // no more insert array service
+      /*  [TestMethod]
         public async Task FetchAllAsync_AfterInsertingGifts_ExpectingSameCountAndNotNullAndUserNotNull()
         {
             //arrange
@@ -165,7 +166,7 @@ namespace SecretSanta.Business.Tests
             using (var dbContext = new ApplicationDbContext(Options))
             {
                 //setup
-                var mapper = AutoMapperProfileConfiguration.CreateMapper();
+                var mapper = AutomapperConfigurationProfile.CreateMapper();
 
                 GiftService giftService = new GiftService(dbContext, mapper);
 
@@ -196,7 +197,7 @@ namespace SecretSanta.Business.Tests
 
 
             }
-        }
+        }*/
 
         [TestMethod]
         [ExpectedException(typeof(System.InvalidOperationException))]
@@ -237,7 +238,7 @@ namespace SecretSanta.Business.Tests
             {
 
                 //setup
-                var mapper = AutoMapperProfileConfiguration.CreateMapper();
+                var mapper = AutomapperConfigurationProfile.CreateMapper();
 
                 GiftService giftService = new GiftService(dbContext, mapper);
 

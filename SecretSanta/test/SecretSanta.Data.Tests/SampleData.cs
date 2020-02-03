@@ -1,4 +1,5 @@
 ﻿using SecretSanta.Data;
+using SecretSanta.Business.Services;
 
 
 public static class SampleData
@@ -27,13 +28,9 @@ public static class SampleData
     static public User CreateUser2() => new User(_SAMPLE_FIRSTNAME2, _SAMPLE_LASTNAME2);
     static public Gift CreateGift() => new Gift(_SAMPLE_TITLE1, _SAMPLE_DESCRIPTION1, _SAMPLE_URL1, CreateUser1());
     static public Group CreateGroup1() {
-        return new Group {
-            Title = _SAMPLE_TITLE1
-        };
+        return new Group(_SAMPLE_TITLE1);
     }
     static public Group CreateGroup2() {
-        return new Group {
-            Title = _SAMPLE_TITLE2
-        };
+        return new Group(_SAMPLE_TITLE2);
     }
 }

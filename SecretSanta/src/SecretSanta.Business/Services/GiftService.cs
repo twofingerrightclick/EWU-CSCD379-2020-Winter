@@ -8,5 +8,8 @@ namespace SecretSanta.Business.Services
         public GiftService(ApplicationDbContext dbContext, IMapper mapper) 
             : base(dbContext, mapper)
         { }
-    }
+
+    
+    
+}
 }

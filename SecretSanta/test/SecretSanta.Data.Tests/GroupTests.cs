@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Threading.Tasks;
+using SecretSanta.Business.Services;
 
 
 namespace SecretSanta.Data.Tests
@@ -15,7 +16,7 @@ namespace SecretSanta.Data.Tests
         {
             //arrange
             using var dbContext = new ApplicationDbContext(Options);
-            dbContext.Groups.Add(new Group());
+            dbContext.Groups.Add(new Group(null!));
 
             //act
 
@@ -28,7 +29,7 @@ namespace SecretSanta.Data.Tests
         {
             //arrange
             using var dbContext = new ApplicationDbContext(Options);
-            dbContext.Groups.Add(new Group());
+            dbContext.Groups.Add(new Group("title"));
             await dbContext.SaveChangesAsync().ConfigureAwait(false);
 
             //act

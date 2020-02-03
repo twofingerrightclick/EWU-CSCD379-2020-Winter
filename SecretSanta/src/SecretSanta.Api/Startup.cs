@@ -2,6 +2,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using SecretSanta.Business.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SecretSanta.Business;
@@ -22,7 +23,7 @@ namespace SecretSanta.Api
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IGiftService, GiftService>();
 
-            System.Type profileType = typeof(AutoMapperProfileConfiguration);
+            System.Type profileType = typeof(AutomapperConfigurationProfile);
             System.Reflection.Assembly assembly = profileType.Assembly;
             services.AddAutoMapper(new[] { assembly } );
             services.AddMvc(options => options.EnableEndpointRouting = false);
