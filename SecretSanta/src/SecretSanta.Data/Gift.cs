@@ -11,29 +11,21 @@ namespace SecretSanta.Data
         public string Url { get => _Url; set => _Url = value ?? throw new ArgumentNullException(nameof(Url)); }
         private string _Url = string.Empty;
 #nullable disable
+       
         public User User { get; set; }
 #nullable enable
         public int UserId { get; set; }
 
-        public Gift()
-            : this("", "", "", 0)
-        { }
+        private Gift(){}
 
-        public Gift(string title, string url, string description, User user) : this(title, url, description,
-            // Justification: There is no way to check for nullability with constructor chaining.
-#pragma warning disable CA1062 // Validate arguments of public methods          
-            user.Id)
-#pragma warning restore CA1062 // Validate arguments of public methods
-        {
-            User = user;
-        }
-
-        private Gift(string title, string url, string description, int userId)
+        public Gift(string title, string description, string url, User user)
         {
             Title = title;
-            Url = url;
             Description = description;
-            UserId = userId;
+            Url = url;
+            User = user ?? throw new ArgumentNullException(nameof(user)); ;
+            UserId = user!.Id;
         }
+        
     }
 }

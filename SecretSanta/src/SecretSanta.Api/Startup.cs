@@ -1,7 +1,11 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SecretSanta.Business;
+using SecretSanta.Data;
 
 namespace SecretSanta.Api
 {
@@ -12,27 +16,31 @@ namespace SecretSanta.Api
     {
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
-        //public void ConfigureServices(IServiceCollection services)
-        //{
-        //}
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddDbContext<ApplicationDbContext>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IGiftService, GiftService>();
+
+            System.Type profileType = typeof(AutoMapperProfileConfiguration);
+            System.Reflection.Assembly assembly = profileType.Assembly;
+            services.AddAutoMapper(new[] { assembly } );
+            services.AddMvc(options => options.EnableEndpointRouting = false);
+            services.AddSwaggerDocument();
+        }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public static void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                _ = app.UseDeveloperExceptionPage();
             }
 
             app.UseRouting();
-
-            app.UseEndpoints(endpoints =>
-            {
-                _ = endpoints.MapGet("/", async context =>
-                  {
-                      await context.Response.WriteAsync("Hello from API!");
-                  });
-            });
+            app.UseOpenApi();
+            app.UseSwaggerUi3();
+            app.UseMvc();
         }
     }
 }

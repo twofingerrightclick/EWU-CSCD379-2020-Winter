@@ -1,6 +1,6 @@
-# Assignment
+# CSCD-379-2020-Winter
 
-For this assignment you will be setting up the SecretSanta.Api project.
+[![Build Status](https://dev.azure.com/afrostad/CSCD379/_apis/build/status/twofingerrightclick.EWU-CSCD379-2020-Winter?branchName=master)](https://dev.azure.com/afrostad/CSCD379/_build/latest?definitionId=3&branchName=Assignment3)
 
 - Enable WebAPI analyzers and handle all warnings.
 
