@@ -222,7 +222,7 @@ namespace SecretSanta.Business.Tests
             sampleGift2.Title = "updated_title";
             var gift = await giftService.UpdateAsync(1, sampleGift2);
 
-            string name = gift.User.FirstName;
+            string name = gift!.User.FirstName;
             Trace.WriteLine(name);
             //assert
             // (check method attribute)
