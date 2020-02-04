@@ -63,8 +63,16 @@ namespace BlogEngine.Api.Controllers
 
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesDefaultResponseType]
+        public async Task<IActionResult> Delete(int id)
         {
+            if (await AuthorService.DeleteAsync(id))
+            {
+                return Ok();
+            }
+            return NotFound();
         }
     }
 }
