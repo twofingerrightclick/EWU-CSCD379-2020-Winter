@@ -1,15 +1,14 @@
-﻿using SecretSanta.Api.Controllers;
-using SecretSanta.Business;
-using SecretSanta.Data;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 using Moq;
+using SecretSanta.Api.Controllers;
+using SecretSanta.Business;
+using SecretSanta.Business.Services;
+using SecretSanta.Data;
+using System;
+using System.Threading.Tasks;
 
-namespace BlogEngine.Api.Tests.Controllers
+namespace SecretSanta.Api.Tests.Controllers
 {
     [TestClass]
     public class UserControllerTests
@@ -18,11 +17,13 @@ namespace BlogEngine.Api.Tests.Controllers
         public void Create_UserController_Success()
         {
             //Arrange
-            //var service = new UserService();
-           // var service = new Mock(EntityController<User>);
+           // var service = new UserService();
+            var controller = new Mock<EntityController<User>>();
+           // service.Setup(x => x.P);
+
 
             //Act
-           // _ = new UserController(service);
+          // _ = new EntityController<IUserService>(service);
 
             //Assert
         }
@@ -35,6 +36,7 @@ namespace BlogEngine.Api.Tests.Controllers
 
             //Act
             _ = new UserController(null!);
+          
 
             //Assert
         }
@@ -43,17 +45,21 @@ namespace BlogEngine.Api.Tests.Controllers
         public async Task GetById_WithExistingUser_Success()
         {
             // Arrange
-           // var service = new UserService();
-            User user = SampleData.CreateUser1();
-           // user = await service.InsertAsync(user);
 
-           // var controller = new UserController(service);
+            var mockService = new Mock<UserService>();
+            mockService.Setup(x => x.FetchByIdAsync(42))
+                .ReturnsAsync(SampleData.CreateUser1());
 
-            // Act
-           // ActionResult<User> rv = await controller.Get(user.Id!);
+            var controller = new UserController(mockService.Object);
+
+            //act
+            var getResult = await controller.Get(42);
 
             // Assert
-          //  Assert.IsTrue(rv.Result is OkObjectResult);
+            Assert.IsNotNull(getResult);
+            
+
+           
         }
 
     }
