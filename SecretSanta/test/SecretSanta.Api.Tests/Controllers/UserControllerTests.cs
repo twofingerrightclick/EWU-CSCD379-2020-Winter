@@ -43,7 +43,7 @@ namespace SecretSanta.Api.Tests.Controllers
         [TestMethod]
         public async Task GetById_WithExistingUser_Success()
         {
-            //whats the difference between why have to use IUserService? versus UserService
+            //whats the difference between why have to use IUserService? versus UserService is it that the Mock object can inherent and thus override the non virtual methods?
             // Arrange
 
             var user = SampleData.CreateUser2();
@@ -55,11 +55,14 @@ namespace SecretSanta.Api.Tests.Controllers
             var controller = new UserController(mockService.Object);
 
             //act
-            var getResult = await controller.Get(42);
+            ActionResult<User> getResult = await controller.Get(42);
+            OkObjectResult? okCode = getResult.Result as OkObjectResult;
+            User? resultValue = okCode!.Value as User;
 
             // Assert
-            //Assert.IsTrue(getResult.Result is OkResult);
-           Assert.IsNotNull(getResult.Value);
+           Assert.IsTrue(getResult.Result is OkObjectResult);
+            Assert.IsNotNull(resultValue);
+           
             
 
            
