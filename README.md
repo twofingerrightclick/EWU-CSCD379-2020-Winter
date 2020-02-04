@@ -1,36 +1,34 @@
 # Assignment
 
-For this assignment you will be setting up the SecretSanta.Api project.
+For this assignment you will be completing the SecretSanta.Api project and startng work on the SecretSanta.Web project
 
-- Enable WebAPI analyzers and handle all warnings.
+- Create DTOs for all entities
+- Create "input" DTOs for all entities
+- Update AutoMapper configuration to be able to map between relevant DTOs and database entities.
+- Update controllers and unit tests to use new DTO objects rather that `SecretSanta.Data` objects.
+- Update the SecretSanta.Api project to use a SQLite **file** database.
 
-- Setup dependency injection and register all relevant services
-  - Ensure all relevant services are registered with appropriate scopes
-  - Ensure DB context is registered
-  - Ensure AutoMapper is registered
+- Replace the API unit tests for **GiftController** with integration tests
+  - The integration tests should should use a SQLite in memory database
+  - Seed the database as needed for the tests
+  - The integration tests should validate all required parameters. For GiftInput both Title, and UserId should be required.
 
-- Apply NSwag to the project and ensure that the swagger page is able to invoke your endpoints. It is ok if invoking the endpoints causes errors due to the use of the SecretSanta.Data classes.
+- Generate C# client for the SecretSanta.Web project
+  - Generated code should be in the `SecretSanta.Web.Api` namespace
+  - Generated clients should have generated interfaces
 
-- Setup the Api project with three controllers (GiftController, GroupController, UserController)
-  - Each controller should take in a service as a constructor dependency.
-  - For now the return types from the controller methods can use the data objects from SecretSanta.Data (we will be fixing this next week).
-  - Create CRUD (Create/Read/Update/Delete) endpoints on all of the controllers using appropriate HTTP verbs
-  - Where relevant, apply `ProducesResponseTypeAttributes` to the controller methods.
-
-- Unit test the controllers
-  - The goal is to simply unit test the code in the controllers. These unit tests should not need to interact with the services.
-  - Unit tests should use "test doubles" to satisfy the service dependencies.
+- In the SecreateSanta.Web project create basic MVC controllers 
+  - Controllers should use the generated clients to invoke the API
+  - Controllers should have a single index endpoint that simply displays a list of items for each of the content types
+  - Code is this project **does not** need to be tested for this assignment
 
 ## Extra Credit
-- There are two commented out tests in EntityServiceTests that are failing due to CreatedBy being overwritten. The solution should either be done inside of the AutoMapper configuration, or inside of the `AddFingerPrinting()` to prevent this value from changing once it has been set. Simply fix the unit tests.
-- Creating test doubles can be strealined by using a mocking framework (such as Moq). Rather than writing your own test doubles use a mocking framewokr to create them.
+- Implement the integration tests for the UserController, and GroupController.
 
-## Relevant Docs
-* [S.O.L.I.D.](https://deviq.com/solid/)
-* [Dependency Inversion Principle](https://deviq.com/dependency-inversion-principle/)
-* [New is glue](https://ardalis.com/new-is-glue)
-* [Use web API analyzers](https://docs.microsoft.com/en-us/aspnet/core/web-api/advanced/analyzers)
-* [Dependency injection in ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection)
-* [Controller action return types in ASP.NET Core web API](https://docs.microsoft.com/aspnet/core/web-api/action-return-types)
-* [Get started with NSwag and ASP.NET Core](https://docs.microsoft.com/aspnet/core/tutorials/getting-started-with-nswag)
-* [Move database initialization code](https://docs.microsoft.com/en-us/aspnet/core/migration/1x-to-2x/?view=aspnetcore-3.1#move-database-initialization-code)
+## Relevant 
+- [Integration Testing](https://docs.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-3.1)
+- [Create Data Transfer Objects (DTOs)](https://docs.microsoft.com/en-us/aspnet/web-api/overview/data/using-web-api-with-entity-framework/part-5)
+- [NSwag Code Generation](https://docs.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-nswag?view=aspnetcore-3.1&tabs=visual-studio#code-generation)
+- [SQLite Connection Strings](https://docs.microsoft.com/en-us/dotnet/standard/data/sqlite/connection-strings)
+- [Implementing Disposable](https://docs.microsoft.com/en-us/dotnet/standard/garbage-collection/implementing-dispose)
+- [ReadWrite Json](https://docs.microsoft.com/en-us/dotnet/standard/serialization/system-text-json-how-to)

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SecretSanta.Business.Services;
 using SecretSanta.Data;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +10,15 @@ namespace SecretSanta.Business.Tests
 {
 
     [TestClass]
-    public abstract class EntityServiceTests<TEntity> : TestBase where TEntity : EntityBase
+    public abstract class EntityServiceTests<TDto, TInputDto, TEntity> : TestBase
+        where TEntity : EntityBase
+        where TDto : class, TInputDto, Dto.IEntity
+        where TInputDto : class
     {
-        protected abstract IEntityService<TEntity> GetService(ApplicationDbContext dbContext, IMapper mapper);
+        protected abstract IEntityService<TDto, TInputDto> GetService(ApplicationDbContext dbContext, IMapper mapper);
 
         protected abstract TEntity CreateEntity();
+        protected abstract TInputDto CreateInputDto();
 
         [TestMethod]
         public async Task DeleteAsync_WithExistingItem_RemovesIt()
@@ -25,7 +30,7 @@ namespace SecretSanta.Business.Tests
             await setupContext.SaveChangesAsync();
 
             using var dbContext = new ApplicationDbContext(Options);
-            IEntityService<TEntity> service = GetService(dbContext, Mapper);
+            IEntityService<TDto, TInputDto> service = GetService(dbContext, Mapper);
 
             // Act
             bool wasRemoved = await service.DeleteAsync(entity.Id);
@@ -41,7 +46,7 @@ namespace SecretSanta.Business.Tests
         {
             // Arrange
             using var dbContext = new ApplicationDbContext(Options);
-            IEntityService<TEntity> service = GetService(dbContext, Mapper);
+            IEntityService<TDto, TInputDto> service = GetService(dbContext, Mapper);
 
             // Act
             bool wasRemoved = await service.DeleteAsync(1);
@@ -64,10 +69,10 @@ namespace SecretSanta.Business.Tests
             setupContext.SaveChanges();
 
             using var dbContext = new ApplicationDbContext(Options);
-            IEntityService<TEntity> service = GetService(dbContext, Mapper);
+            IEntityService<TDto, TInputDto> service = GetService(dbContext, Mapper);
 
             // Act
-            List<TEntity> items = await service.FetchAllAsync();
+            List<TDto> items = await service.FetchAllAsync();
 
             // Assert
             CollectionAssert.AreEquivalent(new[] 
@@ -89,10 +94,10 @@ namespace SecretSanta.Business.Tests
             await setupContext.SaveChangesAsync();
 
             using var dbContext = new ApplicationDbContext(Options);
-            IEntityService<TEntity> service = GetService(dbContext, Mapper);
+            IEntityService<TDto, TInputDto> service = GetService(dbContext, Mapper);
 
             // Act
-            TEntity found = await service.FetchByIdAsync(entity.Id);
+            TDto found = await service.FetchByIdAsync(entity.Id);
 
             // Assert
             Assert.AreEqual(entity.Id, found.Id);
@@ -103,10 +108,10 @@ namespace SecretSanta.Business.Tests
         {
             // Arrange
             using var dbContext = new ApplicationDbContext(Options);
-            IEntityService<TEntity> service = GetService(dbContext, Mapper);
+            IEntityService<TDto, TInputDto> service = GetService(dbContext, Mapper);
 
             // Act
-            TEntity found = await service.FetchByIdAsync(1);
+            TDto found = await service.FetchByIdAsync(1);
 
             // Assert
             Assert.IsNull(found);
@@ -117,53 +122,52 @@ namespace SecretSanta.Business.Tests
         {
             // Arrange
             using var dbContext = new ApplicationDbContext(Options);
-            IEntityService<TEntity> service = GetService(dbContext, Mapper);
-            TEntity entity = CreateEntity();
+            IEntityService<TDto, TInputDto> service = GetService(dbContext, Mapper);
+            TInputDto inputDto = CreateInputDto();
 
             // Act
-            await service.InsertAsync(entity);
+            TDto inserted = await service.InsertAsync(inputDto);
 
             // Assert
             using var assertContext = new ApplicationDbContext(Options);
-            Assert.IsNotNull(assertContext.Set<TEntity>().Find(entity.Id));
+            Assert.IsNotNull(assertContext.Set<TEntity>().Find(inserted.Id));
         }
 
-        //[TestMethod]
-        //public async Task UpdateAsync_WithExistingItem_UpdatesItem()
-        //{
-        //    // Arrange
-        //    using var setupContext = new ApplicationDbContext(Options);
-        //    TEntity entity = CreateEntity();
-        //    setupContext.Set<TEntity>().Add(entity);
-        //    await setupContext.SaveChangesAsync();
+        [TestMethod]
+        public async Task UpdateAsync_WithExistingItem_UpdatesItem()
+        {
+            // Arrange
+            using var setupContext = new ApplicationDbContext(Options);
+            TEntity entity = CreateEntity();
+            setupContext.Set<TEntity>().Add(entity);
+            await setupContext.SaveChangesAsync();
 
-        //    using var dbContext = new ApplicationDbContext(Options);
-        //    IEntityService<TEntity> service = GetService(dbContext, Mapper);
+            using var dbContext = new ApplicationDbContext(Options);
+            IEntityService<TDto, TInputDto> service = GetService(dbContext, Mapper);
 
-        //    TEntity newEntity = CreateEntity();
+            TInputDto newEntity = CreateInputDto();
 
-        //    // Act
-        //    TEntity? updated = await service.UpdateAsync(entity.Id, newEntity);
+            // Act
+            TDto? updated = await service.UpdateAsync(entity.Id, newEntity);
 
-        //    // Assert
-        //    Assert.IsNotNull(updated);
-        //}
+            // Assert
+            Assert.IsNotNull(updated);
+        }
 
+        [TestMethod]
+        public async Task UpdateAsync_WithNoItem_ItReturnsNull()
+        {
+            // Arrange
+            using var dbContext = new ApplicationDbContext(Options);
+            IEntityService<TDto, TInputDto> service = GetService(dbContext, Mapper);
 
-        //[TestMethod]
-        //public async Task UpdateAsync_WithNoItem_ItReturnsNull()
-        //{
-        //    // Arrange
-        //    using var dbContext = new ApplicationDbContext(Options);
-        //    IEntityService<TEntity> service = GetService(dbContext, Mapper);
+            TInputDto newEntity = CreateInputDto();
 
-        //    TEntity newEntity = CreateEntity();
+            // Act
+            TDto? updated = await service.UpdateAsync(1, newEntity);
 
-        //    // Act
-        //    TEntity? updated = await service.UpdateAsync(1, newEntity);
-
-        //    // Assert
-        //    Assert.IsNull(updated);
-        //}
+            // Assert
+            Assert.IsNull(updated);
+        }
     }
 }
