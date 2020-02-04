@@ -1,13 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using SecretSanta.Api.Controllers;
 using SecretSanta.Business;
-using SecretSanta.Business.Services;
 using SecretSanta.Data;
 using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace SecretSanta.Api.Tests.Controllers
