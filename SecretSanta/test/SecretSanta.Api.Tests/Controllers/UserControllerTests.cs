@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using SecretSanta.Api.Controllers;
@@ -6,24 +7,25 @@ using SecretSanta.Business;
 using SecretSanta.Business.Services;
 using SecretSanta.Data;
 using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace SecretSanta.Api.Tests.Controllers
 {
     [TestClass]
-    public class UserControllerTests
+    public class UserControllerTests: ControllerBase
     {
         [TestMethod]
         public void Create_UserController_Success()
         {
             //Arrange
            // var service = new UserService();
-            var controller = new Mock<EntityController<User>>();
+            var controller = new Mock<UserController>();
            // service.Setup(x => x.P);
 
 
             //Act
-          // _ = new EntityController<IUserService>(service);
+         
 
             //Assert
         }
@@ -44,11 +46,14 @@ namespace SecretSanta.Api.Tests.Controllers
         [TestMethod]
         public async Task GetById_WithExistingUser_Success()
         {
+            //whats the difference between why have to use IUserService? versus UserService
             // Arrange
 
-            var mockService = new Mock<UserService>();
-            mockService.Setup(x => x.FetchByIdAsync(42))
-                .ReturnsAsync(SampleData.CreateUser1());
+            var user = SampleData.CreateUser2();
+
+            var mockService = new Mock<IUserService>();
+            mockService.Setup(s => s.FetchByIdAsync(42))
+                .ReturnsAsync(user);
 
             var controller = new UserController(mockService.Object);
 
@@ -56,64 +61,132 @@ namespace SecretSanta.Api.Tests.Controllers
             var getResult = await controller.Get(42);
 
             // Assert
-            Assert.IsNotNull(getResult);
+            //Assert.IsTrue(getResult.Result is OkResult);
+           Assert.IsNotNull(getResult.Value);
             
 
            
         }
 
+
+        [TestMethod]
+        public async Task GetById_NoUserExists_ReturnsNull()
+        {
+            //whats the difference between why have to use IUserService? versus UserService
+            // Arrange
+            User nullUser = null!;
+            var mockService = new Mock<IUserService>();
+            mockService.Setup(x => x.FetchByIdAsync(42))
+                .ReturnsAsync(nullUser);
+
+            var controller = new UserController(mockService.Object);
+
+            //act
+            var getResult = await controller.Get(42);
+
+            // Assert
+            Assert.IsNull(getResult.Value);
+
+
+
+        }
+
+        [TestMethod]
+        public async Task PutById_WithNewUser_Success()
+        {
+
+            // Arrange
+
+            var mockService = new Mock<IUserService>();
+
+            User user = SampleData.CreateUser1();
+
+            mockService.Setup(s => s.UpdateAsync(42, user))
+                .ReturnsAsync(user) ;
+
+            var controller = new UserController(mockService.Object);
+
+            //act
+            ActionResult<User> putResult = await controller.Put(42,user);
+
+
+            // Assert
+   
+            Assert.IsTrue(putResult.Result is OkResult);
+
+
+        }
+
+        [TestMethod]
+        public async Task PutById_UserNotFoud_ReturnsNull()
+        {
+
+            // Arrange
+
+            var mockService = new Mock<IUserService>();
+
+            User user = SampleData.CreateUser1();
+
+            User nullUser = null!;
+
+            mockService.Setup(s => s.UpdateAsync(42, nullUser))
+                .ReturnsAsync(nullUser);
+
+            var controller = new UserController(mockService.Object);
+
+
+            //act
+            var putResult = await controller.Put(42, user);
+
+            // Assert
+           
+
+            Assert.IsTrue(putResult.Result is NotFoundResult);
+
+
+
+
+        }
+
+        [TestMethod]
+        public async Task Delete_EntityWithId_Success()
+        {
+            //Arrange
+            var mockService = new Mock<IUserService>();
+
+           
+            mockService.Setup(s => s.DeleteAsync(42)).ReturnsAsync(true);
+                
+
+            var controller = new UserController(mockService.Object);
+
+            //Act
+            ActionResult deleteResult = await controller.Delete(42);
+
+            //Assert
+            Assert.IsTrue(deleteResult is OkResult);
+        }
+
+        [TestMethod]
+        public async Task Delete_UserWithWrongId_Fails()
+        {
+            //Arrange
+            var mockService = new Mock<IUserService>();
+
+
+            mockService.Setup(s => s.DeleteAsync(42)).ReturnsAsync(false);
+
+
+            var controller = new UserController(mockService.Object);
+
+            //Act
+            ActionResult deleteResult = await controller.Delete(42);
+
+            //Assert
+            Assert.IsTrue(deleteResult is NotFoundResult);
+        }
+
     }
 
-   /* public class UserService : IUserService
-    {
-        private Dictionary<int, User> Items { get; } = new Dictionary<int, User>();
-
-        public Task<bool> DeleteAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<User>> FetchAllAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<User?> FetchByIdAsync(int id)
-        {
-            if (Items.TryGetValue(id, out User? user))
-            {
-                Task<User?> t1 = Task.FromResult<User?>(user);
-                return t1;
-            }
-            Task<User?> t2 = Task.FromResult<User?>(null);
-            return t2;
-        }
-
-        public Task<User> InsertAsync(User entity)
-        {
-            int id = Items.Count + 1;
-            Items[id] = new TestUser(entity, id);
-            return Task.FromResult(Items[id]);
-        }
-
-        public Task<User[]> InsertAsync(params User[] entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<User?> UpdateAsync(int id, User entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        private class TestUser : User
-        {
-            public TestUser(User user, int id)
-                : base((user ?? throw new ArgumentNullException(nameof(user))).FirstName,
-                      user.LastName, user.Email)
-            {
-                Id = id;
-            }
-        }
-    }*/
+  
 }

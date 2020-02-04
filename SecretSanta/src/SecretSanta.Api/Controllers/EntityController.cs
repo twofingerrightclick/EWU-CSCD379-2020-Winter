@@ -53,9 +53,9 @@ namespace SecretSanta.Api.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<TEntity>> Put(int id, TEntity value)
         {
-            if (await EntityService.UpdateAsync(id, value) is TEntity entity)
+            if (await EntityService.UpdateAsync(id, value) is { } entity)
             {
-                return entity;
+                return Ok();
             }
             return NotFound();
         }
