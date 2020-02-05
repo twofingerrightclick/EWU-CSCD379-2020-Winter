@@ -1,5 +1,5 @@
 ﻿using BlogEngine.Business;
-using BlogEngine.Data;
+using BlogEngine.Business.Dto;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -42,7 +42,7 @@ namespace BlogEngine.Api.Controllers
 
         // POST: api/Author
         [HttpPost]
-        public async Task<Author> Post(Author value)
+        public async Task<Author> Post(AuthorInput value)
         {
             return await AuthorService.InsertAsync(value);
         }
@@ -52,7 +52,7 @@ namespace BlogEngine.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesDefaultResponseType]
-        public async Task<ActionResult<Author>> Put(int id, Author value)
+        public async Task<ActionResult<Author>> Put(int id, AuthorInput value)
         {
             if (await AuthorService.UpdateAsync(id, value) is Author author)
             {

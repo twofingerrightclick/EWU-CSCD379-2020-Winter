@@ -1,12 +1,6 @@
-﻿using BlogEngine.Data;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BlogEngine.Business
+﻿namespace BlogEngine.Business
 {
-    public interface IPostService: IEntityService<Post>
+    public interface IPostService: IEntityService<Dto.Post, Dto.PostInput>
     {
 
     }

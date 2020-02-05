@@ -8,6 +8,9 @@ namespace BlogEngine.Business
     {
         public AutomapperProfileConfiguration()
         {
+            CreateMap<Author, Dto.Author>();
+            CreateMap<Dto.AuthorInput, Author>();
+
             CreateMap<Author, Author>().ForMember(property => property.Id, option => option.Ignore());
             CreateMap<Tag, Tag>().ForMember(property => property.Id, option => option.Ignore());
         }

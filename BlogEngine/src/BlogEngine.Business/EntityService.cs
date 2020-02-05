@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 
 namespace BlogEngine.Business
 {
-    public abstract class EntityService<TEntity>:IEntityService<TEntity>
-        where TEntity: EntityBase
+    public abstract class EntityService<TEntity, TDto, TInputDto> : IEntityService<TDto, TInputDto>
+        where TEntity : EntityBase
+        where TDto : class, TInputDto
+        where TInputDto : class
     {
         protected ApplicationDbContext ApplicationDbContext { get; }
 
@@ -22,7 +24,7 @@ namespace BlogEngine.Business
 
         public async Task<bool> DeleteAsync(int id)
         {
-            TEntity entity = await FetchByIdAsync(id);
+            TEntity entity = await ApplicationDbContext.FindAsync<TEntity>(id);
             if (entity is { })
             {
                 ApplicationDbContext.Remove(entity);
@@ -32,35 +34,33 @@ namespace BlogEngine.Business
             return false;
         }
 
-        public async Task<List<TEntity>> FetchAllAsync() =>
-            await ApplicationDbContext.Set<TEntity>().ToListAsync();
-
-        virtual public async Task<TEntity> FetchByIdAsync(int id) =>
-            await ApplicationDbContext.FindAsync<TEntity>(id);
-
-        public async Task<TEntity> InsertAsync(TEntity entity)
+        public async Task<List<TDto>> FetchAllAsync()
         {
+            List<TEntity> entities = await ApplicationDbContext.Set<TEntity>().ToListAsync();
+            return Mapper.Map<List<TEntity>, List<TDto>>(entities);
+        }
+
+        public virtual async Task<TDto> FetchByIdAsync(int id)
+        {
+            return Mapper.Map<TEntity, TDto>(await ApplicationDbContext.FindAsync<TEntity>(id));
+        }
+
+        public async Task<TDto> InsertAsync(TInputDto inputDto)
+        {
+            TEntity entity = Mapper.Map<TInputDto, TEntity>(inputDto);
+
             ApplicationDbContext.Add(entity);
             await ApplicationDbContext.SaveChangesAsync();
-            return entity;
-        }
-        
-        public async Task<TEntity[]> InsertAsync(params TEntity[] entities)
-        {
-            foreach (TEntity entity in entities)
-            {
-                await InsertAsync(entity);
-            }
-            return entities;
+            return Mapper.Map<TEntity, TDto>(entity);
         }
 
-        public async Task<TEntity?> UpdateAsync(int id, TEntity entity)
+        public async Task<TDto?> UpdateAsync(int id, TInputDto inputDto)
         {
-            if (await ApplicationDbContext.FindAsync<TEntity>(id) is { } result)
+            if (await ApplicationDbContext.FindAsync<TEntity>(id) is TEntity result)
             {
-                Mapper.Map(entity, result);
+                Mapper.Map(inputDto, result);
                 await ApplicationDbContext.SaveChangesAsync();
-                return result;
+                return Mapper.Map<TEntity, TDto>(result);
             }
             return null;
         }

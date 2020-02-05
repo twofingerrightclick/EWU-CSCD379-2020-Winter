@@ -16,12 +16,9 @@ namespace BlogEngine.Api
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public static void ConfigureServices(IServiceCollection services)
         {
-            var sqliteConnection = new SqliteConnection("DataSource=:memory:");
-            sqliteConnection.Open();
-
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.EnableSensitiveDataLogging()
-                       .UseSqlite(sqliteConnection));
+                       .UseSqlite("Data Source=Blog.db"));
 
             services.AddScoped<IAuthorService, AuthorService>();
             services.AddScoped<IPostService, PostService>();
