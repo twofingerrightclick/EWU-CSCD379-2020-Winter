@@ -5,6 +5,7 @@ using SecretSanta.Api.Controllers;
 using SecretSanta.Business;
 using SecretSanta.Data;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 
@@ -185,6 +186,114 @@ namespace SecretSanta.Api.Tests.Controllers
 
             //Assert
             Assert.IsTrue(deleteResult is NotFoundResult);
+        }
+
+        /*  [HttpGet]
+        public async Task<IEnumerable<TEntity>> Get()
+        {
+            List<TEntity> entities = await EntityService.FetchAllAsync();
+            return entities;
+        }
+*/
+        [TestMethod]
+        public async Task Get_WithUsers_ReturnsAllUsers()
+        {
+            //whats the difference between why have to use IUserService? versus UserService
+            // Arrange
+            List<User> users = new List<User>();
+            users.Add(SampleData.CreateUser1());
+            users.Add(SampleData.CreateUser2());
+
+            int expectedSize = users.Count;
+
+            var mockService = new Mock<IUserService>();
+            mockService.Setup(gs => gs.FetchAllAsync())
+                .ReturnsAsync(users);
+
+            var controller = new UserController(mockService.Object);
+
+            //act
+            var getResult = await controller.Get();
+
+
+            // Assert
+            Assert.IsTrue(getResult is IEnumerable<User>);
+
+            List<User> getResultList = (List<User>)getResult;
+
+            Assert.IsTrue(getResultList.Count == expectedSize);
+
+
+
+        }
+
+        [TestMethod]
+        public async Task Get_NoUsers_Returns_EmptyList()
+        {
+            //whats the difference between why have to use IUserService? versus UserService
+            // Arrange
+            List<User> users = new List<User>();
+
+            int expectedSize = users.Count;
+
+            var mockService = new Mock<IUserService>();
+            mockService.Setup(gs => gs.FetchAllAsync())
+                .ReturnsAsync(users);
+
+            var controller = new UserController(mockService.Object);
+
+            //act
+            var getResult = await controller.Get();
+
+
+            // Assert
+            Assert.IsTrue(getResult is IEnumerable<User>);
+
+
+            List<User> getResultList = (List<User>)getResult;
+
+            Assert.IsTrue(getResultList.Count == expectedSize);
+
+
+
+        }
+
+
+
+
+
+        /* // POST: api/Entity
+         [HttpPost]
+         [ProducesResponseType(StatusCodes.Status200OK)]
+         
+         public async Task<TEntity> Post(TEntity value)
+         {
+             return await EntityService.InsertAsync(value);
+         }*/
+
+        [TestMethod]
+        public async Task Post_User_Success()
+        {
+            //Arrange
+            var mockService = new Mock<IUserService>();
+
+            var user = SampleData.CreateUser1();
+
+
+            mockService.Setup(s => s.InsertAsync(user)).ReturnsAsync(user);
+
+
+            var controller = new UserController(mockService.Object);
+
+            //Act
+            ActionResult<User> resultEntity = await controller.Post(user);
+
+            //Assert
+            Assert.IsTrue(resultEntity.Result is OkObjectResult);
+            //not sure about what dbcontext.add(TEntity) returns if there is a failure
+            OkObjectResult? okCode = resultEntity.Result as OkObjectResult;
+            User? resultValue = okCode?.Value as User;
+            Assert.IsNotNull(resultValue);
         }
 
     }

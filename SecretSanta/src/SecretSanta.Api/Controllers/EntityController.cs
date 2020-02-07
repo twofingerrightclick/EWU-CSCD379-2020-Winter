@@ -21,6 +21,7 @@ namespace SecretSanta.Api.Controllers
 
         // GET: api/Entity
         [HttpGet]
+
         public async Task<IEnumerable<TEntity>> Get()
         {
             List<TEntity> entities = await EntityService.FetchAllAsync();
@@ -42,9 +43,10 @@ namespace SecretSanta.Api.Controllers
 
         // POST: api/Entity
         [HttpPost]
-        public async Task<TEntity> Post(TEntity value)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<TEntity>> Post(TEntity value)
         {
-            return await EntityService.InsertAsync(value);
+            return Ok(await EntityService.InsertAsync(value));
         }
 
         // PUT: api/Entity/5

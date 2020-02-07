@@ -22,6 +22,7 @@ namespace SecretSanta.Api
             services.AddDbContext<ApplicationDbContext>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IGiftService, GiftService>();
+            services.AddScoped<IGroupService, GroupService>();
 
             System.Type profileType = typeof(AutomapperConfigurationProfile);
             System.Reflection.Assembly assembly = profileType.Assembly;
