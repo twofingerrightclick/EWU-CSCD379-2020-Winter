@@ -12,7 +12,7 @@ namespace BlogEngine.Data
 
         public string Title { get; set; }
 
-        public string Content { get; set; }
+        public string? Content { get; set; }
 
         public List<Comment> Comments { get; } = new List<Comment>();
         public Author Author { get; set; }

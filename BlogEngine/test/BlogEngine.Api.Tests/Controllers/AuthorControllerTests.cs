@@ -76,13 +76,14 @@ namespace BlogEngine.Api.Tests.Controllers
         public async Task Put_WithMissingId_NotFound()
         {
             // Arrange
-            Business.Dto.AuthorInput im = Mapper.Map<Author, Business.Dto.AuthorInput>(SampleData.CreateInigoMontoya());
+            Business.Dto.AuthorInput im = Mapper.Map<Author, Business.Dto.Author>(SampleData.CreateInigoMontoya());
             string jsonData = JsonSerializer.Serialize(im);
 
             using StringContent stringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
+            var uri = new Uri("api/Author/42", UriKind.RelativeOrAbsolute);
 
             // Act
-            HttpResponseMessage response = await Client.PutAsync("api/Author/42", stringContent);
+            HttpResponseMessage response = await Client.PutAsync(uri, stringContent);
 
             // Assert
             Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
@@ -120,8 +121,36 @@ namespace BlogEngine.Api.Tests.Controllers
             Business.Dto.Author returnedAuthor = JsonSerializer.Deserialize<Business.Dto.Author>(retunedJson, options);
 
             // Assert that returnedAuthor matches im values
-            // Assert that returnedAuthor matches database value
+            // Why?
 
+            // Assert that returnedAuthor matches database value
+            // Why?
+        }
+
+        [TestMethod]
+        [DataRow(nameof(Business.Dto.AuthorInput.FirstName))]
+        [DataRow(nameof(Business.Dto.AuthorInput.LastName))]
+        [DataRow(nameof(Business.Dto.AuthorInput.Email))]
+        public async Task Post_WithoutFirstName_BadResult(string propertyName)
+        {
+            // Arrange
+            Data.Author entity = SampleData.CreateInigoMontoya();
+
+            //DTO
+            Business.Dto.AuthorInput im = Mapper.Map<Author, Business.Dto.Author>(entity);
+            System.Type inputType = typeof(Business.Dto.AuthorInput);
+            System.Reflection.PropertyInfo? propInfo = inputType.GetProperty(propertyName);
+            propInfo!.SetValue(im, null);
+
+            string jsonData = JsonSerializer.Serialize(im);
+            
+            using StringContent stringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
+
+            // Act
+            HttpResponseMessage response = await Client.PostAsync($"api/Author/{entity.Id}", stringContent);
+
+            // Assert
+            Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
         }
     }
 }

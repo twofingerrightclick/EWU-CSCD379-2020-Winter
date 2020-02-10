@@ -14,9 +14,11 @@ namespace BlogEngine.Web
     {
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
-        //public void ConfigureServices(IServiceCollection services)
-        //{
-        //}
+        public static void ConfigureServices(IServiceCollection services)
+        {
+            services.AddMvc(options => options.EnableEndpointRouting = false);
+            services.AddHttpClient("BlogApi");
+        }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Reliability", "CA2007:Consider calling ConfigureAwait on the awaited task", Justification = "<Pending>")]
@@ -28,15 +30,11 @@ namespace BlogEngine.Web
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseRouting();
+            app.UseHttpsRedirection();
 
-            app.UseEndpoints(endpoints =>
-            {
-                _ = endpoints.MapGet("/", async context =>
-                  {
-                      await context.Response.WriteAsync("Hello World from Web!");
-                  });
-            });
+            app.UseStaticFiles();
+
+            app.UseMvcWithDefaultRoute();
         }
     }
 }
