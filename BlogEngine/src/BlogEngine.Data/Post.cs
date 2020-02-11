@@ -15,6 +15,7 @@ namespace BlogEngine.Data
         public string? Content { get; set; }
 
         public List<Comment> Comments { get; } = new List<Comment>();
+        public int AuthorId { get; set; }
         public Author Author { get; set; }
         public string? Slug { get; set; }
 
@@ -36,7 +37,6 @@ namespace BlogEngine.Data
         {
             Title = title;
             Content = content;
-            //AuthorId = authorId;
         }
     }
 }

@@ -23,13 +23,18 @@ namespace BlogEngine.Business.Tests
             using var dbContextInsert = new ApplicationDbContext(Options);
             IAuthorService service = new AuthorService(dbContextInsert, Mapper);
 
-            var inigo = SampleData.CreateInigoMontoya();
+            var inigo = new Dto.AuthorInput
+            {
+                FirstName = SampleData.Inigo,
+                LastName = SampleData.Montoya,
+                Email = SampleData.InigoMontoyaEmail
+            };
 
             // Act
-            await service.InsertAsync(inigo);
+            var createdAuthor = await service.InsertAsync(inigo);
 
             // Assert
-            Assert.IsNotNull(inigo.Id);
+            Assert.IsNotNull(createdAuthor.Id);
         }
 
         [TestMethod]
@@ -39,25 +44,35 @@ namespace BlogEngine.Business.Tests
             using var dbContextInsert = new ApplicationDbContext(Options);
             IAuthorService service = new AuthorService(dbContextInsert, Mapper);
 
-            var inigo = SampleData.CreateInigoMontoya();
-            var princess = SampleData.CreatePrincessButtercup();
+            var inigo = new Dto.AuthorInput
+            {
+                FirstName = SampleData.Inigo,
+                LastName = SampleData.Montoya,
+                Email = SampleData.InigoMontoyaEmail
+            };
+            var princess = new Dto.AuthorInput
+            {
+                FirstName = SampleData.Princess,
+                LastName = SampleData.Buttercup,
+                Email = SampleData.PrincessButtercupEmail
+            };
 
-            await service.InsertAsync(inigo);
-            await service.InsertAsync(princess);
+            var createdInigo = await service.InsertAsync(Mapper.Map<Dto.AuthorInput>(inigo));
+            var createdPrincess = await service.InsertAsync(Mapper.Map<Dto.AuthorInput>(princess));
 
             // Act
             using var dbContextFetch = new ApplicationDbContext(Options);
-            Author inigoFromDb = await dbContextFetch.Authors.SingleAsync(item => item.Id == inigo.Id);
+            Author inigoFromDb = await dbContextFetch.Authors.SingleAsync(item => item.Id == createdInigo.Id);
 
             const string montoyaThe3rd = "Montoya The 3rd";
             inigoFromDb.LastName = montoyaThe3rd;
 
             // Update Inigo Montoya using the princesses Id.
-            await service.UpdateAsync(princess.Id!.Value, inigoFromDb);
+            await service.UpdateAsync(createdPrincess.Id, new Dto.AuthorInput { FirstName = inigoFromDb.FirstName, LastName = inigoFromDb.LastName, Email = inigoFromDb.Email });
 
             // Assert
             using var dbContextAssert = new ApplicationDbContext(Options);
-            inigoFromDb = await dbContextAssert.Authors.SingleAsync(item => item.Id == inigo.Id);
+            inigoFromDb = await dbContextAssert.Authors.SingleAsync(item => item.Id == createdInigo.Id);
             var princessFromDb = await dbContextAssert.Authors.SingleAsync(item => item.Id == 2); 
 
             Assert.AreEqual(

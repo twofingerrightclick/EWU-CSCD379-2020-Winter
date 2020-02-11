@@ -98,7 +98,12 @@ namespace BlogEngine.Api.Tests.Controllers
             context.Authors.Add(entity);
             context.SaveChanges();
             
-            Business.Dto.AuthorInput im = Mapper.Map<Author, Business.Dto.AuthorInput>(entity);
+            Business.Dto.AuthorInput im = new Business.Dto.AuthorInput
+            {
+                FirstName = entity.FirstName,
+                LastName = entity.LastName,
+                Email = entity.Email
+            };
             im.FirstName += "changed";
             im.LastName += "changed";
             im.Email += "changed";

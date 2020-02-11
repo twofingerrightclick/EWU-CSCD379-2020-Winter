@@ -23,20 +23,32 @@ namespace BlogEngine.Business.Tests
             using var dbContext = new ApplicationDbContext(Options);
 
             IPostService service = new PostService(dbContext, Mapper);
+            IAuthorService authorService = new AuthorService(dbContext, Mapper);
 
-            var author = new Author("Inigo", "Montoya", "inigo@montoya.me");
+            var author = new Dto.AuthorInput
+            {
+                FirstName = "Inigo",
+                LastName = "Montoya",
+                Email = "inigo@montoya.me"
+            };
 
-            var post = new Post("Title", "Content", author);
+            var createdAuthor = await authorService.InsertAsync(author);
 
-            await service.InsertAsync(post);
+            var post = new Dto.PostInput()
+            {
+                Title = "Title",
+                AuthorId = createdAuthor.Id,
+                Content = "Content"
+            };
+
+            var createdPost = await service.InsertAsync(post);
 
             // Act
 
             // Assert
-            Assert.IsNotNull(post.Id);
-            Assert.IsNotNull(author.Id);
-            Assert.AreSame(post.Author, author);
-            Assert.AreEqual(author.Id, post.Author.Id);
+            Assert.IsNotNull(createdPost.Id);
+            Assert.IsNotNull(createdAuthor.Id);
+            Assert.AreEqual(createdAuthor.Id, createdPost.Author.Id);
         }
 
         [TestMethod]
@@ -46,21 +58,34 @@ namespace BlogEngine.Business.Tests
             using var dbContext = new ApplicationDbContext(Options);
 
             IPostService service = new PostService(dbContext, Mapper);
+            IAuthorService authorService = new AuthorService(dbContext, Mapper);
 
-            var author = new Author("Inigo", "Montoya", "inigo@montoya.me");
+            var author = new Dto.AuthorInput
+            {
+                FirstName = "Inigo",
+                LastName = "Montoya",
+                Email = "inigo@montoya.me"
+            };
 
-            Post post = new Post("Title", "Content", author);
+            var createdAuthor = await authorService.InsertAsync(author);
 
-            await service.InsertAsync(post);
+            var post = new Dto.PostInput
+            {
+                Title = "Title",
+                Content = "Content",
+                AuthorId = createdAuthor.Id
+            };
+
+            var createdPost = await service.InsertAsync(post);
 
             // Act
 
             // Assert
             using var dbContext2 = new ApplicationDbContext(Options);
             service = new PostService(dbContext, Mapper);
-            post = await service.FetchByIdAsync(post.Id!.Value);
+            var fetchedPost = await service.FetchByIdAsync(createdPost.Id);
 
-            Assert.IsNotNull(post.Author);
+            Assert.IsNotNull(fetchedPost.AuthorId);
         }
 
         [TestMethod]
@@ -70,28 +95,41 @@ namespace BlogEngine.Business.Tests
             using var dbContext = new ApplicationDbContext(Options);
 
             IAuthorService service = new AuthorService(dbContext, Mapper);
+            IAuthorService authorService = new AuthorService(dbContext, Mapper);
 
-            var author = new Author("Inigo", "Montoya", "inigo@montoya.me");
+            var author = new Dto.AuthorInput
+            {
+                FirstName = "Inigo",
+                LastName = "Montoya",
+                Email = "inigo@montoya.me"
+            };
 
-            var author2 = new Author("Inigo", "Montoya", "inigo@montoya.me");
+            var author2 = new Dto.AuthorInput
+            {
+                FirstName = "Inigo",
+                LastName = "Montoya",
+                Email = "inigo@montoya.me"
+            };
 
-            await service.InsertAsync(author);
-            await service.InsertAsync(author2);
+            var insertedAuthor = await service.InsertAsync(author);
+            var insertedAuthor2 = await service.InsertAsync(author2);
 
             // Act
             using var dbContext2 = new ApplicationDbContext(Options);
-            Author fetchAuthor = await dbContext2.Authors.SingleAsync(item => item.Id == author.Id);
-
-            fetchAuthor.FirstName = "Princess";
-            fetchAuthor.LastName = "Buttercup";
+            Author fetchAuthor = await dbContext2.Authors.SingleAsync(item => item.Id == insertedAuthor.Id);
 
             using var dbContext3 = new ApplicationDbContext(Options);
             var service2 = new AuthorService(dbContext3, Mapper);
-            await service2.UpdateAsync(2, fetchAuthor);
+            await service2.UpdateAsync(2, new Dto.AuthorInput
+            {
+                FirstName = "Princess",
+                LastName = "Buttercup",
+                Email = fetchAuthor.Email
+            });
 
             // Assert
             using var dbContext4 = new ApplicationDbContext(Options);
-            Author savedAuthor = await dbContext4.Authors.SingleAsync(item => item.Id == author.Id);
+            Author savedAuthor = await dbContext4.Authors.SingleAsync(item => item.Id == insertedAuthor.Id);
             var otherAuthor = await dbContext4.Authors.SingleAsync(item => item.Id == 2);
             Assert.AreEqual(("Inigo", "Montoya"), (savedAuthor.FirstName, savedAuthor.LastName));
             Assert.AreNotEqual((savedAuthor.FirstName, savedAuthor.LastName), (otherAuthor.FirstName, otherAuthor.LastName));

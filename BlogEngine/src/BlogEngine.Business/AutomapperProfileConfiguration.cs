@@ -11,6 +11,9 @@ namespace BlogEngine.Business
             CreateMap<Author, Dto.Author>();
             CreateMap<Dto.AuthorInput, Author>();
 
+            CreateMap<Post, Dto.Post>();
+            CreateMap<Dto.PostInput, Post>();
+
             CreateMap<Author, Author>().ForMember(property => property.Id, option => option.Ignore());
             CreateMap<Tag, Tag>().ForMember(property => property.Id, option => option.Ignore());
         }
