@@ -105,14 +105,10 @@ namespace SecretSanta.Api.Tests.Controllers
 
             //act
             HttpResponseMessage responseMessage = await Client.PutAsync(uri, inputUserStringContent);
+            
             //assert
             responseMessage.EnsureSuccessStatusCode();
-
             Assert.AreEqual(HttpStatusCode.OK, responseMessage.StatusCode);
-
-            // var result = await context.Users.FindAsync(1);
-
-
             string retunedJson = await responseMessage.Content.ReadAsStringAsync();
 
             var options = new JsonSerializerOptions
@@ -120,6 +116,7 @@ namespace SecretSanta.Api.Tests.Controllers
                 PropertyNameCaseInsensitive = true,
             };
             Business.Dto.User returnedUser = JsonSerializer.Deserialize<Business.Dto.User>(retunedJson, options);
+
 
             // Assert that returnedAuthor matches im values
             Assert.AreEqual<string>(inputUser.FirstName!, returnedUser.FirstName!);
@@ -134,22 +131,26 @@ namespace SecretSanta.Api.Tests.Controllers
             Assert.AreEqual<string>(databaseUser.LastName!, returnedUser.LastName!);
             
 
+        }
+
+     /*   [TestMethod]
+        public async Task Post_WithValidUserInput_Ok()
+        {
+            Business.Dto.UserInput inputUser = Mapper.Map<Data.User, Business.Dto.UserInput>(SampleData.CreateDataUser2());
+            string jsonData = JsonSerializer.Serialize(inputUser);
+            using StringContent inputUserStringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
+            Uri uri = new Uri("api/User/", UriKind.Relative);
+            
 
 
+            using Data.ApplicationDbContext assertContext = Factory.GetDbContext();
 
+            Data.User databaseUser = assertContext.Users.Find(returnedUser.Id);
+            Assert.AreEqual<string>(databaseUser.FirstName!, returnedUser.FirstName!);
+            Assert.AreEqual<string>(databaseUser.LastName!, returnedUser.LastName!);
 
-
-
-
-
-
-
-
-
+        }*/
 
 
         }
-
-
     }
-}
