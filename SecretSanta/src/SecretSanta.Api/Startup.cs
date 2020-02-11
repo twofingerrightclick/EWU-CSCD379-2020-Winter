@@ -28,7 +28,7 @@ namespace SecretSanta.Api
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.EnableSensitiveDataLogging()
-                       .UseSqlite("Data Source=Blog.db"));
+                       .UseSqlite("Data Source=SecretSanta.db"));
 
             services.AddMvc(opts => opts.EnableEndpointRouting = false);
 
