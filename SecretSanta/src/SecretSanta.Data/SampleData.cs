@@ -5,6 +5,7 @@ using SecretSanta.Data;
 public static class SampleData
 {
     // Properties
+#pragma warning disable CA1707 // Identifiers should not contain underscores
     public const string _SAMPLE_FIRSTNAME1 = "sample1_fname";
     public const string _SAMPLE_LASTNAME1 = "sample1_lname";
     public const string _SAMPLE_EMAIL1 = "sample1@email.com";
@@ -22,6 +23,7 @@ public static class SampleData
     public const string _SAMPLE_URL2 = "sample2_url";
     public const string _SAMPLE_DESCRIPTION2 = "sample2_description";
 
+#pragma warning restore CA1707 // Identifiers should not contain underscores
 
 
     static public User CreateDataUser1() => new User(_SAMPLE_FIRSTNAME1, _SAMPLE_LASTNAME1);

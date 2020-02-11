@@ -13,8 +13,8 @@ namespace SecretSanta.Api.Tests.Controllers
     [TestClass]
     public class UserControllerTests
     {
-        private SecretSantaWebApplicationFactory Factory { get; set; }
-        private HttpClient Client { get; set; }
+        private SecretSantaWebApplicationFactory Factory { get; set; } = null!;
+        private HttpClient Client { get; set; } = null!;
         private IMapper Mapper { get; } = AutomapperConfigurationProfile.CreateMapper();
 
         private JsonSerializerOptions _JsonOptions = new JsonSerializerOptions
