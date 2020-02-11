@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SecretSanta.Business;
-using SecretSanta.Data;
+
 using System;
 using System.Net;
 using System.Net.Http;
@@ -25,7 +25,7 @@ namespace SecretSanta.Api.Tests.Controllers
         {
             Factory = new SecretSantaWebApplicationFactory();
 
-            using ApplicationDbContext context = Factory.GetDbContext();
+            using Data.ApplicationDbContext context = Factory.GetDbContext();
             context.Database.EnsureCreated();
 
             Client = Factory.CreateClient();
@@ -41,7 +41,7 @@ namespace SecretSanta.Api.Tests.Controllers
         public async Task Get_ReturnsUsers()
         {
             // Arrange
-            using ApplicationDbContext context = Factory.GetDbContext();
+            using Data.ApplicationDbContext context = Factory.GetDbContext();
             Data.User im = SampleData.CreateDataUser1();
             context.Users.Add(im);
             context.SaveChanges();
@@ -72,7 +72,7 @@ namespace SecretSanta.Api.Tests.Controllers
         public async Task Put_WithMissingId_NotFound()
         {
             // Arrange
-            Business.Dto.UserInput im = Mapper.Map<User, Business.Dto.User>(SampleData.CreateDataUser1());
+            Business.Dto.UserInput im = Mapper.Map<Data.User, Business.Dto.UserInput>(SampleData.CreateDataUser1());
             string jsonData = JsonSerializer.Serialize(im);
 
             using StringContent stringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
@@ -87,27 +87,62 @@ namespace SecretSanta.Api.Tests.Controllers
         }
 
         [TestMethod]
-        public async Task Put_WithId_Ok()
+        public async Task Put_WithValidId_Ok()
         {
 
             //arrange
-            using ApplicationDbContext context = Factory.GetDbContext();
+            using Data.ApplicationDbContext context = Factory.GetDbContext();
             var user1 = SampleData.CreateDataUser1();
-            var savedUser = await context.AddAsync<User>(user1);
+            var savedUser = context.Users.Add(user1);
             context.SaveChanges();
 
 
 
-            Business.Dto.UserInput im = Mapper.Map<User, Business.Dto.User>(SampleData.CreateDataUser2());
-            string jsonData = JsonSerializer.Serialize(im);
-            using StringContent stringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
+            Business.Dto.UserInput inputUser = Mapper.Map<Data.User, Business.Dto.UserInput>(SampleData.CreateDataUser2());
+            string jsonData = JsonSerializer.Serialize(inputUser);
+            using StringContent inputUserStringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
             Uri uri = new Uri("api/User/1", UriKind.Relative);
 
             //act
-            HttpResponseMessage responseMessage = await Client.PutAsync(uri, stringContent);
+            HttpResponseMessage responseMessage = await Client.PutAsync(uri, inputUserStringContent);
             //assert
+            responseMessage.EnsureSuccessStatusCode();
 
             Assert.AreEqual(HttpStatusCode.OK, responseMessage.StatusCode);
+
+            // var result = await context.Users.FindAsync(1);
+
+
+            string retunedJson = await responseMessage.Content.ReadAsStringAsync();
+
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+            };
+            Business.Dto.User returnedUser = JsonSerializer.Deserialize<Business.Dto.User>(retunedJson, options);
+
+            // Assert that returnedAuthor matches im values
+            Assert.AreEqual<string>(inputUser.FirstName!, returnedUser.FirstName!);
+            Assert.AreEqual<string>(inputUser.LastName!, returnedUser.LastName!);
+
+
+            // Assert that returnedAuthor matches database value
+            using Data.ApplicationDbContext assertContext = Factory.GetDbContext();
+
+            Data.User databaseUser = assertContext.Users.Find(returnedUser.Id);
+            Assert.AreEqual<string>(databaseUser.FirstName!, returnedUser.FirstName!);
+            Assert.AreEqual<string>(databaseUser.LastName!, returnedUser.LastName!);
+            
+
+
+
+
+
+
+
+
+
+
 
 
 
