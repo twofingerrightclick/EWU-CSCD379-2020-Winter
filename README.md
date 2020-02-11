@@ -1,4 +1,6 @@
 # Assignment
+[![Build Status](https://dev.azure.com/afrostad/CSCD379/_apis/build/status/twofingerrightclick.EWU-CSCD379-2020-Winter?branchName=master)](https://dev.azure.com/afrostad/CSCD379/_build/latest?definitionId=3&branchName=Assignment5)
+
 
 For this assignment you will be completing the SecretSanta.Api project and startng work on the SecretSanta.Web project
 
