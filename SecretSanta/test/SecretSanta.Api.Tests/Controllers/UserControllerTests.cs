@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SecretSanta.Business;
-
 using System;
 using System.Net;
 using System.Net.Http;
@@ -17,6 +16,11 @@ namespace SecretSanta.Api.Tests.Controllers
         private SecretSantaWebApplicationFactory Factory { get; set; }
         private HttpClient Client { get; set; }
         private IMapper Mapper { get; } = AutomapperConfigurationProfile.CreateMapper();
+
+        private JsonSerializerOptions _JsonOptions = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        };
 
 
 
@@ -111,11 +115,8 @@ namespace SecretSanta.Api.Tests.Controllers
             Assert.AreEqual(HttpStatusCode.OK, responseMessage.StatusCode);
             string retunedJson = await responseMessage.Content.ReadAsStringAsync();
 
-            var options = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true,
-            };
-            Business.Dto.User returnedUser = JsonSerializer.Deserialize<Business.Dto.User>(retunedJson, options);
+        
+            Business.Dto.User returnedUser = JsonSerializer.Deserialize<Business.Dto.User>(retunedJson, _JsonOptions);
 
 
             // Assert that returnedAuthor matches im values
@@ -133,24 +134,39 @@ namespace SecretSanta.Api.Tests.Controllers
 
         }
 
-     /*   [TestMethod]
+        [TestMethod]
         public async Task Post_WithValidUserInput_Ok()
         {
-            Business.Dto.UserInput inputUser = Mapper.Map<Data.User, Business.Dto.UserInput>(SampleData.CreateDataUser2());
+            Business.Dto.UserInput inputUser = Mapper.Map<Data.User, Business.Dto.UserInput>(SampleData.CreateDataUser1());
             string jsonData = JsonSerializer.Serialize(inputUser);
             using StringContent inputUserStringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
             Uri uri = new Uri("api/User/", UriKind.Relative);
-            
 
+            HttpResponseMessage responseMessage = await Client.PostAsync(uri, inputUserStringContent);
 
+            //assert
+            //ensure success
+            responseMessage.EnsureSuccessStatusCode();
+
+            string returnedJson = await responseMessage.Content.ReadAsStringAsync();
+
+          
+            Business.Dto.User returnedUser = JsonSerializer.Deserialize<Business.Dto.User>(returnedJson, _JsonOptions);
+           
+            //assert matches returned jason object matches input jason object
+
+            Assert.AreEqual<string>(inputUser.FirstName!, returnedUser.FirstName!);
+            Assert.AreEqual<string>(inputUser.LastName!, returnedUser.LastName!);
+
+            //assert matches stored entity
             using Data.ApplicationDbContext assertContext = Factory.GetDbContext();
 
             Data.User databaseUser = assertContext.Users.Find(returnedUser.Id);
             Assert.AreEqual<string>(databaseUser.FirstName!, returnedUser.FirstName!);
             Assert.AreEqual<string>(databaseUser.LastName!, returnedUser.LastName!);
 
-        }*/
-
-
         }
+
+
+    }
     }
