@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using BlogEngine.Api.Controllers;
 using BlogEngine.Data;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -22,7 +23,7 @@ namespace BlogEngine.Api
             {
                 IServiceProvider services = scope.ServiceProvider;
                 using var context = services.GetRequiredService<ApplicationDbContext>();
-                context.Database.EnsureCreated();
+                context.Database.Migrate();
             }
 
             host.Run();

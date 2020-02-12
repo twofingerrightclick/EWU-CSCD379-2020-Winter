@@ -97,13 +97,14 @@ namespace BlogEngine.Api.Tests.Controllers
             using ApplicationDbContext context = Factory.GetDbContext();
             context.Authors.Add(entity);
             context.SaveChanges();
-            
+
             Business.Dto.AuthorInput im = new Business.Dto.AuthorInput
             {
                 FirstName = entity.FirstName,
                 LastName = entity.LastName,
                 Email = entity.Email
             };
+
             im.FirstName += "changed";
             im.LastName += "changed";
             im.Email += "changed";
@@ -152,7 +153,7 @@ namespace BlogEngine.Api.Tests.Controllers
             using StringContent stringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
 
             // Act
-            HttpResponseMessage response = await Client.PostAsync($"api/Author/{entity.Id}", stringContent);
+            HttpResponseMessage response = await Client.PostAsync($"api/Author", stringContent);
 
             // Assert
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);

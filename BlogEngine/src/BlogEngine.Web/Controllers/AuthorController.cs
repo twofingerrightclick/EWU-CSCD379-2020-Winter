@@ -29,5 +29,42 @@ namespace BlogEngine.Web.Controllers
             ICollection<Author> authors = await client.GetAllAsync();
             return View(authors);
         }
+
+        public ActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Create(AuthorInput authorInput)
+        {
+            HttpClient httpClient = ClientFactory.CreateClient("BlogApi");
+
+            var client = new AuthorClient(httpClient);
+            var createdAuthor = await client.PostAsync(authorInput);
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<ActionResult> Edit(int id)
+        {
+            HttpClient httpClient = ClientFactory.CreateClient("BlogApi");
+
+            var client = new AuthorClient(httpClient);
+            var fetchedAuthor = await client.GetAsync(id);
+
+            return View(fetchedAuthor);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Edit(int id, AuthorInput authorInput)
+        {
+            HttpClient httpClient = ClientFactory.CreateClient("BlogApi");
+
+            var client = new AuthorClient(httpClient);
+            var updatedAuthor = await client.PutAsync(id, authorInput);
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
