@@ -1,55 +1,27 @@
-﻿@model IEnumerable<BlogEngine.Web.Api.Author>
+﻿@model IEnumerable<Author>
 
-@{
-    Layout = null;
-}
-
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>View</title>
-</head>
-<body>
 <p>
     <a asp-action="Create">Create New</a>
 </p>
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FirstName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LastName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
+            <th asp-display-name-for="@Model.ToList()[0].Id"></th>
+            <th asp-display-name-for="@Model.ToList()[0].FirstName"></th>
+            <th asp-display-name-for="@Model.ToList()[0].LastName"></th>
+            <th asp-display-name-for="@Model.ToList()[0].Email"></th>
             <th></th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
         <tr>
+            <td asp-display-for="@item.Id"></td>
+            <td asp-display-for="@item.FirstName"></td>
+            <td asp-display-for="@item.LastName"></td>
+            <td asp-display-for="@item.Email"></td>
             <td>
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
                 @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
             </td>
@@ -57,5 +29,3 @@
 }
     </tbody>
 </table>
-</body>
-</html>

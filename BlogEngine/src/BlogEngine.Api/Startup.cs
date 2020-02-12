@@ -7,18 +7,24 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Data.Sqlite;
+using Microsoft.Extensions.Configuration;
 
 namespace BlogEngine.Api
 {
     public class Startup
     {
+        private IConfiguration Configuration { get; }
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
-        public static void ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.EnableSensitiveDataLogging()
-                       .UseSqlite("Data Source=Blog.db"));
+                       .UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddScoped<IAuthorService, AuthorService>();
             services.AddScoped<IPostService, PostService>();
@@ -27,7 +33,8 @@ namespace BlogEngine.Api
             System.Reflection.Assembly assembly = profileType.Assembly;
             services.AddAutoMapper(new[] { assembly });
 
-            services.AddMvc(opts => opts.EnableEndpointRouting = false);
+            // services.AddMvc(opts => opts.EnableEndpointRouting = false);
+            services.AddControllers();
 
             services.AddSwaggerDocument();
         }
@@ -48,7 +55,10 @@ namespace BlogEngine.Api
             //http://localhost/swagger
             app.UseSwaggerUi3();
 
-            app.UseMvc();
+            app.UseEndpoints(endpoint =>
+            {
+                endpoint.MapDefaultControllerRoute();
+            });
         }
     }
 }

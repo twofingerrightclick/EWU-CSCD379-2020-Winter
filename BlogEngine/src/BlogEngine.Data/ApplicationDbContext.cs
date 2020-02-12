@@ -15,6 +15,7 @@ namespace BlogEngine.Data
         public DbSet<Comment> Comments { get; private set; }
         public DbSet<Tag> Tags { get; private set; }
         public DbSet<PostTag> PostTags { get; private set; }
+        public DbSet<Editor> Editors { get; set; }
         public IHttpContextAccessor HttpContextAccessor { get; private set; }
 
 // Justifiction: Properties initialized by Entity Framework.
