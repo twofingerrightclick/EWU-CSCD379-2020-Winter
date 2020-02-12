@@ -1,34 +1,34 @@
 # Assignment
 
-For this assignment you will be completing the SecretSanta.Api project and startng work on the SecretSanta.Web project
+For this assignment you will be adding CRUD functionality in the SecretSanta.Web application
 
-- Create DTOs for all entities
-- Create "input" DTOs for all entities
-- Update AutoMapper configuration to be able to map between relevant DTOs and database entities.
-- Update controllers and unit tests to use new DTO objects rather that `SecretSanta.Data` objects.
-- Update the SecretSanta.Api project to use a SQLite **file** database.
+- Within the API project
+  - Remove the hardcoded Data Source value for the database and use the value stored in the ConnectionStrings.DefaultConnection within the appropriate App Settings file
+  - Replace the EnsureCreated with a call to Migrate
+    - This will require the generation of Migrations as well. The command should be run from the API project, but the migrations should live within the Data project
+  - Modify the ConfigureServices and Configure methods to use the new ASP.NET Core 3.x routing
 
-- Replace the API unit tests for **GiftController** with integration tests
-  - The integration tests should should use a SQLite in memory database
-  - Seed the database as needed for the tests
-  - The integration tests should validate all required parameters. For GiftInput both Title, and UserId should be required.
-
-- Generate C# client for the SecretSanta.Web project
-  - Generated code should be in the `SecretSanta.Web.Api` namespace
-  - Generated clients should have generated interfaces
-
-- In the SecreateSanta.Web project create basic MVC controllers 
-  - Controllers should use the generated clients to invoke the API
-  - Controllers should have a single index endpoint that simply displays a list of items for each of the content types
-  - Code is this project **does not** need to be tested for this assignment
+- Within the Web project
+  - Modify the ConfigureServices and Configure methods to use the new ASP.NET Core 3.x routing
+  - Set the BaseAddress of the HttpClient so the value is coming from the appropriate App Settings file
+  - Regenerate the Client.g.cs file with the following settings
+    - Generated code should be in the `SecretSanta.Web.Api` namespace
+    - Generated clients should have generated interfaces
+    - Generated code should not use the base url for the request
+  - Create an _Layout.cshtml file and put the "Chrome" for the application within it (this should include the navigation that allows one to get Home, Users, Gifts, Groups)
+    - All pages created should use this _Layouts file
+  - Create Create, Edit, Delete pages for Users, Gifts, Groups
+    - Display validation errors if any occur (server side validation)
+  - Enable TagHelpers functionality and move all namespaces into the _ViewImports file
+  - Configure webpack so that all style assets get created and copied into the wwwroot folder
+    - Should auto-generate the _Layouts.cshtml from the _LayoutsTemplate.cshtml file
+    - Should have bulma added as the css framework and using the scss version of the assets
 
 ## Extra Credit
-- Implement the integration tests for the UserController, and GroupController.
+- Add client side validation of fields
 
 ## Relevant 
-- [Integration Testing](https://docs.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-3.1)
-- [Create Data Transfer Objects (DTOs)](https://docs.microsoft.com/en-us/aspnet/web-api/overview/data/using-web-api-with-entity-framework/part-5)
-- [NSwag Code Generation](https://docs.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-nswag?view=aspnetcore-3.1&tabs=visual-studio#code-generation)
-- [SQLite Connection Strings](https://docs.microsoft.com/en-us/dotnet/standard/data/sqlite/connection-strings)
-- [Implementing Disposable](https://docs.microsoft.com/en-us/dotnet/standard/garbage-collection/implementing-dispose)
-- [ReadWrite Json](https://docs.microsoft.com/en-us/dotnet/standard/serialization/system-text-json-how-to)
+- [Bulma](https://bulma.io/)
+- [Webpack](https://webpack.js.org/)
+- [dotnet-ef command tool](https://docs.microsoft.com/en-us/ef/core/miscellaneous/cli/dotnet)
+- [aspnet core taghelpers](https://docs.microsoft.com/en-us/aspnet/core/mvc/views/tag-helpers/intro?view=aspnetcore-3.1)
