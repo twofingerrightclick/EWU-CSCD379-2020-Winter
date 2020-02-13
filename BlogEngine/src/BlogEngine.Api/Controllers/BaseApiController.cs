@@ -40,10 +40,18 @@ namespace BlogEngine.Api.Controllers
             return Ok(entity);
         }
 
+        // PUT: api/Author/5
         [HttpPut("{id}")]
-        public async Task<TDto?> Put(int id, TInputDto value)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult<TDto?>> Put(int id, TInputDto value)
         {
-            return await Service.UpdateAsync(id, value);
+            if (await Service.UpdateAsync(id, value) is TDto dto)
+            {
+                return dto;
+            }
+            return NotFound();
         }
 
         [HttpPost]
