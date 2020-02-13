@@ -276,3 +276,5 @@ __pycache__/
 
 *.sqlite
 *.db
+**/*.db
+**/**/*.db
