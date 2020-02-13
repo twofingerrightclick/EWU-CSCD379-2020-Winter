@@ -21,7 +21,7 @@ namespace SecretSanta.Api.Controllers
             Service = service ?? throw new ArgumentNullException(nameof(service));
         }
 
-       [HttpGet]
+        [HttpGet]
         public async Task<IEnumerable<TDto>> Get() => await Service.FetchAllAsync();
 
         [HttpGet("{id}")]
@@ -40,13 +40,11 @@ namespace SecretSanta.Api.Controllers
         [ProducesDefaultResponseType]
         public async Task<ActionResult<TDto?>> Put(int id, [FromBody] TInputDto value)
         {
-
             if (await Service.UpdateAsync(id, value) is TDto dto)
             {
                 return Ok(dto);
             }
             return NotFound();
-           
         }
 
         [HttpPost]
