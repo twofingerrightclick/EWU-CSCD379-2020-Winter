@@ -33,7 +33,6 @@ namespace BlogEngine.Api
             System.Reflection.Assembly assembly = profileType.Assembly;
             services.AddAutoMapper(new[] { assembly });
 
-            // services.AddMvc(opts => opts.EnableEndpointRouting = false);
             services.AddControllers();
 
             services.AddSwaggerDocument();

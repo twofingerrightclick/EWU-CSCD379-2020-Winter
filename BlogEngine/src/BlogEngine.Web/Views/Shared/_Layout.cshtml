@@ -1,21 +1,85 @@
-﻿<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>@ViewBag.Title</title>
-</head>
-<body>
-    <header>
-        <nav>
-            <ul>
-                <li><a asp-controller="Author">Authors</a></li>
-                <li><a asp-controller="Post">Posts</a></li>
-            </ul>
-        </nav>
-    </header>
-    <div>
-        @RenderBody()
-    </div>
-</body>
-</html>
+Html Webpack Plugin:
+<pre>
+  Error: Child compilation failed:
+  Module build failed (from ./node_modules/html-webpack-plugin/lib/loader.js):
+  Error: ENOENT: no such file or directory, open 'C:\repos\intellitect-samples\EWU-CSCD379-2020-Winter\BlogEngine\src\  BlogEngine.Web\Views\Shared\_Layout_Template.cshtml':
+  Error: ENOENT: no such file or directory, open 'C:\repos\intellitect-samples\EWU-CSCD379-2020-Winter\BlogEngine\src\  BlogEngine.Web\Views\Shared\_Layout_Template.cshtml'
+  
+  - compiler.js:79 
+    [BlogEngine.Web]/[html-webpack-plugin]/lib/compiler.js:79:16
+  
+  - Compiler.js:343 
+    [BlogEngine.Web]/[webpack]/lib/Compiler.js:343:11
+  
+  - Compiler.js:681 
+    [BlogEngine.Web]/[webpack]/lib/Compiler.js:681:15
+  
+  
+  - Hook.js:154 AsyncSeriesHook.lazyCompileHook
+    [BlogEngine.Web]/[tapable]/lib/Hook.js:154:20
+  
+  - Compiler.js:678 
+    [BlogEngine.Web]/[webpack]/lib/Compiler.js:678:31
+  
+  
+  - Hook.js:154 AsyncSeriesHook.lazyCompileHook
+    [BlogEngine.Web]/[tapable]/lib/Hook.js:154:20
+  
+  - Compilation.js:1423 
+    [BlogEngine.Web]/[webpack]/lib/Compilation.js:1423:35
+  
+  
+  - Hook.js:154 AsyncSeriesHook.lazyCompileHook
+    [BlogEngine.Web]/[tapable]/lib/Hook.js:154:20
+  
+  - Compilation.js:1414 
+    [BlogEngine.Web]/[webpack]/lib/Compilation.js:1414:32
+  
+  
+  - Hook.js:154 AsyncSeriesHook.lazyCompileHook
+    [BlogEngine.Web]/[tapable]/lib/Hook.js:154:20
+  
+  - Compilation.js:1409 
+    [BlogEngine.Web]/[webpack]/lib/Compilation.js:1409:36
+  
+  
+  - Hook.js:154 AsyncSeriesHook.lazyCompileHook
+    [BlogEngine.Web]/[tapable]/lib/Hook.js:154:20
+  
+  - Compilation.js:1405 
+    [BlogEngine.Web]/[webpack]/lib/Compilation.js:1405:32
+  
+  
+  - Hook.js:154 AsyncSeriesHook.lazyCompileHook
+    [BlogEngine.Web]/[tapable]/lib/Hook.js:154:20
+  
+  - Compilation.js:1342 Compilation.seal
+    [BlogEngine.Web]/[webpack]/lib/Compilation.js:1342:27
+  
+  - Compiler.js:675 
+    [BlogEngine.Web]/[webpack]/lib/Compiler.js:675:18
+  
+  - Compilation.js:1261 
+    [BlogEngine.Web]/[webpack]/lib/Compilation.js:1261:4
+  
+  
+  - Hook.js:154 AsyncSeriesHook.lazyCompileHook
+    [BlogEngine.Web]/[tapable]/lib/Hook.js:154:20
+  
+  - Compilation.js:1253 Compilation.finish
+    [BlogEngine.Web]/[webpack]/lib/Compilation.js:1253:28
+  
+  - Compiler.js:672 
+    [BlogEngine.Web]/[webpack]/lib/Compiler.js:672:17
+  
+  
+  - Compilation.js:1185 
+    [BlogEngine.Web]/[webpack]/lib/Compilation.js:1185:12
+  
+  - Compilation.js:1097 
+    [BlogEngine.Web]/[webpack]/lib/Compilation.js:1097:9
+  
+  - task_queues.js:75 processTicksAndRejections
+    internal/process/task_queues.js:75:11
+  
+</pre>
