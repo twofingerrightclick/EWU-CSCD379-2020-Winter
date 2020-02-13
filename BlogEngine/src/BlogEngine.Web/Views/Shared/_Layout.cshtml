@@ -4,6 +4,11 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
+    <style>
+        input.input-validation-error {
+            border-color: red;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -17,5 +22,6 @@
     <div>
         @RenderBody()
     </div>
+    @RenderSection("scripts", required: false)
 </body>
 </html>

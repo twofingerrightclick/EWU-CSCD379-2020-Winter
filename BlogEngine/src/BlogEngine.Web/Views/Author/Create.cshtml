@@ -1,30 +1,40 @@
 ﻿@model AuthorInput
 
-<form asp-route="Create">
-    <div class="field">
-        <label class="label" asp-for="FirstName">First Name</label>
-        <div class="control">
-            <input class="input" type="text" asp-for="FirstName" />
+    <form asp-route="Create">
+        <div asp-validation-summary="ModelOnly"></div>
+        <div class="field">
+            <label class="label" asp-for="FirstName"></label>
+            <div class="control">
+                <input class="input" type="text" asp-for="FirstName" />
+                <span asp-validation-for="FirstName"></span>
+            </div>
         </div>
-    </div>
-    <div class="field">
-        <label class="label" asp-for="LastName">Last Name</label>
-        <div class="control">
-            <input class="input" type="text" asp-for="LastName" />
+        <div class="field">
+            <label class="label" asp-for="LastName"></label>
+            <div class="control">
+                <input class="input" type="text" asp-for="LastName" />
+                <span asp-validation-for="LastName"></span>
+            </div>
         </div>
-    </div>
-    <div class="field">
-        <label class="label" asp-for="Email">Email Address</label>
-        <div class="control">
-            <input class="input" type="text" asp-for="Email" />
+        <div class="field">
+            <label class="label" asp-for="Email"></label>
+            <div class="control">
+                <input class="input" type="text" asp-for="Email" />
+                <span asp-validation-for="Email"></span>
+            </div>
         </div>
-    </div>
-    <div class="field is-grouped">
-        <div class="control">
-            <button class="button is-primary">Submit</button>
+        <div class="field is-grouped">
+            <div class="control">
+                <button id="submit" onclick="setAttribute('disabled', 'disabled');" class="button is-primary">Submit</button>
+            </div>
+            <div class="control">
+                <a asp-action="Index" class="button is-light">Cancel</a>
+            </div>
         </div>
-        <div class="control">
-            <a asp-action="Index" class="button is-light">Cancel</a>
-        </div>
-    </div>
-</form>
+    </form>
+@section scripts
+{
+<script>
+    //document.getElementById("submit").setAttribute("disabled", "disabled");
+</script>
+}
