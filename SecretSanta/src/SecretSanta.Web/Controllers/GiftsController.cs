@@ -20,6 +20,8 @@ namespace SecretSanta.Web.Controllers
         public async Task<IActionResult> Index()
         {
             ICollection<Gift> gifts = await Client.GetAllAsync();
+
+            var mygift = await Client.GetAsync(1);
             return View(gifts);
         }
     }
