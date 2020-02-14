@@ -266,24 +266,19 @@ namespace SecretSanta.Api.Tests.Controllers
         //trying to figure out how to do this test by getting the property name dynamically
         // was just passing in literal "FirstName" to get the FirstName property. Not sure if the enum is any better
 
-        public enum DtoInputUserPropName 
-        {
-            FirstName = 0,
-            LastName = 1,
-        }
+      
 
         [DataTestMethod]
-        [DataRow(DtoInputUserPropName.FirstName, null)]
-        [DataRow(DtoInputUserPropName.LastName, null)]
+        [DataRow(nameof(Business.Dto.User.FirstName), null)]
+        [DataRow(nameof(Business.Dto.User.LastName), null)]
 
-        public async Task Post_UserInputWithMissingProperty_Fails(DtoInputUserPropName prop, string? propValue)
+        public async Task Post_UserInputWithMissingProperty_Fails(string propName, string? propValue)
         {
 
             //arrange
             Business.Dto.UserInput inputUser = Mapper.Map<Data.User, Business.Dto.UserInput>(SampleData.CreateDataUser1());
 
             Type inputUserType = typeof(Business.Dto.UserInput);
-            string propName = typeof(Data.User).GetProperties()[(int)prop].Name;
             PropertyInfo piInputUser = inputUserType.GetProperty(propName)!;
             piInputUser.SetValue(inputUser, propValue);
 

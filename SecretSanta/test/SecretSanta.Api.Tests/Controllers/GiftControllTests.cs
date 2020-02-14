@@ -348,23 +348,14 @@ namespace SecretSanta.Api.Tests.Controllers
 
 
 
-    //trying to figure out how to do this test by getting the property name dynamically
-    // was just passing in literal "FirstName" to get the FirstName property. Not sure if the enum is any better
-
-    public enum DtoInputGiftPropName
-        {
-            Title = 0,
-            Description = 1,
-            Url = 2,
-           
-        }
 
         [DataTestMethod]
-        [DataRow(DtoInputGiftPropName.Title, null)]
-        [DataRow(DtoInputGiftPropName.Description, null)]
-        [DataRow(DtoInputGiftPropName.Url, null)]
+        [DataRow(nameof(Business.Dto.GiftInput.Title), null)]
+        [DataRow(nameof(Business.Dto.GiftInput.Description), null)]
+        [DataRow(nameof(Business.Dto.GiftInput.Url), null)]
+       
 
-        public async Task Post_GiftInputWithMissingProperty_Fails(DtoInputGiftPropName prop, string? propValue)
+        public async Task Post_GiftInputWithMissingProperty_Fails(string propName, string? propValue)
         {
 
             //arrange
@@ -376,8 +367,8 @@ namespace SecretSanta.Api.Tests.Controllers
             Business.Dto.GiftInput inputGift = Mapper.Map<Data.Gift, Business.Dto.GiftInput>(SampleData.CreateGift());
             inputGift.UserId = storedUser.Entity.Id;
             Type inputGiftType = typeof(Business.Dto.GiftInput);
-            string propName = typeof(Data.Gift).GetProperties()[(int)prop].Name;
-            PropertyInfo piInputGift = inputGiftType.GetProperty(propName)!;
+            
+            PropertyInfo piInputGift = inputGiftType.GetProperty(propName!);
             piInputGift.SetValue(inputGift, propValue);
 
             string jsonData = JsonSerializer.Serialize(inputGift);
