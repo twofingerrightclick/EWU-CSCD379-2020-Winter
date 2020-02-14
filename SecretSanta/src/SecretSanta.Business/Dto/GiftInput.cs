@@ -12,7 +12,7 @@ namespace SecretSanta.Business.Dto
         [Required]
         public string? Description { get; set; }
         [Required]
-        [Url]
+        //[Url]
         public string? Url { get; set; }
         [Required]
         public int? UserId { get; set; }

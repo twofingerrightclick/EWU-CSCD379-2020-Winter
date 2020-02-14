@@ -1,16 +1,19 @@
 ﻿using AutoMapper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SecretSanta.Api.Controllers;
 using SecretSanta.Business;
-using SecretSanta.Data;
 using System;
+using System.Net;
 using System.Net.Http;
+using System.Reflection;
+using System.Text;
 using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace SecretSanta.Api.Tests.Controllers
 {
     [TestClass]
-    public class GiftControllTests {
+    public class GiftControllTests
+    {
 
         private SecretSantaWebApplicationFactory Factory { get; set; } = null!;
         private HttpClient Client { get; set; } = null!;
@@ -39,48 +42,51 @@ namespace SecretSanta.Api.Tests.Controllers
         {
             Factory.Dispose();
         }
-/*
+
         [TestMethod]
-        public async Task Get_WithUsersInDB_ReturnsUsers()
+        public async Task Get_WithGiftsInDB_ReturnsGifts()
         {
             // Arrange
             using Data.ApplicationDbContext context = Factory.GetDbContext();
-            Data.User im = SampleData.CreateDataUser1();
-            context.Users.Add(im);
+            Data.Gift im = SampleData.CreateGift();
+            context.Gifts.Add(im);
             context.SaveChanges();
-            Uri uri = new Uri("api/User", UriKind.Relative);
+            Uri uri = new Uri("api/Gift", UriKind.Relative);
 
             // Act
             HttpResponseMessage response = await Client.GetAsync(uri);
 
             // Assert
-            response.EnsureSuccessStatusCode(); // Status Code 200-299
+            response.EnsureSuccessStatusCode();
             string jsonData = await response.Content.ReadAsStringAsync();
 
             var options = new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true,
             };
-            Business.Dto.User[] users =
-                JsonSerializer.Deserialize<Business.Dto.User[]>(jsonData, options);
-            Assert.AreEqual(1, users.Length);
+            Business.Dto.Gift[] gifts =
+                JsonSerializer.Deserialize<Business.Dto.Gift[]>(jsonData, options);
 
-            Assert.AreEqual(im.Id, users[0].Id);
-            Assert.AreEqual(im.FirstName, users[0].FirstName);
-            Assert.AreEqual(im.LastName, users[0].LastName);
+            Assert.AreEqual(1, gifts.Length);
+
+            Assert.AreEqual(im.Id, gifts[0].Id);
+            Assert.AreEqual(im.Title, gifts[0].Title);
+            Assert.AreEqual(im.Description, gifts[0].Description);
+            Assert.AreEqual(im.Url, gifts[0].Url);
+            Assert.AreEqual(im.UserId, gifts[0].UserId);
 
         }
 
 
         [TestMethod]
-        public async Task Get_ValidId_ReturnsUser()
+        public async Task Get_ValidId_ReturnsGift()
         {
             // Arrange
             using Data.ApplicationDbContext context = Factory.GetDbContext();
-            Data.User im = SampleData.CreateDataUser1();
-            context.Users.Add(im);
+            Data.Gift im = SampleData.CreateGift();
+            context.Gifts.Add(im);
             context.SaveChanges();
-            Uri uri = new Uri("api/User/1", UriKind.Relative);
+            Uri uri = new Uri("api/Gift/1", UriKind.Relative);
 
             // Act
             HttpResponseMessage response = await Client.GetAsync(uri);
@@ -90,13 +96,16 @@ namespace SecretSanta.Api.Tests.Controllers
             string jsonData = await response.Content.ReadAsStringAsync();
 
 
-            Business.Dto.User user =
-                JsonSerializer.Deserialize<Business.Dto.User>(jsonData, _JsonOptions);
+            Business.Dto.Gift gift =
+                JsonSerializer.Deserialize<Business.Dto.Gift>(jsonData, _JsonOptions);
 
 
-            Assert.AreEqual(im.Id, user.Id);
-            Assert.AreEqual(im.FirstName, user.FirstName);
-            Assert.AreEqual(im.LastName, user.LastName);
+            Assert.AreEqual(im.Id, gift.Id);
+            Assert.AreEqual(im.Title, gift.Title);
+            Assert.AreEqual(im.Description, gift.Description);
+            Assert.AreEqual(im.Url, gift.Url);
+            Assert.AreEqual(im.UserId, gift.UserId);
+
 
         }
 
@@ -107,7 +116,7 @@ namespace SecretSanta.Api.Tests.Controllers
         {
             // Arrange
 
-            Uri uri = new Uri("api/User/1", UriKind.Relative);
+            Uri uri = new Uri("api/Gift/1", UriKind.Relative);
 
             // Act
             HttpResponseMessage response = await Client.GetAsync(uri);
@@ -123,11 +132,11 @@ namespace SecretSanta.Api.Tests.Controllers
         {
             // Arrange
             using Data.ApplicationDbContext context = Factory.GetDbContext();
-            Data.User im = SampleData.CreateDataUser1();
-            context.Users.Add(im);
+            Data.Gift im = SampleData.CreateGift();
+            context.Gifts.Add(im);
             context.SaveChanges();
 
-            Uri uri = new Uri("api/User/1", UriKind.Relative);
+            Uri uri = new Uri("api/Gift/1", UriKind.Relative);
 
             // Act
             HttpResponseMessage response = await Client.DeleteAsync(uri);
@@ -138,7 +147,7 @@ namespace SecretSanta.Api.Tests.Controllers
 
             using Data.ApplicationDbContext assertContext = Factory.GetDbContext();
 
-            Assert.IsNull(assertContext.Users.Find(im.Id));
+            Assert.IsNull(assertContext.Gifts.Find(im.Id));
 
 
         }
@@ -148,7 +157,7 @@ namespace SecretSanta.Api.Tests.Controllers
         {
             // Arrange
 
-            Uri uri = new Uri("api/User/1", UriKind.Relative);
+            Uri uri = new Uri("api/Gift/1", UriKind.Relative);
 
             // Act
             HttpResponseMessage response = await Client.DeleteAsync(uri);
@@ -166,11 +175,11 @@ namespace SecretSanta.Api.Tests.Controllers
         public async Task Put_WithMissingId_NotFound()
         {
             // Arrange
-            Business.Dto.UserInput im = Mapper.Map<Data.User, Business.Dto.UserInput>(SampleData.CreateDataUser1());
-            string jsonData = JsonSerializer.Serialize(im);
 
+            Business.Dto.GiftInput im = Mapper.Map<Data.Gift, Business.Dto.GiftInput>(SampleData.CreateGift());
+            string jsonData = JsonSerializer.Serialize(im);
             using StringContent stringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
-            var uri = new Uri("api/User/42", UriKind.RelativeOrAbsolute);
+            var uri = new Uri("api/Gift/42", UriKind.RelativeOrAbsolute);
 
             // Act
             HttpResponseMessage response = await Client.PutAsync(uri, stringContent);
@@ -181,24 +190,26 @@ namespace SecretSanta.Api.Tests.Controllers
         }
 
         [TestMethod]
-        public async Task Put_WithValidId_Ok()
+        public async Task Put_WithValidId_AndValidForeignUserId_Ok()
         {
+
 
             //arrange
             using Data.ApplicationDbContext context = Factory.GetDbContext();
-            var user1 = SampleData.CreateDataUser1();
-            var savedUser = context.Users.Add(user1);
+            var storedUser = context.Users.Add(SampleData.CreateDataUser1());
+
+            var storedGift = context.Gifts.Add(SampleData.CreateGift());
             context.SaveChanges();
 
 
-
-            Business.Dto.UserInput inputUser = Mapper.Map<Data.User, Business.Dto.UserInput>(SampleData.CreateDataUser2());
-            string jsonData = JsonSerializer.Serialize(inputUser);
-            using StringContent inputUserStringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
-            Uri uri = new Uri("api/User/1", UriKind.Relative);
+            Business.Dto.GiftInput inputGift = Mapper.Map<Data.Gift, Business.Dto.GiftInput>(SampleData.CreateGift());
+            inputGift.UserId = storedUser.Entity.Id;
+            string jsonData = JsonSerializer.Serialize(inputGift);
+            using StringContent inputGiftStringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
+            Uri uri = new Uri($"api/Gift/{storedGift.Entity.Id}", UriKind.Relative);
 
             //act
-            HttpResponseMessage responseMessage = await Client.PutAsync(uri, inputUserStringContent);
+            HttpResponseMessage responseMessage = await Client.PutAsync(uri, inputGiftStringContent);
 
             //assert
             responseMessage.EnsureSuccessStatusCode();
@@ -206,97 +217,181 @@ namespace SecretSanta.Api.Tests.Controllers
             string retunedJson = await responseMessage.Content.ReadAsStringAsync();
 
 
-            Business.Dto.User returnedUser = JsonSerializer.Deserialize<Business.Dto.User>(retunedJson, _JsonOptions);
+            Business.Dto.Gift returnedGift = JsonSerializer.Deserialize<Business.Dto.Gift>(retunedJson, _JsonOptions);
 
 
-            // Assert that returnedAuthor matches im values
-            Assert.AreEqual<string>(inputUser.FirstName!, returnedUser.FirstName!);
-            Assert.AreEqual<string>(inputUser.LastName!, returnedUser.LastName!);
+            // Assert that returnedGift matches im values
+            Assert.AreEqual<string>(inputGift.Title!, returnedGift.Title!);
+            Assert.AreEqual<string>(inputGift.Description!, returnedGift.Description!);
+            Assert.AreEqual<string>(inputGift.Url!, returnedGift.Url!);
+            Assert.AreEqual(inputGift.UserId, returnedGift.UserId);
 
 
-            // Assert that returnedAuthor matches database value
+            // Assert that returnedGift matches database value
             using Data.ApplicationDbContext assertContext = Factory.GetDbContext();
 
-            Data.User databaseUser = assertContext.Users.Find(returnedUser.Id);
-            Assert.AreEqual<string>(databaseUser.FirstName!, returnedUser.FirstName!);
-            Assert.AreEqual<string>(databaseUser.LastName!, returnedUser.LastName!);
+            Data.Gift databaseGift = assertContext.Gifts.Find(returnedGift.Id);
+
+            Assert.AreEqual<string>(databaseGift.Title!, returnedGift.Title!);
+            Assert.AreEqual<string>(databaseGift.Description!, returnedGift.Description!);
+            Assert.AreEqual<string>(databaseGift.Url!, returnedGift.Url!);
+            Assert.AreEqual(databaseGift.UserId, returnedGift.UserId);
 
 
         }
 
-        [TestMethod]
-        public async Task Post_WithValidUserInput_Ok()
-        {
-            //arrange
-            Business.Dto.UserInput inputUser = Mapper.Map<Data.User, Business.Dto.UserInput>(SampleData.CreateDataUser1());
-            string jsonData = JsonSerializer.Serialize(inputUser);
-            using StringContent inputUserStringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
-            Uri uri = new Uri("api/User/", UriKind.Relative);
 
-            HttpResponseMessage responseMessage = await Client.PostAsync(uri, inputUserStringContent);
+
+        [TestMethod]
+        public async Task Put_WithValidId_InvalidForeignUserId_Fails()
+        {
+
+            //arrange
+            using Data.ApplicationDbContext context = Factory.GetDbContext();
+
+
+            var storedGift = context.Gifts.Add(SampleData.CreateGift());
+            context.SaveChanges();
+
+
+            Business.Dto.GiftInput inputGift = Mapper.Map<Data.Gift, Business.Dto.GiftInput>(SampleData.CreateGift());
+            inputGift.UserId = 42;
+            string jsonData = JsonSerializer.Serialize(inputGift);
+            using StringContent inputGiftStringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
+            Uri uri = new Uri($"api/Gift/{storedGift.Entity.Id}", UriKind.Relative);
+
+            //act
+            HttpResponseMessage responseMessage = await Client.PutAsync(uri, inputGiftStringContent);
 
             //assert
-            //ensure success
+
+            Assert.AreEqual(HttpStatusCode.InternalServerError, responseMessage.StatusCode);
+
+
+        }
+
+
+
+
+        [TestMethod]
+        public async Task Post_WithValidGiftInput_AndValidForeignUserId_Ok()
+        {
+            //arrange
+            using Data.ApplicationDbContext context = Factory.GetDbContext();
+            var storedUser = context.Users.Add(SampleData.CreateDataUser1());
+
+            var storedGift = context.Gifts.Add(SampleData.CreateGift());
+            context.SaveChanges();
+
+
+            Business.Dto.GiftInput inputGift = Mapper.Map<Data.Gift, Business.Dto.GiftInput>(SampleData.CreateGift());
+            inputGift.UserId = storedUser.Entity.Id;
+            string jsonData = JsonSerializer.Serialize(inputGift);
+            using StringContent inputGiftStringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
+            Uri uri = new Uri("api/Gift/", UriKind.Relative);
+
+            HttpResponseMessage responseMessage = await Client.PostAsync(uri, inputGiftStringContent);
+
+            //assert
+
             responseMessage.EnsureSuccessStatusCode();
+            Assert.AreEqual(HttpStatusCode.OK, responseMessage.StatusCode);
+
 
             string returnedJson = await responseMessage.Content.ReadAsStringAsync();
 
 
-            Business.Dto.User returnedUser = JsonSerializer.Deserialize<Business.Dto.User>(returnedJson, _JsonOptions);
+            Business.Dto.Gift returnedGift = JsonSerializer.Deserialize<Business.Dto.Gift>(returnedJson, _JsonOptions);
 
-            //assert matches returned jason object matches input jason object
+            // Assert that returnedGift matches im values
+            Assert.AreEqual<string>(inputGift.Title!, returnedGift.Title!);
+            Assert.AreEqual<string>(inputGift.Description!, returnedGift.Description!);
+            Assert.AreEqual<string>(inputGift.Url!, returnedGift.Url!);
+            Assert.AreEqual(inputGift.UserId, returnedGift.UserId);
 
-            Assert.AreEqual<string>(inputUser.FirstName!, returnedUser.FirstName!);
-            Assert.AreEqual<string>(inputUser.LastName!, returnedUser.LastName!);
 
-            //assert matches stored entity
+            // Assert that returnedGift matches database value
             using Data.ApplicationDbContext assertContext = Factory.GetDbContext();
 
-            Data.User databaseUser = assertContext.Users.Find(returnedUser.Id);
-            Assert.AreEqual<string>(databaseUser.FirstName!, returnedUser.FirstName!);
-            Assert.AreEqual<string>(databaseUser.LastName!, returnedUser.LastName!);
+            Data.Gift databaseGift = assertContext.Gifts.Find(returnedGift.Id);
+
+            Assert.AreEqual<string>(databaseGift.Title!, returnedGift.Title!);
+            Assert.AreEqual<string>(databaseGift.Description!, returnedGift.Description!);
+            Assert.AreEqual<string>(databaseGift.Url!, returnedGift.Url!);
+            Assert.AreEqual(databaseGift.UserId, returnedGift.UserId);
+
 
         }
 
 
 
-
-        //trying to figure out how to do this test by getting the property name dynamically
-        // was just passing in literal "FirstName" to get the FirstName property. Not sure if the enum is any better
-
-        public enum DtoInputUserPropName
-        {
-            FirstName = 0,
-            LastName = 1,
-        }
-
-        [DataTestMethod]
-        [DataRow(DtoInputUserPropName.FirstName, null)]
-        [DataRow(DtoInputUserPropName.LastName, null)]
-
-        public async Task Post_UserInputWithMissingProperty_Fails(DtoInputUserPropName prop, string? propValue)
+        [TestMethod]
+        public async Task Post_WithValidId_InvalidForeignUserId_Fails()
         {
 
             //arrange
-            Business.Dto.UserInput inputUser = Mapper.Map<Data.User, Business.Dto.UserInput>(SampleData.CreateDataUser1());
-
-            Type inputUserType = typeof(Business.Dto.UserInput);
-            string propName = typeof(Data.User).GetProperties()[(int)prop].Name;
-            PropertyInfo piInputUser = inputUserType.GetProperty(propName)!;
-            piInputUser.SetValue(inputUser, propValue);
-
-            string jsonData = JsonSerializer.Serialize(inputUser);
-            using StringContent inputUserStringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
-            Uri uri = new Uri("api/User/", UriKind.Relative);
+            Business.Dto.GiftInput inputGift = Mapper.Map<Data.Gift, Business.Dto.GiftInput>(SampleData.CreateGift());
+            inputGift.UserId = 42;
+            string jsonData = JsonSerializer.Serialize(inputGift);
+            using StringContent inputGiftStringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
+            Uri uri = new Uri($"api/Gift/", UriKind.Relative);
 
             //act
-            HttpResponseMessage responseMessage = await Client.PostAsync(uri, inputUserStringContent);
+            HttpResponseMessage responseMessage = await Client.PostAsync(uri, inputGiftStringContent);
+
+            //assert
+
+            Assert.AreEqual(HttpStatusCode.InternalServerError, responseMessage.StatusCode);
+
+
+        }
+
+
+
+    //trying to figure out how to do this test by getting the property name dynamically
+    // was just passing in literal "FirstName" to get the FirstName property. Not sure if the enum is any better
+
+    public enum DtoInputGiftPropName
+        {
+            Title = 0,
+            Description = 1,
+            Url = 2,
+           
+        }
+
+        [DataTestMethod]
+        [DataRow(DtoInputGiftPropName.Title, null)]
+        [DataRow(DtoInputGiftPropName.Description, null)]
+        [DataRow(DtoInputGiftPropName.Url, null)]
+
+        public async Task Post_GiftInputWithMissingProperty_Fails(DtoInputGiftPropName prop, string? propValue)
+        {
+
+            //arrange
+
+            using Data.ApplicationDbContext context = Factory.GetDbContext();
+            var storedUser = context.Users.Add(SampleData.CreateDataUser1());
+            context.SaveChanges();
+
+            Business.Dto.GiftInput inputGift = Mapper.Map<Data.Gift, Business.Dto.GiftInput>(SampleData.CreateGift());
+            inputGift.UserId = storedUser.Entity.Id;
+            Type inputGiftType = typeof(Business.Dto.GiftInput);
+            string propName = typeof(Data.Gift).GetProperties()[(int)prop].Name;
+            PropertyInfo piInputGift = inputGiftType.GetProperty(propName)!;
+            piInputGift.SetValue(inputGift, propValue);
+
+            string jsonData = JsonSerializer.Serialize(inputGift);
+            using StringContent inputGiftStringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
+            Uri uri = new Uri("api/Gift/", UriKind.Relative);
+
+            //act
+            HttpResponseMessage responseMessage = await Client.PostAsync(uri, inputGiftStringContent);
             //Trace.WriteLine(responseMessage.Content.);
 
             //assert
             Assert.IsTrue(responseMessage.StatusCode is HttpStatusCode.BadRequest);
 
-        }*/
+        }
 
     }
 }

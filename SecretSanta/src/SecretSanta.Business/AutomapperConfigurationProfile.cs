@@ -15,6 +15,7 @@ namespace SecretSanta.Business
             //    SecretSanta.Data.Gift -> SecretSanta.Business.Dto.Gift
             CreateMap<Gift, Dto.Gift>();
             CreateMap<Dto.GiftInput, Gift>();
+            CreateMap<Gift, Dto.GiftInput>();
 
             CreateMap<Group, Dto.Group>();
             CreateMap<Dto.GroupInput, Group>();

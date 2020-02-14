@@ -16,11 +16,11 @@ public static class SampleData
 
 
     public const string _SAMPLE_TITLE1 = "sample1_title";
-    public const string _SAMPLE_URL1 = "sample1_url";
+    public const string _SAMPLE_URL1 = "https://docs.microsoft.com/sampleurl1";
     public const string _SAMPLE_DESCRIPTION1 = "sample1_description";
 
     public const string _SAMPLE_TITLE2 = "sample2_title";
-    public const string _SAMPLE_URL2 = "sample2_url";
+    public const string _SAMPLE_URL2 = "https://docs.microsoft.com/sampleurl2";
     public const string _SAMPLE_DESCRIPTION2 = "sample2_description";
 
 #pragma warning restore CA1707 // Identifiers should not contain underscores
@@ -31,6 +31,7 @@ public static class SampleData
 
    
     static public Gift CreateGift() => new Gift(_SAMPLE_TITLE1, _SAMPLE_DESCRIPTION1, _SAMPLE_URL1, CreateDataUser1());
+    static public Gift CreateGift2() => new Gift(_SAMPLE_TITLE2, _SAMPLE_DESCRIPTION2, _SAMPLE_URL2, CreateDataUser1());
     static public Group CreateGroup1()
     {
         return new Group(_SAMPLE_TITLE1);
