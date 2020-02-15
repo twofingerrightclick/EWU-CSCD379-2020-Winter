@@ -38,12 +38,19 @@ namespace BlogEngine.Web.Controllers
         [HttpPost]
         public async Task<ActionResult> Create(AuthorInput authorInput)
         {
-            HttpClient httpClient = ClientFactory.CreateClient("BlogApi");
+            ActionResult result = View(authorInput);
 
-            var client = new AuthorClient(httpClient);
-            var createdAuthor = await client.PostAsync(authorInput);
+            if (ModelState.IsValid)
+            {
+                HttpClient httpClient = ClientFactory.CreateClient("BlogApi");
 
-            return RedirectToAction(nameof(Index));
+                var client = new AuthorClient(httpClient);
+                var createdAuthor = await client.PostAsync(authorInput);
+
+                result = RedirectToAction(nameof(Index));
+            }
+
+            return result;
         }
 
         public async Task<ActionResult> Edit(int id)
