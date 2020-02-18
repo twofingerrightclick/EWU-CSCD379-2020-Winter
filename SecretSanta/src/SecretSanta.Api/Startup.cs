@@ -16,11 +16,10 @@ namespace SecretSanta.Api
     public class Startup
 #pragma warning restore CA1052 // Static holder types should be Static or NotInheritable
     {
-        private IConfiguration _Configuration { get; }
-
+        private IConfiguration Configuration { get; }
         public Startup(IConfiguration configuration)
         {
-            _Configuration = configuration;
+            Configuration = configuration;
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -29,7 +28,7 @@ namespace SecretSanta.Api
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.EnableSensitiveDataLogging()
-                       .UseSqlite(_Configuration.GetConnectionString("DefaultConnection")));
+                       .UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
             services.AddSwaggerDocument();
             services.AddScoped<IGiftService, GiftService>();
             services.AddScoped<IUserService, UserService>();
