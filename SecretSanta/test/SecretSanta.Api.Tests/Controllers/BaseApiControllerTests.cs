@@ -77,7 +77,9 @@ namespace SecretSanta.Api.Tests.Controllers
             TDto entity2 = CreateEntity();
             BaseApiController<TDto, TInputDto> controller = CreateController(service);
 
-            TDto? result = await controller.Put(entity1.Id, entity2);
+            var actionResult = await controller.Put(entity1.Id, entity2);
+
+            TDto? result = actionResult.Value;
 
             Assert.AreEqual(result, service.Items.Single());
         }
