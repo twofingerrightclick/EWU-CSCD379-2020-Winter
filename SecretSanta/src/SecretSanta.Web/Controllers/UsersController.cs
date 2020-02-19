@@ -12,18 +12,61 @@ namespace SecretSanta.Web.Controllers
 {
     public class UsersController : Controller
     {
+        private IHttpClientFactory ClientFactory { get; }
+
         public UsersController(IHttpClientFactory clientFactory)
         {
-            HttpClient httpClient = clientFactory?.CreateClient("SecretSantaApi") ?? throw new ArgumentNullException(nameof(clientFactory));
-            Client = new UserClient(httpClient);
+            //HttpClient httpClient = clientFactory?.CreateClient("SecretSantaApi") ?? throw new ArgumentNullException(nameof(clientFactory));
+            //Client = new UserClient(httpClient);
+
+            ClientFactory = clientFactory ?? throw new ArgumentNullException(nameof(clientFactory));
         }
 
-        private UserClient Client { get; }
-
-        public async Task<IActionResult> Index()
+        public async Task<ActionResult> Index()
         {
-            ICollection<User> users = await Client.GetAllAsync();
-            return View(users);
+            HttpClient httpClient = ClientFactory.CreateClient("SecretSantaApi");
+
+            return View(await new UserClient(httpClient).GetAllAsync());
+        }
+
+        public ActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Create(UserInput userInput)
+        {
+            ActionResult result = View(userInput);
+
+            if (ModelState.IsValid) {
+                HttpClient httpClient = ClientFactory.CreateClient("SecretSantaApi");
+                await new UserClient(httpClient).PostAsync(userInput);
+                result = RedirectToAction(nameof(Index));
+            }
+
+            return result;
+        }
+
+        public async Task<ActionResult> Edit(int id)
+        {
+            var client = new UserClient(ClientFactory.CreateClient("SecretSantaApi"));
+
+            ActionResult result = View(id);
+
+            if (ModelState.IsValid) {
+                result = View(client.GetAsync(id));
+            }
+
+            return result;
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Edit(int id, UserInput userInput)
+        {
+            User updatedUser = await new UserClient(ClientFactory.CreateClient("SecretSantaApi")).PutAsync(id, userInput);
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }
