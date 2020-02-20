@@ -55,7 +55,9 @@ namespace SecretSanta.Web.Controllers
             ActionResult result = View(id);
 
             if (ModelState.IsValid) {
-                result = View(client.GetAsync(id));
+                
+                var fetchedUser=await client.GetAsync(id);
+                result = View(fetchedUser);
             }
 
             return result;

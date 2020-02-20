@@ -51,19 +51,33 @@ namespace SecretSanta.Web.Controllers
 
             ActionResult result = View(id);
 
-            if (ModelState.IsValid) {
-                result = View(client.GetAsync(id));
+            if (ModelState.IsValid)
+            {
+                var fetchedGift = await client.GetAsync(id);
+                result = View(fetchedGift);
             }
 
             return result;
+
+
+
         }
 
         [HttpPost]
         public async Task<ActionResult> Edit(int id, GiftInput giftInput)
         {
-            Gift updatedGift = await new GiftClient(ClientFactory.CreateClient("SecretSantaApi")).PutAsync(id, giftInput);
+            ActionResult result = View(giftInput);
 
+            if (ModelState.IsValid)
+            {
+                Gift updatedGift = await new GiftClient(ClientFactory.CreateClient("SecretSantaApi")).PutAsync(id, giftInput);
+                result = View(updatedGift);
+                
+            }
             return RedirectToAction(nameof(Index));
         }
-    }
+
+
+    
+}
 }
