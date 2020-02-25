@@ -1,5 +1,7 @@
 ﻿import '../styles/site.scss';
 
-import { App } from "./app";
+import { App } from "./list-Gifts";
 
 new App().renderGifts();
+
+

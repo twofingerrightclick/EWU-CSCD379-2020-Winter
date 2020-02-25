@@ -9,14 +9,12 @@ export const hello = () => "Hello world!";
 export class App {
     async renderGifts() {
         var gifts = await this.getAllGifts();
-        const itemList = document.getElementById("itemList");
-        for (let index = 0; index < gifts.length; index++) {
-            const gift = gifts[index];
-            document.write("Hello World");
-            const giftList = document.createElement("li");
-            giftList.textContent = `${gift.title}:${gift.description}`;
-            itemList.append(giftList);
-        }
+        const itemList = document.getElementById("giftList");
+        gifts.forEach(gift => {
+            const listItem = document.createElement("li");
+            listItem.textContent = `${gift.id}:${gift.title}:${gift.description}:${gift.url}`
+            itemList.append(listItem);
+        })
     }
 
     giftClient: IGiftClient;
