@@ -13,6 +13,11 @@ namespace SecretSanta.Web.Controllers
         // GET: /<controller>/
         public IActionResult Index()
         {
+            return View("~/Views/Gifts/ListGifts.cshtml");
+        }
+
+        public IActionResult Html()
+        {
             return View();
         }
     }

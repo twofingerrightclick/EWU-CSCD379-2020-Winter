@@ -25,6 +25,18 @@ namespace SecretSanta.Web
             {
                 options.BaseAddress = new Uri(Configuration["ApiUrl"]);
             });
+
+
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+                });
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -40,6 +52,8 @@ namespace SecretSanta.Web
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseCors(); //Apply CORS policies to all endpoints
 
             app.UseEndpoints(endpoints =>
             {
