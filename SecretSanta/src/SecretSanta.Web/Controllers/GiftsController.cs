@@ -102,5 +102,10 @@ namespace SecretSanta.Web.Controllers
 
             return result;
         }
+
+        public ActionResult ListGifts()
+        {
+            return View();
+        }
     }
 }

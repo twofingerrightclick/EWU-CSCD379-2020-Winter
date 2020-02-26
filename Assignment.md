@@ -1,17 +1,18 @@
-# Assignment **7**
+# Assignment **8**
 
-To create a web page that uses TypeScript to retrieve the list of Gifts from the Api project and display them in an html page.
+Create pages that use VueJS to perform the CRUD operations that were earlier created using the ASP.NET Core MVC Framework. Also add some styling
+to the website to add your own personal flare
 
-- Create an `ListGifts.html` page in the `Views` directory that lists the Gifts. ✔❌
-- Use NSwag to generate an `secretsanta-client.ts` file against the API project. ✔❌
-- Create a `list-Gifts.ts` file that: ✔❌
-  - Invokes the secretsanta-client API to delete all existing Gifts and then create a hard coded list of 5-10 Gifts when the page loads. ✔❌
-  - Invokes the secretsanta-client API to retrieve a list of Gifts as part of the page load. ✔❌
-- Populate the `ListGifts.html` page leveraging list-Gifts api to retrieve a list of Gifts. ✔❌
-- Set the default start page when the Web project runs to be the ListGifts.html page. ✔❌
+- Fix up the navigation so that it isn't an unordered list of items. ✔❌
+- Change up the theme a bit so that the default colors aren't used at a minimum for buttons and links. ✔❌
+- Add the necessary resources to the package.json file so that vuejs applications can be transpiled correctly. ✔❌
+- Configure webpack to transpile the vuejs files. ✔❌
+- Modify the app.ts file so that you can create/update/delete/fetch the users, gifts, and groups. ✔❌
+- Remove the ListGifts functionality and replace the index page in each of the Gifts, Users, Groups views so that you can perform all the CRUD features
+  without leaving the page.
+    - Remove the Create/Edit/Delete pages and actions for each of the Gifts, Users, Groups elements
+- Set the default start page back to the original Home/Index page. ✔❌
 
 ## Extra Credit
 
-- Add build steps to generate the `secretsanta-client.ts` file from the csproj file. ✔❌
-- Update the yaml file to run the TypeScript unit tests and fail the build if any unit test fails. ✔❌
 - Include a search text box that only displays Gifts whose first or last name contains the value in the text box. ✔❌
