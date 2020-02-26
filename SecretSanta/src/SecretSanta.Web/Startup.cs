@@ -27,7 +27,7 @@ namespace SecretSanta.Web
             });
 
 
-            services.AddCors(options =>
+           /* services.AddCors(options =>
             {
                 options.AddDefaultPolicy(builder =>
                 {
@@ -35,7 +35,8 @@ namespace SecretSanta.Web
                     .AllowAnyMethod()
                     .AllowAnyHeader();
                 });
-            });
+            });*/
+
 
         }
 
@@ -53,7 +54,7 @@ namespace SecretSanta.Web
 
             app.UseRouting();
 
-            app.UseCors(); //Apply CORS policies to all endpoints
+           // app.UseCors(); //Apply CORS policies to all endpoints
 
             app.UseEndpoints(endpoints =>
             {

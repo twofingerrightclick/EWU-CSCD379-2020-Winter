@@ -7,8 +7,9 @@
 export const hello = () => "Hello world!";
 
 export class App {
-    async renderGifts() {
+    async  renderGifts() {
         var gifts = await this.getAllGifts();
+        console.log("In render gifts");
         const itemList = document.getElementById("giftList");
         gifts.forEach(gift => {
             const listItem = document.createElement("li");

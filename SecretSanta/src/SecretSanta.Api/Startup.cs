@@ -33,6 +33,16 @@ namespace SecretSanta.Api
                 options.EnableSensitiveDataLogging()
                        .UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+                });
+            });
+
             services.AddAutoMapper(new[] { typeof(AutomapperConfigurationProfile).Assembly });
         }
 
@@ -48,7 +58,7 @@ namespace SecretSanta.Api
 
             app.UseOpenApi();
             app.UseSwaggerUi3();
-
+            app.UseCors();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();
