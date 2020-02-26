@@ -9,8 +9,8 @@ to the website to add your own personal flare
 - Configure webpack to transpile the vuejs files. ✔❌
 - Modify the app.ts file so that you can create/update/delete/fetch the users, gifts, and groups. ✔❌
 - Remove the ListGifts functionality and replace the index page in each of the Gifts, Users, Groups views so that you can perform all the CRUD features
-  without leaving the page.
-    - Remove the Create/Edit/Delete pages and actions for each of the Gifts, Users, Groups elements
+  without leaving the page. ✔❌
+    - Remove the Create/Edit/Delete pages and actions for each of the Gifts, Users, Groups elements ✔❌
 - Set the default start page back to the original Home/Index page. ✔❌
 
 ## Extra Credit
