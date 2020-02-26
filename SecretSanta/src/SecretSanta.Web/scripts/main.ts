@@ -1,6 +1,6 @@
 ﻿import '../styles/site.scss';
 
-import { App } from "./list-Gifts";
+import { GiftList } from "./list-Gifts";
 
 
 console.log("Before render gifts");
