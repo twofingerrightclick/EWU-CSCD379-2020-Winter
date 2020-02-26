@@ -6,7 +6,7 @@
 
 export const hello = () => "Hello world!";
 
-export class App {
+export class GiftList {
     async renderGifts() {
         var gifts = await this.getAllGifts();
         const itemList = document.getElementById("giftList");
