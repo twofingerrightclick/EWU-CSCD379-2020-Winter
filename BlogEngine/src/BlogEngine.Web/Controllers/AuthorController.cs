@@ -30,6 +30,16 @@ namespace BlogEngine.Web.Controllers
             return View(authors);
         }
 
+        public async Task<ActionResult> Details(int id)
+        {
+            HttpClient httpClient = ClientFactory.CreateClient("BlogApi");
+
+            var client = new AuthorClient(httpClient);
+            Author author = await client.GetAsync(id);
+            return View(author);
+        }
+
+
         public ActionResult Create()
         {
             return View();
