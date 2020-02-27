@@ -5,7 +5,7 @@ import { GiftList } from "./list-Gifts";
 
 console.log("Before render gifts");
 
-(new App().renderGifts());
+(new GiftList().renderGifts());
 
 console.log("After Srender gifts");
 
