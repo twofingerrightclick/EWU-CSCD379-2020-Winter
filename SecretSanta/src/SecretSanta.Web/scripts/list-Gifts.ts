@@ -19,6 +19,7 @@ export class GiftList {
             this.giftClient.delete(gift.id);
 
         })
+
     }
 
     async populateGifts() {
@@ -34,14 +35,22 @@ export class GiftList {
 
     }
 
+    async delay(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
     async renderGifts() {
         await this.deleteAllGifts();
+        await this.delay(300);
         await this.populateGifts();
 
-        var gifts = await this.getAllGifts();
-        console.log("In render gifts");
+       
 
-        var tableBody =document.getElementById("tableBody");
+        var gifts = await this.getAllGifts();
+        console.log(`number of gifts: ${gifts.length}`);
+
+        var tableBody = document.getElementById("tableBody");
+       
 
       
         gifts.forEach(gift => {
@@ -103,14 +112,14 @@ export class GiftList {
 
     buttercupGift: GiftInput = new GiftInput({
         title: 'True Love',
-        description: 'A lovely sounding phrase',
+        description: 'A lovely sounding phrase easily misheard as "to blave," which means "to bluff" ',
         url: 'https://en.wikipedia.org/wiki/Inigo_Montoya',
         userId: 1
     });
 
     dreadPirateRobertsGift: GiftInput = new GiftInput({
         title: 'Zoro Mask',
-        description: 'allows Westley to prove Buttercups devotion',
+        description: 'allows Westley to test Buttercups devotion',
         url: 'https://en.wikipedia.org/wiki/Inigo_Montoya',
         userId: 1
     });
