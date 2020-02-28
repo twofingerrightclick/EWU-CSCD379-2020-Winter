@@ -87,13 +87,15 @@ export class GiftList {
         var gifts = await this.getAllGifts();
         console.log(`number of gifts: ${gifts.length}`);
 
+        document.getElementById("results").innerText = "Results";
         var tableBody = document.getElementById("tableBody");
+        tableBody.innerHTML = "";
 
-
+        var searchInput = (<HTMLInputElement>document.getElementById("input")).value;
 
         gifts.forEach(gift => {
 
-            if (gift.title.startsWith("s")) {
+            if (gift.title.startsWith(searchInput)) {
                 var tableRow = document.createElement("tr");
 
                 let id = document.createElement("td");

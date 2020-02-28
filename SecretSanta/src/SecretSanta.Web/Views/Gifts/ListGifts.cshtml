@@ -11,13 +11,13 @@
 </div>
 <div class="field is-grouped">
     <div class="control">
-        <button id="search by title" onclick="searchByTitle()" class="button is-primary">Search</button>
+        <button id="searchButton" onclick="searchByTitle()" class="button is-primary">Search</button>
     </div>
     <div class="control">
         <a asp-action="Index" class="button is-light">Cancel</a>
     </div>
 </div>
-
+<h1 id="results"> </h1>
 
 <ul id="giftList"></ul>
 
@@ -36,4 +36,3 @@
     </tbody>
 </table>
 
-<button onclick="myFunction()">Click Me</button>
