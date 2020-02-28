@@ -1,4 +1,23 @@
-﻿<h1>List of Gifts</h1>
+﻿@model Gift
+
+<h2>List of Gifts</h2>
+
+<div class="field">
+    <label class="label" title="Search by Title"></label>
+    <div class="control">
+        <input class="input" type="text" asp-for="Description" id="input"/>
+        <span asp-validation-for="Description"></span>
+    </div>
+</div>
+<div class="field is-grouped">
+    <div class="control">
+        <button id="search by title" onclick="searchByTitle()" class="button is-primary">Search</button>
+    </div>
+    <div class="control">
+        <a asp-action="Index" class="button is-light">Cancel</a>
+    </div>
+</div>
+
 
 <ul id="giftList"></ul>
 
@@ -14,6 +33,7 @@
         </tr>
     </thead>
     <tbody id="tableBody">
-        
     </tbody>
 </table>
+
+<button onclick="myFunction()">Click Me</button>

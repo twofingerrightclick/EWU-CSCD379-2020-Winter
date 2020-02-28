@@ -15,10 +15,10 @@ export class GiftList {
         var gifts = await this.getAllGifts();
         console.log("In render gifts");
         const itemList = document.getElementById("giftList");
-        gifts.forEach(gift => {
-            this.giftClient.delete(gift.id);
+       for (let gift  of gifts ) {
+           await this.giftClient.delete(gift.id);
 
-        })
+        }
 
     }
 
@@ -75,6 +75,51 @@ export class GiftList {
             tableBody.append(tableRow);
         })
     
+
+    }
+
+
+    async searchGifts() {
+    
+
+
+
+        var gifts = await this.getAllGifts();
+        console.log(`number of gifts: ${gifts.length}`);
+
+        var tableBody = document.getElementById("tableBody");
+
+
+
+        gifts.forEach(gift => {
+
+            if (gift.title.startsWith("s")) {
+                var tableRow = document.createElement("tr");
+
+                let id = document.createElement("td");
+                id.textContent = `${gift.id}`
+                tableRow.append(id);
+
+                let title = document.createElement("td");
+                title.textContent = `${gift.title}`
+                tableRow.appendChild(title);
+
+                let desc = document.createElement("td");
+                desc.textContent = `${gift.description}`
+                tableRow.append(desc);
+
+                let url = document.createElement("td");
+                url.textContent = `${gift.url}`
+                tableRow.append(url);
+
+                tableBody.append(tableRow);
+            }
+
+            else {
+                document.getElementById("input").textContent = "na";
+            }
+        })
+
 
     }
 
