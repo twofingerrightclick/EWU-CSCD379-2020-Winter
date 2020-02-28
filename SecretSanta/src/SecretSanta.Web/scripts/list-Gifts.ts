@@ -9,8 +9,48 @@
 } from "./secret-santa-api.client";
 
 
+let searchButton = document.getElementById("searchButton");
+searchButton.addEventListener("click", (e: Event) => searchByTitle());
+
+let cancelButton = document.getElementById("cancelButton");
+cancelButton.addEventListener("click", (e: Event) => clearSearch());
+
+
+function searchByTitle() {
+    (new GiftList().searchGifts());
+}
+
+
+function clearSearch() {
+    document.getElementById("results").innerText = "";
+    (<HTMLInputElement>document.getElementById("input")).value = "";
+    (new GiftList().reloadList());
+}
+
+
+
+
+
+
+
 
 export class GiftList {
+
+    async reloadList() {
+
+        var gifts = await this.getAllGifts();
+
+
+       var tableBody = document.getElementById("tableBody");
+       tableBody.innerHTML = "";
+        for (let gift of gifts) {
+            console.log("apending");
+           this.appendToTable(gift, tableBody);
+       }
+    }
+
+
+
     async deleteAllGifts() {
         var gifts = await this.getAllGifts();
         console.log("In render gifts");
@@ -23,15 +63,18 @@ export class GiftList {
     }
 
     async populateGifts() {
-      
 
-        await this.userClient.post(this.userThePrincessBride);
-
+        var users = await this.getAllUsers();
+        //trying to figure out how to use the promise<User> on the get(int id) versus getAll
+        if (users.length<1) {
+            await this.userClient.post(this.userThePrincessBride);
+            console.log("Created New User 1");
+        }
         await this.giftClient.post(this.buttercupGift);
         await this.giftClient.post(this.imGift);
         await this.giftClient.post(this.miracleMaxGift);
         await this.giftClient.post(this.dreadPirateRobertsGift);
-        await this.giftClient.post(this.buttercupGift);
+        await this.giftClient.post(this.iocaneGift);
 
     }
 
@@ -48,36 +91,40 @@ export class GiftList {
         var tableBody = document.getElementById("tableBody");
        
         gifts.forEach(gift => {
-            var tableRow = document.createElement("tr");
-            
-            let id = document.createElement("td");
-            id.textContent = `${gift.id}`
-            tableRow.append(id);
-
-            let title = document.createElement("td");
-            title.textContent = `${gift.title}`
-            tableRow.appendChild(title);
-
-            let desc = document.createElement("td");
-            desc.textContent = `${gift.description}`
-            tableRow.append(desc);
-
-            let url = document.createElement("td");
-            url.textContent = `${gift.url}`
-            tableRow.append(url);
-
-            tableBody.append(tableRow);
+            this.appendToTable(gift, tableBody);
         })
     
 
+    }
+    appendToTable(gift: Gift, tableBody: HTMLElement) {
+        var tableRow = document.createElement("tr");
+
+        let id = document.createElement("td");
+        id.textContent = `${gift.id}`
+        tableRow.append(id);
+
+        let title = document.createElement("td");
+        title.textContent = `${gift.title}`
+        tableRow.appendChild(title);
+
+        let desc = document.createElement("td");
+        desc.textContent = `${gift.description}`
+        tableRow.append(desc);
+
+        let url = document.createElement("td");
+        url.textContent = `${gift.url}`
+        tableRow.append(url);
+
+        tableBody.append(tableRow);
     }
 
 
     async searchGifts() {
     
 
-        var gifts = await this.getAllGifts();
-        console.log(`number of gifts: ${gifts.length}`);
+       
+        var users = await this.getAllUsers();
+      
 
         document.getElementById("results").innerText = "Results";
         var tableBody = document.getElementById("tableBody");
@@ -85,30 +132,20 @@ export class GiftList {
 
         var searchInput: string = (<HTMLInputElement>document.getElementById("input")).value;
         var match: boolean = false;
-        gifts.forEach(gift => {
+        users.forEach(user => {
 
-            if (gift.title.includes(searchInput)) {
-
+            if (user.firstName.toLowerCase().includes(searchInput) || user.lastName.toLowerCase().includes(searchInput)) {
                 match = true;
-                var tableRow = document.createElement("tr");
 
-                let id = document.createElement("td");
-                id.textContent = `${gift.id}`
-                tableRow.append(id);
+                console.log("match");
 
-                let title = document.createElement("td");
-                title.textContent = `${gift.title}`
-                tableRow.appendChild(title);
+                user.gifts.forEach(gift => {
 
-                let desc = document.createElement("td");
-                desc.textContent = `${gift.description}`
-                tableRow.append(desc);
+              
+                    this.appendToTable(gift, tableBody);
 
-                let url = document.createElement("td");
-                url.textContent = `${gift.url}`
-                tableRow.append(url);
-
-                tableBody.append(tableRow);
+                })
+            
             }
 
         })
@@ -134,6 +171,10 @@ export class GiftList {
         return gifts;
     }
 
+    async getAllUsers() {
+        var users = await this.userClient.getAll();
+        return users;
+    }
 
     userThePrincessBride: UserInput = new UserInput({
         firstName: 'The Princess',
@@ -156,6 +197,14 @@ export class GiftList {
         url: 'https://en.wikipedia.org/wiki/Inigo_Montoya',
         userId: 1
     });
+
+    iocaneGift: GiftInput = new GiftInput({
+        title: 'Iocane Powder',
+        description: "Iocane powder is noted as being one of the deadliest poisons known to man.  It has no odor, no taste, and will dissolve instantly when poured into liquid.",
+        url: 'https://en.wikipedia.org/wiki/Inigo_Montoya',
+        userId: 1
+    });
+
 
     dreadPirateRobertsGift: GiftInput = new GiftInput({
         title: 'Zoro Mask',

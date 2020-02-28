@@ -10,6 +10,7 @@ namespace SecretSanta.Web.Controllers
 {
     public class HomeController : Controller
     {
+        public int sasdProperty { get; set; }
         // GET: /<controller>/
         public IActionResult Index()
         {
