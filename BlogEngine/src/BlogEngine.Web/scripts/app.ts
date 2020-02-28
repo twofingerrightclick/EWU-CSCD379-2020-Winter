@@ -10,6 +10,7 @@ export module App {
             this.postClient = new PostClient('https://localhost:44317');
             this.authorClient = new AuthorClient('https://localhost:44317');
         }
+
         async deletePosts() {
             var posts = await this.getPosts();
 
@@ -29,14 +30,14 @@ export module App {
             }
         }
 
-        async getPosts(): Promise<Post[]> {
-            var posts = await this.postClient.getAll();
+        async getPosts() {
+            let posts = await this.postClient.getAll();
 
             return posts;
         }
 
         async createAuthor() {
-            var authors = await this.authorClient.getAll();
+            let authors = await this.authorClient.getAll();
 
             if (authors.length > 0) {
                 this.createdAuthor = authors[0];
