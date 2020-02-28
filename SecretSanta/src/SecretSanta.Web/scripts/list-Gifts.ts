@@ -8,13 +8,13 @@
     UserInput
 } from "./secret-santa-api.client";
 
-export const hello = () => "Hello world!";
+
 
 export class GiftList {
     async deleteAllGifts() {
         var gifts = await this.getAllGifts();
         console.log("In render gifts");
-        const itemList = document.getElementById("giftList");
+
        for (let gift  of gifts ) {
            await this.giftClient.delete(gift.id);
 
@@ -35,24 +35,18 @@ export class GiftList {
 
     }
 
-    async delay(ms: number) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
 
     async renderGifts() {
         await this.deleteAllGifts();
-        await this.delay(300);
+ 
         await this.populateGifts();
 
-       
 
         var gifts = await this.getAllGifts();
         console.log(`number of gifts: ${gifts.length}`);
 
         var tableBody = document.getElementById("tableBody");
        
-
-      
         gifts.forEach(gift => {
             var tableRow = document.createElement("tr");
             
@@ -82,8 +76,6 @@ export class GiftList {
     async searchGifts() {
     
 
-
-
         var gifts = await this.getAllGifts();
         console.log(`number of gifts: ${gifts.length}`);
 
@@ -91,11 +83,13 @@ export class GiftList {
         var tableBody = document.getElementById("tableBody");
         tableBody.innerHTML = "";
 
-        var searchInput = (<HTMLInputElement>document.getElementById("input")).value;
-
+        var searchInput: string = (<HTMLInputElement>document.getElementById("input")).value;
+        var match: boolean = false;
         gifts.forEach(gift => {
 
-            if (gift.title.startsWith(searchInput)) {
+            if (gift.title.includes(searchInput)) {
+
+                match = true;
                 var tableRow = document.createElement("tr");
 
                 let id = document.createElement("td");
@@ -117,16 +111,15 @@ export class GiftList {
                 tableBody.append(tableRow);
             }
 
-            else {
-                document.getElementById("input").textContent = "na";
-            }
         })
+
+        if (!match) {
+            document.getElementById("tableBody").innerHTML = "<h1>no items found<h1>";
+        }
+
 
 
     }
-
-
-
 
     giftClient: IGiftClient;
     userClient: IUserClient;

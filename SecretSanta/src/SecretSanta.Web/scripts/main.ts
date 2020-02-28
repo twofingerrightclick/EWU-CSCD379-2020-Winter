@@ -3,20 +3,22 @@
 import { GiftList } from "./list-Gifts";
 
 
-console.log("Before render gifts");
 
-(new GiftList().renderGifts());
+
+var giftsRendered: boolean = false;
+
+if (!giftsRendered) {
+    (new GiftList().renderGifts());
+    giftsRendered = true;
+}
+
 
 function searchByTitle() {
-    alert("searchByTitle() called");
     (new GiftList().searchGifts());
 }
 
-console.log("After Srender gifts");
+
 
 let btn = document.getElementById("searchButton");
 btn.addEventListener("click", (e: Event) => searchByTitle());
 
-function myFunction() {
-    alert("onclick() called");
-}
