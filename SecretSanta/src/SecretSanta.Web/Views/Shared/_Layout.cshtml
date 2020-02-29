@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 
 <html>
+
 <head>
+
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
     <!-- Stylesheets -->
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
     
-    <link href="~/css/main.7412d994a62944a2acaf.css" rel="stylesheet" />
+    <link href="~/css/main.62ced76a24eb0eba18ab.css" rel="stylesheet" />
     
     <!-- End Stylesheets -->
     <style>
@@ -16,24 +18,70 @@
         }
     </style>
 </head>
+
 <body>
-    <nav class="navbar" role="navigation">
-        <div class="navbar-menu">
-            <div class="navbar-start">
-            <a class="navbar-item"  asp-controller="Home" asp-action="Index">Home</a>
-            <a class="navbar-item" asp-controller="Users" asp-action="Index">Users</a>
-            <a class="navbar-item" asp-controller="Groups" asp-action="Index">Groups</a>
-            <a class="navbar-item" asp-controller="Gifts" asp-action="Index">Gifts</a>
+
+    <section class="hero is-primary is-small">
+        <!-- Hero head: will stick at the top -->
+        <div class="hero-head">
+            <nav class="navbar">
+                <div class="container">
+                    <div class="navbar-brand">
+                        <a class="navbar-item">
+                            <img src="https://bloximages.newyork1.vip.townnews.com/news-journal.com/content/tncms/assets/v3/editorial/9/d9/9d9d2aca-4c42-11ea-9659-0fcffa7c6907/5e41bb507a581.image.jpg?resize=620%2C264" alt="Logo">
+                        </a>
+                        <span class="navbar-burger burger" data-target="navbarMenuHeroA">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </span>
+                    </div>
+                    <div id="navbarMenuHeroA" class="navbar-menu">
+                        <div class="navbar-end">
+                            <a class="navbar-item is-active" asp-controller="Home" asp-action="Index">
+                                Home/List Gifts
+                            </a>     
+                         
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+
+        <!-- Hero content: will be in the middle -->
+        <div class="hero-body">
+            <div class="container has-text-centered">
+                <h1 class="title">
+                    Secret Santa
+                </h1>
+                <h2 class="subtitle" >
+                   <i>"You seem a decent fellow," Inigo said. "I hate to kill you."</i>
+                </h2>
             </div>
         </div>
-    </nav>
-    <div>
+
+        <!-- Hero footer: will stick at the bottom -->
+        <div class="hero-foot">
+            <nav class="tabs">
+                <div class="container">
+                    <ul>
+                        <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li><a asp-controller="Users" asp-action="Index">Users</a></li>
+                        <li><a asp-controller="Groups" asp-action="Index">Groups</a></li>
+                        <li><a asp-controller="Gifts" asp-action="Index">Gifts</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </section>
+    
+    <div class>
         @RenderBody()
     </div>
     <!-- Scripts -->
-    
-    <script src="~/js/main.7412d994a62944a2acaf.js"></script>
-    
+
+    <script src="~/js/main.62ced76a24eb0eba18ab.js"></script>
+
     <!-- End Scripts -->
     @RenderSection("scripts", required: false)
 </body>
