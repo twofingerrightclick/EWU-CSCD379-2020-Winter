@@ -24,6 +24,7 @@ function searchByTitle() {
 
 function clearSearch() {
     document.getElementById("results").innerText = "";
+    document.getElementById("cancelButtonDiv").style.visibility = "hidden";
     document.getElementById("optionalColumn").innerText = "";
     (<HTMLInputElement>document.getElementById("input")).value = "";
     (new GiftList().reloadList());
@@ -67,7 +68,7 @@ export class GiftList {
         var users = await this.getAllUsers();
         //trying to figure out how to use the promise<User> on the get(int id) versus getAll
         if (users.length<2) {
-            var user1 = await this.userClient.post(this.userThePrincessBride);
+            var user1 = await this.userClient.post(this.userDreadPirate);
             var user2 =await this.userClient.post(this.userInigo);
           
         }
@@ -146,6 +147,9 @@ export class GiftList {
         var searchInput: string = (<HTMLInputElement>document.getElementById("input")).value;
 
         if (!(searchInput && searchInput.length > 0)) { console.log("invalid search term"); return; }
+
+
+        document.getElementById("cancelButtonDiv").style.visibility = "visible";
        
         var users = await this.getAllUsers();
         var gifts = await this.getAllGifts();
@@ -204,9 +208,9 @@ export class GiftList {
         return users;
     }
 
-    userThePrincessBride: UserInput = new UserInput({
-        firstName: 'The Princess',
-        lastName: 'Bride'
+    userDreadPirate: UserInput = new UserInput({
+        firstName: 'Dread Pirate',
+        lastName: 'Roberts'
     });
 
     userInigo: UserInput = new UserInput({

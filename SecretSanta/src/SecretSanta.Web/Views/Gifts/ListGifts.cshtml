@@ -1,11 +1,12 @@
 ﻿@model Gift
 
-<h3 class="tile">List of Gifts</h3>
+<h1 class="title is-1">List of Gifts</h1>
+<h1 class="subtitle">Example - Requires an empty database for the start and current users in database are Inigo Montoya and Dread Pirate Roberts</h1>
 
 <div class="field">
     <label class="label" title="Search by Title"></label>
     <div class="control">
-        <input class="input" type="text" asp-for="Description" id="input"/>
+        <input class="input" type="text" asp-for="Description" id="input" />
         <span asp-validation-for="Description"></span>
     </div>
 </div>
@@ -13,8 +14,8 @@
     <div class="control">
         <button id="searchButton" class="button is-primary">Search by User</button>
     </div>
-    <div class="control">
-        <button id="cancelButton" class="button is-light">Cancel</button>
+    <div style = "visibility:hidden" id="cancelButtonDiv" class="control">
+        <button inherit id="cancelButton" class="button is-light">Cancel</button>
     </div>
 </div>
 <h1 class="is-italic" id="results"> </h1>
