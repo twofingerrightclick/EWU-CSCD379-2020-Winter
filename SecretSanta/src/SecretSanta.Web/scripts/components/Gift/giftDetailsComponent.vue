@@ -21,9 +21,14 @@
                 </div>
             </div>
             <div class="field">
-                <label class="label has-text-white">User Id</label>
-                <div class="control">
-                    <input class="input" type="text" v-model.number="clonedGift.userId" />
+                <label class="label has-text-white">User</label>
+                <div class="select">
+                    <select v-model="clonedGift.userId">
+                        <option v-for="user in users" :value="user.id">
+                            {{user.firstName}} {{user.lastName}}
+                        </option>
+                    </select>
+                    <!--<input class="input" type="text" v-model.number="clonedGift.userId" />-->
                 </div>
             </div>
             <div class="field is-grouped">
@@ -39,18 +44,22 @@
 </template>
 <script lang="ts">
     import { Vue, Component, Prop, Emit } from 'vue-property-decorator'
-    import { Gift, GiftClient } from '../../secretsanta-client';
+    import { Gift, GiftClient, UserClient, User } from '../../secretsanta-client';
     @Component
     export default class GiftDetailsComponent extends Vue {
         @Prop()
         gift: Gift;
         clonedGift: Gift = <Gift>{};
+        users: User[] = null;
 
         constructor() {
             super();
         }
 
-        mounted() {
+        async mounted() {
+            // get list of users for dropdown
+            let userClient = new UserClient();
+            this.users = await userClient.getAll();
             let tempGift = { ...this.gift };
             this.clonedGift = <Gift>tempGift;
         }
