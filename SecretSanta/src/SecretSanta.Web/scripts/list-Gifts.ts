@@ -125,9 +125,14 @@ export class GiftList {
         desc.textContent = `${gift.description}`
         tableRow.append(desc);
 
-        let url = document.createElement("td");
-        url.textContent = `${gift.url}`
-        tableRow.append(url);
+        let urlElement = document.createElement("td");
+       
+        let url = document.createElement("a");
+        url.href = `${gift.url}`;
+        url.innerText = `${gift.url}`;
+        urlElement.append(url);
+
+        tableRow.append(urlElement);
 
         if (user) {
             let userName = document.createElement("td");
