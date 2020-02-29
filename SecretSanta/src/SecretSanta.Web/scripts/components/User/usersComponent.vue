@@ -17,8 +17,8 @@
                     <td>{{user.firstName}}</td>
                     <td>{{user.lastName}}</td>
                     <td>
-                        <button class="button is-primary" @click="Edit(user)">Edit</button>
-                        <button class="button" @click="Delete(user)">Delete</button>
+                        <button class="button is-primary" @click="edit(user)">Edit</button>
+                        <button class="button" @click="deleteUser(user)">Delete</button>
                     </td>
                 </tr>
             </tbody>
@@ -56,16 +56,20 @@
             this.selectedUser = <User>{};
         }
 
-        async edit(user: User) {
-
+        edit(user: User) {
+            this.selectedUser = user;
         }
 
-        async delete(user: User) {
-
+        async deleteUser(user: User) {
+            if (confirm(`Are you sure you want to delete ${user.firstName} ${user.lastName}?`)) {
+                await this.userClient.delete(user.id);
+                this.refresh();
+            }
         }
 
         async refresh() {
             this.users = await this.userClient.getAll();
+            this.selectedUser = null;
         }
     }
 </script>

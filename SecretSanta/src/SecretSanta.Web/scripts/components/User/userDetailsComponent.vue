@@ -1,23 +1,26 @@
 ﻿<template>
-    <div>
-        <div class="field">
-            <label class="label">First Name</label>
-            <div class="control">
-                <input class="input" type="text" v-model="clonedUser.firstName" />
+    <div class="modal is-active">
+        <div class="modal-background"></div>
+        <div class="modal-content">
+            <div class="field">
+                <label class="label has-text-white">First Name</label>
+                <div class="control">
+                    <input class="input" type="text" v-model="clonedUser.firstName" />
+                </div>
             </div>
-        </div>
-        <div class="field">
-            <label class="label">Last Name</label>
-            <div class="control">
-                <input class="input" type="text" v-model="clonedUser.lastName" />
+            <div class="field">
+                <label class="label has-text-white">Last Name</label>
+                <div class="control">
+                    <input class="input" type="text" v-model="clonedUser.lastName" />
+                </div>
             </div>
-        </div>
-        <div class="field is-grouped">
-            <div class="control">
-                <button id="submit" class="button is-primary" @click.once="save">Submit</button>
-            </div>
-            <div class="control">
-                <a class="button" @click="cancel">Cancel</a>
+            <div class="field is-grouped">
+                <div class="control">
+                    <button id="submit" class="button is-primary" @click.once="save">Submit</button>
+                </div>
+                <div class="control">
+                    <a class="button" @click="cancel">Cancel</a>
+                </div>
             </div>
         </div>
     </div>

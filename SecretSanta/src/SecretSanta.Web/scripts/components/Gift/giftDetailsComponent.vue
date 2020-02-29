@@ -1,1 +1,73 @@
-﻿
+﻿<template>
+    <div class="modal is-active">
+        <div class="modal-background"></div>
+        <div class="modal-content">
+            <div class="field">
+                <label class="label has-text-white">Title</label>
+                <div class="control">
+                    <input class="input" type="text" v-model="clonedGift.title" />
+                </div>
+            </div>
+            <div class="field">
+                <label class="label has-text-white">Description</label>
+                <div class="control">
+                    <input class="input" type="text" v-model="clonedGift.description" />
+                </div>
+            </div>
+            <div class="field">
+                <label class="label has-text-white">Url</label>
+                <div class="control">
+                    <input class="input" type="text" v-model="clonedGift.url" />
+                </div>
+            </div>
+            <div class="field">
+                <label class="label has-text-white">User Id</label>
+                <div class="control">
+                    <input class="input" type="text" v-model.number="clonedGift.userId" />
+                </div>
+            </div>
+            <div class="field is-grouped">
+                <div class="control">
+                    <button id="submit" class="button is-primary" @click.once="save">Submit</button>
+                </div>
+                <div class="control">
+                    <a class="button" @click="cancel">Cancel</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+<script lang="ts">
+    import { Vue, Component, Prop, Emit } from 'vue-property-decorator'
+    import { Gift, GiftClient } from '../../secretsanta-client';
+    @Component
+    export default class GiftDetailsComponent extends Vue {
+        @Prop()
+        gift: Gift;
+        clonedGift: Gift = <Gift>{};
+
+        constructor() {
+            super();
+        }
+
+        mounted() {
+            let tempGift = { ...this.gift };
+            this.clonedGift = <Gift>tempGift;
+        }
+
+        @Emit('gift-saved')
+        async save() {
+            let giftClient = new GiftClient();
+            if (this.clonedGift.id > 0) {
+                await giftClient.put(this.clonedGift.id, this.clonedGift);
+            }
+            else {
+                await giftClient.post(this.clonedGift);
+            }
+        }
+
+        @Emit('gift-saved')
+        cancel() {
+        }
+    }
+</script>
