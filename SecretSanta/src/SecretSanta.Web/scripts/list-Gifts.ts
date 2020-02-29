@@ -129,6 +129,7 @@ export class GiftList {
        
         let url = document.createElement("a");
         url.href = `${gift.url}`;
+        url.target="_blank"
         url.innerText = `${gift.url}`;
         urlElement.append(url);
 
