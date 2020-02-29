@@ -10,10 +10,9 @@ namespace SecretSanta.Web.Controllers
 {
     public class HomeController : Controller
     {
-        // GET: /<controller>/
         public IActionResult Index()
         {
-            return RedirectToAction("ListGifts", "Gifts");
+            return View();
         }
     }
 }
