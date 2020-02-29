@@ -30,7 +30,7 @@ namespace BlogEngine.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesDefaultResponseType]
-        public async Task<IActionResult> Get(int id)
+        public async Task<ActionResult<TDto?>> Get(int id)
         {
             TDto entity = await Service.FetchByIdAsync(id);
             if (entity is null)
