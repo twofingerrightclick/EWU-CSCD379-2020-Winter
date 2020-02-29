@@ -32,8 +32,6 @@ function clearSearch() {
 
 
 
-
-
 export class GiftList {
 
 
