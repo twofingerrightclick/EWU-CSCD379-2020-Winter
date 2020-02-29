@@ -4,6 +4,7 @@
     IUserClient,
     UserClient,
     Gift,
+    User,
     GiftInput,
     UserInput
 } from "./secret-santa-api.client";
@@ -23,6 +24,7 @@ function searchByTitle() {
 
 function clearSearch() {
     document.getElementById("results").innerText = "";
+    document.getElementById("optionalColumn").innerText = "";
     (<HTMLInputElement>document.getElementById("input")).value = "";
     (new GiftList().reloadList());
 }
@@ -31,10 +33,8 @@ function clearSearch() {
 
 
 
-
-
-
 export class GiftList {
+
 
     async reloadList() {
 
@@ -45,7 +45,7 @@ export class GiftList {
        tableBody.innerHTML = "";
         for (let gift of gifts) {
             console.log("apending");
-           this.appendToTable(gift, tableBody);
+           this.appendToTable(gift, tableBody,null);
        }
     }
 
@@ -66,37 +66,52 @@ export class GiftList {
 
         var users = await this.getAllUsers();
         //trying to figure out how to use the promise<User> on the get(int id) versus getAll
-        if (users.length<1) {
-            await this.userClient.post(this.userThePrincessBride);
-            console.log("Created New User 1");
+        if (users.length<2) {
+            var user1 = await this.userClient.post(this.userThePrincessBride);
+            var user2 =await this.userClient.post(this.userInigo);
+          
         }
-        await this.giftClient.post(this.buttercupGift);
-        await this.giftClient.post(this.imGift);
-        await this.giftClient.post(this.miracleMaxGift);
-        await this.giftClient.post(this.dreadPirateRobertsGift);
-        await this.giftClient.post(this.iocaneGift);
 
+     
+        this.buttercupGift.userId = user1.id;
+        this.imGift.userId = user2.id;
+        this.miracleMaxGift.userId = user2.id;
+        this.dreadPirateRobertsGift.userId = user1.id;
+        this.iocaneGift.userId = user1.id;
+ 
+        
+            await this.giftClient.post(this.buttercupGift);
+            await this.giftClient.post(this.imGift);
+            await this.giftClient.post(this.miracleMaxGift);
+            await this.giftClient.post(this.dreadPirateRobertsGift);
+            await this.giftClient.post(this.iocaneGift);
+   
     }
 
 
     async renderGifts() {
-        await this.deleteAllGifts();
- 
-        await this.populateGifts();
-
 
         var gifts = await this.getAllGifts();
+
+        if (gifts.length < 5) {
+            await this.deleteAllGifts();
+            console.log("Created New gifts");
+            await this.populateGifts();
+        }
+      
+
         console.log(`number of gifts: ${gifts.length}`);
 
         var tableBody = document.getElementById("tableBody");
        
         gifts.forEach(gift => {
-            this.appendToTable(gift, tableBody);
+            this.appendToTable(gift, tableBody,null);
         })
     
 
     }
-    appendToTable(gift: Gift, tableBody: HTMLElement) {
+
+    appendToTable(gift: Gift, tableBody: HTMLElement, user:User) {
         var tableRow = document.createElement("tr");
 
         let id = document.createElement("td");
@@ -115,34 +130,47 @@ export class GiftList {
         url.textContent = `${gift.url}`
         tableRow.append(url);
 
+        if (user) {
+            let userName = document.createElement("td");
+            userName.textContent = `${user.firstName} ${user.lastName}`
+            tableRow.append(userName);
+        }
+       
+
         tableBody.append(tableRow);
     }
 
 
     async searchGifts() {
     
+        var searchInput: string = (<HTMLInputElement>document.getElementById("input")).value;
 
+        if (!(searchInput && searchInput.length > 0)) { console.log("invalid search term"); return; }
        
         var users = await this.getAllUsers();
+        var gifts = await this.getAllGifts();
       
 
         document.getElementById("results").innerText = "Results";
         var tableBody = document.getElementById("tableBody");
         tableBody.innerHTML = "";
 
-        var searchInput: string = (<HTMLInputElement>document.getElementById("input")).value;
+      
         var match: boolean = false;
         users.forEach(user => {
 
             if (user.firstName.toLowerCase().includes(searchInput) || user.lastName.toLowerCase().includes(searchInput)) {
                 match = true;
 
-                console.log("match");
+                console.log(`match and user giftcount: ${user.gifts.length}`);
 
-                user.gifts.forEach(gift => {
+                document.getElementById("optionalColumn").innerText=("User Name");
 
-              
-                    this.appendToTable(gift, tableBody);
+
+                gifts.forEach(gift => {
+                    if (user.id == gift.userId)
+
+                        this.appendToTable(gift, tableBody, user);
 
                 })
             
@@ -181,42 +209,50 @@ export class GiftList {
         lastName: 'Bride'
     });
 
+    userInigo: UserInput = new UserInput({
+        firstName: 'Inigo',
+        lastName: 'Montoya'
+    });
+
+
   
+         imGift:GiftInput = new GiftInput({
+            title: 'spanish rapier',
+            description: 'A Rapier is type of sword with a slender and sharply-pointed two-edged blade.',
+            url: 'https://en.wikipedia.org/wiki/Inigo_Montoya',
+            userId: 1
+        });
+
+buttercupGift:GiftInput = new GiftInput({
+    title: 'True Love',
+    description: 'A lovely sounding phrase easily misheard as "to blave," which means "to bluff" ',
+    url: 'https://en.wikipedia.org/wiki/Inigo_Montoya',
+    userId: 1
+});
+
+iocaneGift:GiftInput = new GiftInput({
+    title: 'Iocane Powder',
+    description: "Iocane powder is noted as being one of the deadliest poisons known to man.  It has no odor, no taste, and will dissolve instantly when poured into liquid.",
+    url: 'https://en.wikipedia.org/wiki/Inigo_Montoya',
+    userId: 1
+});
 
 
-    imGift:GiftInput = new GiftInput({
-        title: 'spanish rapier',
-        description: 'A Rapier is type of sword with a slender and sharply-pointed two-edged blade.',
-        url: 'https://en.wikipedia.org/wiki/Inigo_Montoya',
-        userId: 1
-    });
+dreadPirateRobertsGift:GiftInput = new GiftInput({
+    title: 'Zoro Mask',
+    description: 'allows Westley to test Buttercups devotion',
+    url: 'https://en.wikipedia.org/wiki/Inigo_Montoya',
+    userId: 1
+});
 
-    buttercupGift: GiftInput = new GiftInput({
-        title: 'True Love',
-        description: 'A lovely sounding phrase easily misheard as "to blave," which means "to bluff" ',
-        url: 'https://en.wikipedia.org/wiki/Inigo_Montoya',
-        userId: 1
-    });
-
-    iocaneGift: GiftInput = new GiftInput({
-        title: 'Iocane Powder',
-        description: "Iocane powder is noted as being one of the deadliest poisons known to man.  It has no odor, no taste, and will dissolve instantly when poured into liquid.",
-        url: 'https://en.wikipedia.org/wiki/Inigo_Montoya',
-        userId: 1
-    });
+miracleMaxGift:GiftInput = new GiftInput({
+    title: 'healing lozenge',
+    description: 'A cure to Westleys paralysis',
+    url: 'https://en.wikipedia.org/wiki/Inigo_Montoya',
+    userId: 1
+});
 
 
-    dreadPirateRobertsGift: GiftInput = new GiftInput({
-        title: 'Zoro Mask',
-        description: 'allows Westley to test Buttercups devotion',
-        url: 'https://en.wikipedia.org/wiki/Inigo_Montoya',
-        userId: 1
-    });
 
-    miracleMaxGift: GiftInput = new GiftInput({
-        title: 'healing lozenge',
-        description: 'A cure to Westleys paralysis',
-        url: 'https://en.wikipedia.org/wiki/Inigo_Montoya',
-        userId: 1
-    });
+    
 }
