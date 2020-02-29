@@ -96,6 +96,7 @@ export class GiftList {
             await this.deleteAllGifts();
             console.log("Created New gifts");
             await this.populateGifts();
+            gifts = await this.getAllGifts();
         }
       
 
