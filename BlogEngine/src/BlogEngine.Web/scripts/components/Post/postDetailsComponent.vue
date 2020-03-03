@@ -20,7 +20,17 @@
             <div class="field">
                 <label class="label has-text-white">Posted On</label>
                 <div class="control">
-                    <date-picker></date-picker>
+                    <input class="input" type="text" v-model="clonedPost.postedOn" />
+                </div>
+            </div>
+            <div class="field">
+                <label class="label has-text-white">Author</label>
+                <div class="select">
+                    <select v-model="clonedPost.authorId">
+                        <option v-for="author in authors" :value="author.id">
+                            {{author.firstName}} {{author.lastName}}
+                        </option>
+                    </select>
                 </div>
             </div>
             <div class="field is-grouped">
@@ -37,23 +47,23 @@
 
 <script lang="ts">
     import { Vue, Component, Prop, Emit } from 'vue-property-decorator'
-    import { Post, PostClient } from '../../blogengine-client.g';
-    import DatePicker from 'vuejs-datepicker';
-    @Component({
-        components: {
-            DatePicker
-        }
-    })
+    import { Post, PostClient, Author, AuthorClient } from '../../blogengine-client.g';
+    @Component
     export default class PostDetailsComponent extends Vue {
         @Prop()
         post: Post;
+
         clonedPost: Post = <Post>{};
+        authors: Author[] = null;
 
         constructor() {
             super();
         }
 
-        mounted() {
+        async mounted() {
+             // get list of authors for dropdown
+            let authorClient = new AuthorClient();
+            this.authors = await authorClient.getAll();
             let tempPost = { ...this.post };
             this.clonedPost = <Post>tempPost;
         }
@@ -61,6 +71,7 @@
         @Emit('post-saved')
         async save() {
             let postClient = new PostClient();
+            this.clonedPost.postedOn = new Date(this.clonedPost.postedOn);
             if (this.clonedPost.id > 0) {
                 await postClient.put(this.clonedPost.id, this.clonedPost);
             }

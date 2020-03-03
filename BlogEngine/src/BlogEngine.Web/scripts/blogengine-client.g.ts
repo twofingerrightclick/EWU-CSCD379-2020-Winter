@@ -271,6 +271,50 @@ export class PostClient {
         this.baseUrl = baseUrl ? baseUrl : "https://localhost:44317";
     }
 
+    getAllWithAuthors(): Promise<Post[]> {
+        let url_ = this.baseUrl + "/api/Post/PostsWithAuthors";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.instance.request(options_).then((_response: AxiosResponse) => {
+            return this.processGetAllWithAuthors(_response);
+        });
+    }
+
+    protected processGetAllWithAuthors(response: AxiosResponse): Promise<Post[]> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200 = _responseText;
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(Post.fromJS(item));
+            }
+            return result200;
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<Post[]>(<any>null);
+    }
+
     getAll(): Promise<Post[]> {
         let url_ = this.baseUrl + "/api/Post";
         url_ = url_.replace(/[?&]$/, "");
