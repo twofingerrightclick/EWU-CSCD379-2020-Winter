@@ -8,20 +8,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BlogEngine.Web.Controllers
 {
-    public class HomeController : Controller
+    public class PostController : Controller
     {
         // GET: /<controller>/
         public IActionResult Index()
-        {
-            return View();
-        }
-
-        public IActionResult Html()
-        {
-            return View();
-        }
-
-        public IActionResult Details(int id)
         {
             return View();
         }

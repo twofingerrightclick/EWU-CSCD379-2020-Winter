@@ -7,7 +7,7 @@ namespace BlogEngine.Data
 {
     public class Post : FingerPrintEntityBase
     {
-        public DateTime PostedOn { get; private set; }
+        public DateTime PostedOn { get; set; }
         public bool IsPublished { get; set; }
 
         public string Title { get; set; }

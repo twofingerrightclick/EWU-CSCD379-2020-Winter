@@ -45,9 +45,10 @@ namespace BlogEngine.Web
 
             app.UseRouting();
 
-            app.UseEndpoints(endpoint =>
+            app.UseEndpoints(endpoints =>
             {
-                endpoint.MapDefaultControllerRoute();
+                endpoints.MapControllerRoute("post", "{controller=Blog}/{action=Post}/{year}/{month}/{day}/{slug}");
+                endpoints.MapDefaultControllerRoute();
             });
         }
     }

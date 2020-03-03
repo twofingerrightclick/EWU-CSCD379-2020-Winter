@@ -6,7 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="scripts\app.ts" />
+    <None Remove="scripts\blah.vue" />
+    <None Remove="scripts\blogengine-client.g.ts" />
     <None Remove="scripts\main.ts" />
+    <None Remove="scripts\vue-shim.d.ts" />
   </ItemGroup>
 
   <ItemGroup>
@@ -17,7 +21,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Include="scripts\app.ts" />
+    <TypeScriptCompile Include="scripts\blah.vue" />
+    <TypeScriptCompile Include="scripts\blogengine-client.g.ts" />
     <TypeScriptCompile Include="scripts\main.ts" />
+    <TypeScriptCompile Include="scripts\vue-shim.d.ts" />
   </ItemGroup>
 
 </Project>
