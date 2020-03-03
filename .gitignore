@@ -274,6 +274,12 @@ __pycache__/
 
 # End of https://www.gitignore.io/api/aspnetcore
 
-
+# SQL Lite
 *.sqlite
 *.db
+
+# Visual Studio code
+.vscode/
+
+#Webpack
+package-lock.json
