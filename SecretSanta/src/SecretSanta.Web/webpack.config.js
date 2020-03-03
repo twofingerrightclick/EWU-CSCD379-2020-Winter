@@ -10,12 +10,14 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
+
 module.exports = (env, argv) => {
     const isProd = argv.mode === 'production';
 
     // paths
     const distPath = path.resolve(__dirname, './wwwroot');
-    const imgDistPath = path.resolve(distPath, './img');
+    const imgDistPath = path.resolve(distPath, './Assets/images');
+    const iconDistPath = path.resolve(distPath, './Assets/icon');
     const srcPath = '.';
     const templatePath = path.resolve(__dirname, './Views/Shared');
 
@@ -45,7 +47,7 @@ module.exports = (env, argv) => {
                     ]
                 },
                 {
-                    test: /\.(png|jpg|gif|svg)$/,
+                    test: /\.(png|ico$|jpg|gif|svg)$/,
                     loader: 'file-loader',
                     options: {
                         name: '[name].[ext]?[hash]'
@@ -73,6 +75,7 @@ module.exports = (env, argv) => {
                         appendTsSuffixTo: [/\.vue$/]
                     }
                 },
+            
             ]
         },
         plugins: [
@@ -82,9 +85,9 @@ module.exports = (env, argv) => {
             // copy src images to wwwroot
             new CopyWebpackPlugin(
                 [
-                    // {from: 'favicon', to: distPath},
-                    // {from: 'icons', to: iconDistPath},
-                    { from: 'images', to: imgDistPath }
+                    { from: './assets/favicon', to: distPath },
+                    //{from: 'icons', to: iconDistPath},
+                    //{from: 'images', to: imgDistPath }
                 ],
                 {
                     context: srcPath,
@@ -99,6 +102,7 @@ module.exports = (env, argv) => {
 
             new HtmlWebpackPlugin({
                 filename: path.resolve(templatePath, './_Layout.cshtml'),
+                favicon: 'Assets/favicon/favicon.ico',
                 inject: false,
                 minify: false,
                 template: path.resolve(templatePath, './_Layout_Template.cshtml')
