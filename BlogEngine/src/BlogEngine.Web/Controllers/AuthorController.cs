@@ -21,13 +21,14 @@ namespace BlogEngine.Web.Controllers
         public IHttpClientFactory ClientFactory { get; }
 
         // GET: Author
-        public async Task<ActionResult> Index()
+        public ActionResult Index()
         {
-            HttpClient httpClient = ClientFactory.CreateClient("BlogApi");
+            return View();
+            //HttpClient httpClient = ClientFactory.CreateClient("BlogApi");
 
-            var client = new AuthorClient(httpClient);
-            ICollection<Author> authors = await client.GetAllAsync();
-            return View(authors);
+            //var client = new AuthorClient(httpClient);
+            //ICollection<Author> authors = await client.GetAllAsync();
+            //return View(authors);
         }
 
         public async Task<ActionResult> Details(int id)

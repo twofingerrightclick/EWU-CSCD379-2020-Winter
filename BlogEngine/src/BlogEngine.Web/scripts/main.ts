@@ -4,6 +4,7 @@ import Vue from 'vue';
 
 import Blah from './blah.vue';
 import AuthorsComponent from './components/Author/authorsComponent.vue';
+import PostsComponent from './components/Post/postsComponent.vue';
 
 document.addEventListener("DOMContentLoaded", async () => {
     if (document.getElementById('blah')) {
@@ -16,6 +17,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         new Vue({
             render: h => h(AuthorsComponent)
         }).$mount('#authorList');
+    }
+    if (document.getElementById('postList')) {
+        new Vue({
+            render: h => h(PostsComponent)
+        }).$mount('#postList');
     }
 });
 //import { App } from './app';

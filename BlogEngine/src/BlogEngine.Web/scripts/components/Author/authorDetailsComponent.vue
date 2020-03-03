@@ -1,29 +1,32 @@
 ﻿<template>
-    <div>
-        <div class="field">
-            <label class="label">First Name</label>
-            <div class="control">
-                <input class="input" type="text" v-model="clonedAuthor.firstName" />
+    <div class="modal is-active">
+        <div class="modal-background"></div>
+        <div class="modal-content">
+            <div class="field">
+                <label class="label has-text-white">First Name</label>
+                <div class="control">
+                    <input class="input" type="text" v-model="clonedAuthor.firstName" />
+                </div>
             </div>
-        </div>
-        <div class="field">
-            <label class="label">Last Name</label>
-            <div class="control">
-                <input class="input" type="text" v-model="clonedAuthor.lastName" />
+            <div class="field">
+                <label class="label has-text-white">Last Name</label>
+                <div class="control">
+                    <input class="input" type="text" v-model="clonedAuthor.lastName" />
+                </div>
             </div>
-        </div>
-        <div class="field">
-            <label class="label">Email Address</label>
-            <div class="control">
-                <input class="input" type="email" v-model="clonedAuthor.email" />
+            <div class="field">
+                <label class="label has-text-white">Email Address</label>
+                <div class="control">
+                    <input class="input" type="email" v-model="clonedAuthor.email" />
+                </div>
             </div>
-        </div>
-        <div class="field is-grouped">
-            <div class="control">
-                <button id="submit" class="button is-primary" @click.once="saveAuthor">Submit</button>
-            </div>
-            <div class="control">
-                <a class="button is-light" @click="cancelEdit">Cancel</a>
+            <div class="field is-grouped">
+                <div class="control">
+                    <button id="submit" class="button is-primary" @click.once="saveAuthor">Submit</button>
+                </div>
+                <div class="control">
+                    <a class="button is-light" @click="cancelEdit">Cancel</a>
+                </div>
             </div>
         </div>
     </div>
