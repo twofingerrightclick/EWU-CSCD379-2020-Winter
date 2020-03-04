@@ -1,0 +1,10 @@
+<Project>
+  <PropertyGroup>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="IntelliTect.Analyzers" Version="0.1.5" />
+    <Compile Include="..\*Suppression.cs" />
+    <Compile Include="..\..\SolutionSuppression.cs" />
+  </ItemGroup>
+</Project>
