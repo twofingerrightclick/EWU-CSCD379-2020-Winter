@@ -1,18 +1,23 @@
-# Assignment **8**
+# Assignment **9**
 
-Create pages that use VueJS to perform the CRUD operations that were earlier created using the ASP.NET Core MVC Framework. Also add some styling
-to the website to add your own personal flare
+Write functional web tests using Selenium to verify website behavior.
 
-- Fix up the navigation so that it isn't an unordered list of items. ✔❌
-- Change up the theme a bit so that the default colors aren't used at a minimum for buttons and links. ✔❌
-- Add the necessary resources to the package.json file so that vuejs applications can be transpiled correctly. ✔❌
-- Configure webpack to transpile the vuejs files. ✔❌
-- Modify the app.ts file so that you can create/update/delete/fetch the users, gifts, and groups. ✔❌
-- Remove the ListGifts functionality and replace the index page in each of the Gifts, Users, Groups views so that you can perform all the CRUD features
-  without leaving the page. ✔❌
-    - Remove the Create/Edit/Delete pages and actions for each of the Gifts, Users, Groups elements ✔❌
-- Set the default start page back to the original Home/Index page. ✔❌
+## Write a selenium test to add a gift
+
+1. Add a user via the API (this is the only step not using Selenium) ✔❌
+2. Navigate to the ~/Gifts Page. ✔❌
+3. Find the Create Gift button **using a CSS Selector** and click it. ✔❌
+4. Enter the gift information. ✔❌
+5. Find the Submit button **via Id** and Submit. ✔❌
+6. Verify the gift appears in the list. ✔❌
+7. Take a screen shot of the updated Gifts list (using Selenium). ✔❌
+
+## Have Azure DevOps pipeline run Selenium tests
+
+1. Update the Azure DevOps pipeline to run your selenium tests
+2. Consider adding `npm run build:prod` to your csproj file as a post build step. ✔❌
+3. Manually create a screen shot of **Azure DevOps** displaying the Gift list screen shot with the added gift in your PR. ✔❌
 
 ## Extra Credit
 
-- Include a search text box that only displays Gifts whose first or last name contains the value in the text box. ✔❌
+- Add a test that verifies all links within the app are valid. ✔❌
