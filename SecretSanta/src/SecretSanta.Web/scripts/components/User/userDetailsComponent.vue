@@ -1,4 +1,5 @@
-﻿<template>
+﻿<!-- GUI -->
+<template>
     <div>
         <div class="field">
             <label class="label">First Name</label>
@@ -12,7 +13,6 @@
                 <input class="input" type="text" v-model="clonedUser.lastName" />
             </div>
         </div>
-      
         <div class="field is-grouped">
             <div class="control">
                 <button id="submit" class="button is-primary" @click.once="saveUser">Submit</button>
@@ -24,9 +24,13 @@
     </div>
 </template>
 
+
+
+<!-- Code Behind -->
 <script lang="ts">
     import { Vue, Component, Prop, Emit } from 'vue-property-decorator'
     import { User, UserClient } from '../../secretsanta-client.g';
+
     @Component
     export default class UserDetailsComponent extends Vue {
         @Prop()
@@ -54,8 +58,6 @@
         }
 
         @Emit('user-saved')
-        cancelEdit() {
-
-        }
+        cancelEdit() {}
     }
 </script>
