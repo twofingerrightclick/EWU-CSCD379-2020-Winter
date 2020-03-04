@@ -21,3 +21,8 @@ Write functional web tests using Selenium to verify website behavior.
 ## Extra Credit
 
 - Add a test that verifies all links within the app are valid. ✔❌
+
+## Additional Reference Material
+
+- [UI Test with Selenium](https://docs.microsoft.com/en-us/azure/devops/pipelines/test/continuous-test-selenium?view=azure-devops)
+- [Automated UI Testing with Azure DevOps and Selenium](http://patrickgoode.com/automated-ui-testing-with-azure-devops-and-selenium/)
