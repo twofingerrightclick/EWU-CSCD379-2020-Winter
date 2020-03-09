@@ -12,11 +12,12 @@ namespace SecretSanta.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("Sqlite:Autoincrement", true)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     CreatedBy = table.Column<string>(nullable: false),
-                    CreatedOn = table.Column<DateTime>(nullable: false),
+                    CreatedOn = table.Column<DateTime>(nullable: false, type: "datetime2"),
                     ModifiedBy = table.Column<string>(nullable: false),
-                    ModifiedOn = table.Column<DateTime>(nullable: false),
+                    ModifiedOn = table.Column<DateTime>(nullable: false, type: "datetime2"),
                     Title = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
@@ -29,11 +30,12 @@ namespace SecretSanta.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("Sqlite:Autoincrement", true)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     CreatedBy = table.Column<string>(nullable: false),
-                    CreatedOn = table.Column<DateTime>(nullable: false),
+                    CreatedOn = table.Column<DateTime>(nullable: false, type: "datetime2"),
                     ModifiedBy = table.Column<string>(nullable: false),
-                    ModifiedOn = table.Column<DateTime>(nullable: false),
+                    ModifiedOn = table.Column<DateTime>(nullable: false, type: "datetime2"),
                     FirstName = table.Column<string>(nullable: false),
                     LastName = table.Column<string>(nullable: false),
                     SantaId = table.Column<int>(nullable: true)
@@ -54,11 +56,12 @@ namespace SecretSanta.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("Sqlite:Autoincrement", true)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     CreatedBy = table.Column<string>(nullable: false),
-                    CreatedOn = table.Column<DateTime>(nullable: false),
+                    CreatedOn = table.Column<DateTime>(nullable: false, type: "datetime2"),
                     ModifiedBy = table.Column<string>(nullable: false),
-                    ModifiedOn = table.Column<DateTime>(nullable: false),
+                    ModifiedOn = table.Column<DateTime>(nullable: false, type: "datetime2"),
                     Title = table.Column<string>(nullable: false),
                     Description = table.Column<string>(nullable: false),
                     Url = table.Column<string>(nullable: false),

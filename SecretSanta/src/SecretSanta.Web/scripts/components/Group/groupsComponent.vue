@@ -30,6 +30,7 @@
     import { Vue, Component } from 'vue-property-decorator';
     import { Group, GroupClient } from '../../secretsanta-client';
     import GroupDetailsComponent from './groupDetailsComponent.vue';
+    declare var apiUrl: string;
 
     @Component({
         components: {
@@ -43,7 +44,7 @@
 
         constructor() {
             super();
-            this.groupClient = new GroupClient();
+            this.groupClient = new GroupClient(apiUrl);
         }
 
         async mounted() {

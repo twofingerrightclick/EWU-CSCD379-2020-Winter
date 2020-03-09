@@ -14,9 +14,12 @@ namespace SecretSanta.Api
     public class Startup
     {
         private IConfiguration Configuration { get; }
-        public Startup(IConfiguration configuration)
+        private IWebHostEnvironment Environment { get; }
+
+        public Startup(IConfiguration configuration, IWebHostEnvironment environment)
         {
             Configuration = configuration;
+            Environment = environment;
         }
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
@@ -29,9 +32,19 @@ namespace SecretSanta.Api
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IGroupService, GroupService>();
 
-            services.AddDbContext<ApplicationDbContext>(options =>
+            if (Environment.IsProduction())
+            {
+                services.AddDbContext<ApplicationDbContext>(options =>
+                options.EnableSensitiveDataLogging()
+                       .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            }
+            else
+            {
+                services.AddDbContext<ApplicationDbContext>(options =>
                 options.EnableSensitiveDataLogging()
                        .UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+
+            }
 
             services.AddAutoMapper(new[] { typeof(AutomapperConfigurationProfile).Assembly });
 
@@ -56,7 +69,10 @@ namespace SecretSanta.Api
 
             app.UseRouting();
 
-            app.UseOpenApi();
+            app.UseOpenApi(x => x.PostProcess = (doc, _) => 
+            {
+                doc.Info.Title = $"Secret Santa API ({env.EnvironmentName})";
+            });
             app.UseSwaggerUi3();
 
             app.UseCors();

@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@inject Microsoft.Extensions.Configuration.IConfiguration configuration;
+<!DOCTYPE html>
 
 <html>
 <head>
@@ -36,6 +37,9 @@
             @RenderBody()
         </div>
     </section>
+    <script>
+        var apiUrl = "@(configuration["ApiUrl"])";
+    </script>
     <!-- Scripts -->
     <% for (var chunk in htmlWebpackPlugin.files.chunks) { %>
     <script src="~<%= htmlWebpackPlugin.files.chunks[chunk].entry %>"></script>

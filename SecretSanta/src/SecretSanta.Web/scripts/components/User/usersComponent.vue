@@ -32,6 +32,7 @@
     import { Component, Vue } from 'vue-property-decorator';
     import { User, UserClient } from '../../secretsanta-client';
     import UserDetailsComponent from './userDetailsComponent.vue';
+    declare var apiUrl: string;
 
     @Component({
         components: {
@@ -45,7 +46,7 @@
 
         constructor() {
             super();
-            this.userClient = new UserClient();
+            this.userClient = new UserClient(apiUrl);
         }
 
         async mounted() {

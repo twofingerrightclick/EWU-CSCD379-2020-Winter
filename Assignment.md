@@ -1,28 +1,33 @@
-# Assignment **9**
+# Assignment **10**
 
-Write functional web tests using Selenium to verify website behavior.
+For this assignment we will be publishing our web application out to Azure.
 
-## Write a selenium test to add a gift
+## CHANGES FROM PAST ASSIGNMENTS
+- The assignment is **DUE BY 11:59pm 3/17**
+- This is an individual assignment, we will *not* be pairing on this assignment
+- Because this assignment is results driven, we are going to drop the peer review for this assignment
+- Because there wont be any peer review or corrections, the assignment will only be worth 40 points
 
-1. Add a user via the API (this is the only step not using Selenium) ✔❌
-2. Navigate to the ~/Gifts Page. ✔❌
-3. Find the Create Gift button **using a CSS Selector** and click it. ✔❌
-4. Enter the gift information. ✔❌
-5. Find the Submit button **via Id** and Submit. ✔❌
-6. Verify the gift appears in the list. ✔❌
-7. Take a screen shot of the updated Gifts list (using Selenium). ✔❌
+## Assignments
+- Sign up for a free Azure account.
+- Create Azure Resources
+  - A Resource Group.
+  - App Service for the API project.
+  - App Service for the Web project.
+  - SQL server and database.
+- Configure App Services with Production environment and relevant connection strings.
+- Create a release pipeline that deploys both the API and Web projects.
+- Update build pipeline for CI/CD.
 
-## Have Azure DevOps pipeline run Selenium tests
+## To submit in PR
+In the pull request include the following:
+- A link to your published API swagger page.
+- A link to your published web site.
+- A screenshot showing the Azure Resource Group with all resources.
+- A screenshot showing the release pipeline that did the deployment.
+- Updated build pipeline yaml file.
 
-1. Update the Azure DevOps pipeline to run your selenium tests
-2. Consider adding `npm run build:prod` to your csproj file as a post build step. ✔❌
-3. Manually create a screen shot of **Azure DevOps** displaying the Gift list screen shot with the added gift in your PR. ✔❌
-
-## Extra Credit
-
-- Add a test that verifies all links within the app are valid. ✔❌
-
-## Additional Reference Material
-
-- [UI Test with Selenium](https://docs.microsoft.com/en-us/azure/devops/pipelines/test/continuous-test-selenium?view=azure-devops)
-- [Automated UI Testing with Azure DevOps and Selenium](http://patrickgoode.com/automated-ui-testing-with-azure-devops-and-selenium/)
+## Documentation 
+- [https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/azure-apps/?view=aspnetcore-3.1&tabs=visual-studio](Deploy ASP.NET Core apps to Azure App Service)
+- [https://docs.microsoft.com/en-us/aspnet/core/fundamentals/environments?view=aspnetcore-3.1#set-the-environment](Set environment)
+- [https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/providers?tabs=dotnet-core-cli](EF Migrations)
