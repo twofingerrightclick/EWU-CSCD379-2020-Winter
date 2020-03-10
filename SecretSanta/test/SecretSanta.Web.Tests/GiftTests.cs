@@ -4,78 +4,107 @@ using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
 using SecretSanta.Web.Api;
 using System;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace BlogEngine.Web
+namespace SecretSanta.Web.Tests
 {
     [TestClass]
     public class GiftTests
 
     {
-        /// <summary>
-        /// Summary description for MySeleniumTests
-        /// </summary>
+  
         [TestClass]
         public class MySeleniumTests
         {
             TestContext testContextInstance;
             private IWebDriver _Driver;
-            private Uri _WebAppURL;
-            Uri _ApiUri;
+            static private Uri _ApiUri = new Uri("https://localhost:44388/");
+            Uri _WebAppUri = new Uri("https://localhost:44394/");
+            UserClient _UserClient;
+            static private User _TestUser;
 
-            private User _TestUser;
 
-            public MySeleniumTests()
+            [ClassInitialize]
+            public static async Task ClassInitalize(TestContext testContext)
             {
+                if (testContext is null)
+                    throw new ArgumentNullException(nameof(testContext));
+
+                await CreateUserAsync(_ApiUri);
+
+
             }
+
+
+
+            [TestInitialize()]
+            public async Task SetupTestAsync()
+            {
+
+                string browser = "Chrome";
+                switch (browser)
+                {
+                    case "Chrome":
+                        _Driver = new ChromeDriver();
+                        break;
+                        /*  case "Firefox":
+                              driver = new FirefoxDriver();
+                              break;
+                          case "IE":
+                              driver = new InternetExplorerDriver();
+                              break;
+                          default:
+                              driver = new ChromeDriver();
+                              break;*/
+                }
+
+
+
+
+            }
+
 
             [TestMethod]
             [TestCategory("Chrome")]
-            public void TheBingSearchTest()
+
+            public async Task CreateGift_SuccessAsync()
             {
-                /*  _Driver.Navigate().GoToUrl(appURL + "/");
-                  _Driver.FindElement(By.Id("sb_for_mq")).SendKeys("Azure Pipelines");
-                  _Driver.FindElement(By.Id("sb_form_go")).Click();
-                  _Driver.FindElement(By.XPath("//ol[@id='b_results']/li/h2/a/strong[3]")).Click();
-                  Assert.IsTrue(_Driver.Title.Contains("Azure Pipelines"), "Verified title of the page");*/
-            }
 
 
-            [TestMethod]
-
-            public void CreateGift_Success()
-            {
-                Uri giftUri = new Uri(_WebAppURL + "Gifts");
+                //arrange
+                Uri giftUri = new Uri(_WebAppUri + "Gifts");
 
                 _Driver.Navigate().GoToUrl(giftUri);
 
                 Click("#createButton.button.is-secondary");
 
                 String giftTitle = "The Princess Bride";
-              
+
                 string uniqueGiftTitleInput = giftTitle + Guid.NewGuid();
 
                 InputText(GiftInputField.titleInput.ToString(), uniqueGiftTitleInput);
 
-               
+
                 InputText(GiftInputField.descriptionInput.ToString(), "A good book");
 
                 InputText(GiftInputField.urlInput.ToString(), "https://en.wikipedia.org/wiki/The_Princess_Bride_(novel)");
-                
+
                 SelectOptionValueFromDropDown("select", _TestUser.Id.ToString(new System.Globalization.CultureInfo("en-us")));
 
                 Click("#submit.button");
 
                 Thread.Sleep(1500);
 
-                _Driver.FindElement(By.XPath($"//*[text()='{uniqueGiftTitleInput}']"));
+                //Assert
 
-               
+                string giftId=_Driver.FindElement(By.XPath($"//*[text()='{uniqueGiftTitleInput}']/parent::tr/child::td")).Text;
 
-
+                //cleanup
+                await UseGiftClientAsync("DeleteAsync", int.Parse(giftId));
 
 
             }
@@ -120,47 +149,35 @@ namespace BlogEngine.Web
             }
 
 
-            [TestInitialize()]
-            public async Task SetupTestAsync()
+            //more for practice than practical
+            private async Task UseGiftClientAsync(String methodName, params Object?[]? parameters)
             {
-                _WebAppURL = new Uri("https://localhost:44394/");
-
-                _ApiUri = new Uri("https://localhost:44388/");
-
-                await CreateUserAsync(_ApiUri);
-
-
-
-                string browser = "Chrome";
-                switch (browser)
+                if (string.IsNullOrEmpty(methodName))
                 {
-                    case "Chrome":
-                        _Driver = new ChromeDriver();
-                        break;
-                        /*  case "Firefox":
-                              driver = new FirefoxDriver();
-                              break;
-                          case "IE":
-                              driver = new InternetExplorerDriver();
-                              break;
-                          default:
-                              driver = new ChromeDriver();
-                              break;*/
+                    throw new ArgumentException("message", nameof(methodName));
                 }
 
+                using HttpClient client = new HttpClient();
+                client.BaseAddress = _ApiUri;
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                GiftClient giftClient = new GiftClient(client);
+
+                System.Reflection.MethodInfo theMethod = typeof(GiftClient)
+        .GetMethods()
+        .Where(x => x.Name == methodName)
+        .FirstOrDefault(x => x.GetParameters().Length == parameters.Length);
+
+                Task result = (Task)theMethod.Invoke(giftClient, parameters);
+                await result;
 
 
+                client.Dispose();
 
             }
 
-
-
-
-
-
-
-
-            async Task CreateUserAsync(Uri apiUri)
+            static async Task CreateUserAsync(Uri apiUri)
             {
                 using HttpClient client = new HttpClient();
                 client.BaseAddress = apiUri;
@@ -170,7 +187,6 @@ namespace BlogEngine.Web
                 UserInput userInput = new UserInput() { FirstName = "Inigo", LastName = "Montoya" };
 
                 UserClient userClient = new UserClient(client);
-
 
                 User responseUser = await userClient.PostAsync(userInput);
                 if (responseUser is default(User))
@@ -182,10 +198,33 @@ namespace BlogEngine.Web
                 client.Dispose();
             }
 
+
+            static async Task DeleteUserAsync(Uri apiUri)
+            {
+                using HttpClient client = new HttpClient();
+                client.BaseAddress = apiUri;
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                UserClient userClient = new UserClient(client);
+
+                await userClient.DeleteAsync(_TestUser.Id);
+               
+
+                client.Dispose();
+            }
+
             [TestCleanup()]
             public void MyTestCleanup()
             {
                 _Driver.Quit();
+            }
+
+
+            [ClassCleanup()]
+            public static async Task ClassCleanupAsync()
+            {
+                await DeleteUserAsync(_ApiUri);
             }
         }
     }
