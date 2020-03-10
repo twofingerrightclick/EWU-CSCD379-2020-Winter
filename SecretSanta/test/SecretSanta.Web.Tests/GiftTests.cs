@@ -104,6 +104,13 @@ namespace SecretSanta.Web.Tests
                 string giftId=_Driver.FindElement(By.XPath($"//*[text()='{uniqueGiftTitleInput}']/parent::tr/child::td")).Text;
 
                 //cleanup
+
+               /* string path = $"{System.IO.Directory.GetCurrentDirectory()}CreateGiftTest.png";
+                System.Diagnostics.Trace.WriteLine(path);
+                ((ITakesScreenshot)_Driver).GetScreenshot().SaveAsFile(path, ScreenshotImageFormat.Png);
+                this.TestContext.AddResultFile(path);*/
+
+
                 await UseGiftClientAsync("DeleteAsync", int.Parse(giftId));
 
 
@@ -154,7 +161,7 @@ namespace SecretSanta.Web.Tests
             {
                 if (string.IsNullOrEmpty(methodName))
                 {
-                    throw new ArgumentException("message", nameof(methodName));
+                    throw new ArgumentException("no such method", nameof(methodName));
                 }
 
                 using HttpClient client = new HttpClient();
