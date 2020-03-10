@@ -44,9 +44,20 @@ namespace BlogEngine.Web
 
             [TestMethod]
 
-            public void OpenUrl()
+            public void CreateGift_Success()
             {
-                _Driver.Navigate().GoToUrl(_WebAppURL);
+                Uri giftUri = new Uri (_WebAppURL + "Gifts");
+
+                _Driver.Navigate().GoToUrl(giftUri);
+
+
+                ClickButton("#createButton.button.is-secondary");
+
+            }
+
+            private void ClickButton(string v)
+            {
+                _Driver.FindElement(By.CssSelector(v)).Click();
             }
 
             /// <summary>
@@ -69,11 +80,11 @@ namespace BlogEngine.Web
             [TestInitialize()]
             public async Task SetupTestAsync()
             {
-                _WebAppURL = new Uri("http://www.bing.com/");
+                _WebAppURL = new Uri("https://localhost:44394/");
 
-                Uri apiUri = new Uri("https://localhost:44388/");
+                _ApiUri = new Uri("https://localhost:44388/");
 
-                await CreateUserAsync(apiUri);
+                await CreateUserAsync(_ApiUri);
 
                
 
