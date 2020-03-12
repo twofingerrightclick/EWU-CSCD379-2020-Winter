@@ -1,10 +1,12 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using System;
+using System.Linq;
+using System.Text;
 
 namespace SecretSanta.Web
 {
@@ -20,20 +22,25 @@ namespace SecretSanta.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-
             services.AddHttpClient("SecretSantaApi", options =>
             {
                 options.BaseAddress = new Uri(Configuration["ApiUrl"]);
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public static void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public static void Configure(IApplicationBuilder app, IWebHostEnvironment env, IConfiguration configuration, ILogger<Startup> logger)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            StringBuilder message = new StringBuilder("Configuration:");
+            foreach (var configItem in configuration.AsEnumerable().OrderBy(item => item.Key))
+            {
+                message.AppendLine($"\t{configItem.Key}={configItem.Value}");
+            }
+            logger.LogInformation(message.ToString());
 
             app.UseHttpsRedirection();
 

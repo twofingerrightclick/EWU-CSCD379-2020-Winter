@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace SecretSanta.Web
 {
@@ -13,17 +13,16 @@ namespace SecretSanta.Web
 
         public static IHostBuilder CreateHostBuilder(string[] args)
         {
-
-            var configuration = new ConfigurationBuilder().AddCommandLine(args).Build();
-
-
-           return  Host.CreateDefaultBuilder(args)
-                    .ConfigureWebHostDefaults(webBuilder =>
-                    {
-                        webBuilder.UseStartup<Startup>();
-                        webBuilder.UseConfiguration(configuration);
-
-                    });
+            return Host.CreateDefaultBuilder(args)
+                .ConfigureLogging(logging =>
+                {
+                    logging.AddConsole();
+                })
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                })
+                ;
         }
     }
 

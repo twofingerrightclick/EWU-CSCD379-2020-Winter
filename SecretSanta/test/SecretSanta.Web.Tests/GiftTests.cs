@@ -7,11 +7,16 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
+
+using System.Collections.Generic;
+
 
 namespace SecretSanta.Web.Tests
 {
@@ -25,59 +30,122 @@ namespace SecretSanta.Web.Tests
         {
             TestContext testContextInstance;
             private IWebDriver _Driver;
-            static private Uri _ApiUri = new Uri("https://localhost:44388/");
-            static Uri _WebAppUri = new Uri("https://localhost:44394/");
+            static private Uri _ApiUri = new Uri("https://localhost:5000/");
+            static Uri _WebAppUri = new Uri("https://localhost:5001/");
             UserClient _UserClient;
             static private User _TestUser;
             private static Process? ApiHostProcess { get; set; }
             private static Process? WebHostProcess { get; set; }
 
 
+            /*    ApiHostProcess = Process.Start("dotnet", $"run -p ..\\..\\..\\..\\..\\src\\SecretSanta.Api\\SecretSanta.Api.csproj --urls={_ApiUri.ToString()}");
+                     WebHostProcess = Process.Start("dotnet", $"run -p ..\\..\\..\\..\\..\\src\\SecretSanta.Web\\SecretSanta.Web.csproj --urls={_WebAppUri.ToString()}");
+                     ApiHostProcess.WaitForExit(20000);
+                     Thread.Sleep(1000);
+    */
+
             [ClassInitialize]
-            public static async Task ClassInitalize(TestContext testContext)
+            public static void ClassInitialize(TestContext testContext)
             {
-                if (testContext is null)
-                    throw new ArgumentNullException(nameof(testContext));
+                using WebClient webClient = new WebClient();
+                ApiHostProcess = StartWebHost("SecretSanta.Api", 5000, "Swagger", new string[] { "ConnectionStrings:DefaultConnection='Data Source=SecretSanta.db'" });
 
-                
+                WebHostProcess = StartWebHost("SecretSanta.Web", 5001, "", " ApiUrl=https://localhost:5000");
 
-                ApiHostProcess = Process.Start("dotnet", $"run -p ..\\..\\..\\..\\..\\src\\SecretSanta.Api\\SecretSanta.Api.csproj --urls={_ApiUri.ToString()}");
-                WebHostProcess = Process.Start("dotnet", $"run -p ..\\..\\..\\..\\..\\src\\SecretSanta.Web\\SecretSanta.Web.csproj --urls={_WebAppUri.ToString()}");
-                ApiHostProcess.WaitForExit(20000);
-                Thread.Sleep(1000);
-                await CreateUserAsync(_ApiUri);
+                Process StartWebHost(string projectName, int port, string urlSubDirectory, params string[] args)
+                {
 
+                    string fileName = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, projectName + ".exe");
+                    Process[] alreadyExecutingProcesses = Process.GetProcessesByName(projectName);
+                    if (alreadyExecutingProcesses.Length != 0)
+                    {
+                        foreach (Process item in alreadyExecutingProcesses)
+                        {
+                            item.Kill();
+                        }
+                    }
 
+                    string testAssemblyLocation = Assembly.GetExecutingAssembly().Location;
+                    string testAssemblyName = Path.GetFileNameWithoutExtension(testAssemblyLocation);
+                    string projectExe = testAssemblyLocation.RegexReplace(testAssemblyName, projectName)
+                        .RegexReplace(@"\\test\\", @"\src\").RegexReplace("dll$", "exe");
+
+                    string argumentList = $"{string.Join(" ", args)} Urls=https://localhost:{port}";
+
+                    ProcessStartInfo startInfo = new ProcessStartInfo(projectExe, argumentList)
+                    {
+                        RedirectStandardError = true,
+                        RedirectStandardOutput = true,
+                        UseShellExecute = false,
+                        CreateNoWindow = true
+                    };
+
+                    string stdErr = "";
+                    string stdOut = "";
+                    // Justification: Dispose invoked by caller on Process object returned.
+#pragma warning disable CA2000 // Dispose objects before losing scope
+                    Process host = new Process
+                    {
+                        EnableRaisingEvents = true,
+                        StartInfo = startInfo
+                    };
+#pragma warning restore CA2000 // Dispose objects before losing scope
+
+                    host.ErrorDataReceived += (sender, args) =>
+                        stdErr += $"{args.Data}\n";
+                    host.OutputDataReceived += (sender, args) =>
+                        stdOut += $"{args.Data}\n";
+                    host.Start();
+                    host.BeginErrorReadLine();
+                    host.BeginOutputReadLine();
+
+                    for (int seconds = 20; seconds > 0; seconds--)
+                    {
+                        if (stdOut.Contains("Application started."))
+                        {
+                            _ = webClient.DownloadString(
+                                $"https://localhost:{port}/{urlSubDirectory.TrimStart(new char[] { '/', '\\' })}");
+                            return host;
+                        }
+                        else if (host.WaitForExit(1000))
+                        {
+                            break;
+                        }
+                    }
+
+                    if (!host.HasExited) host.Kill();
+                    host.WaitForExit();
+                    throw new InvalidOperationException($"Unable to execute process successfully: {stdErr}") { Data = { { "StandardOut", stdOut } } };
+
+                }
+            }
+
+            [ClassCleanup]
+            public static void ClassCleanup()
+            {
+                ApiHostProcess?.CloseMainWindow();
+                ApiHostProcess?.Close();
+                WebHostProcess?.CloseMainWindow();
+                WebHostProcess?.Close();
             }
 
 
 
-            [TestInitialize()]
-            public async Task SetupTestAsync()
+            [TestInitialize]
+            public void TestInitialize()
             {
 
                 string browser = "Chrome";
                 switch (browser)
                 {
                     case "Chrome":
-                        var chromeOptions = new ChromeOptions();
-                        chromeOptions.AddArguments("headless");
-                        _Driver = new ChromeDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),chromeOptions);
+                        _Driver = new ChromeDriver();
                         break;
-                        /*  case "Firefox":
-                              driver = new FirefoxDriver();
-                              break;
-                          case "IE":
-                              driver = new InternetExplorerDriver();
-                              break;
-                          default:
-                              driver = new ChromeDriver();
-                              break;*/
+                    default:
+                        _Driver = new ChromeDriver();
+                        break;
                 }
-
-
-
-
+                _Driver.Manage().Timeouts().ImplicitWait = new System.TimeSpan(0, 0, 10);
             }
 
 
@@ -86,12 +154,14 @@ namespace SecretSanta.Web.Tests
 
             public async Task CreateGift_SuccessAsync()
             {
-
+                await CreateUserAsync(_ApiUri);
 
                 //arrange
                 Uri giftUri = new Uri(_WebAppUri + "Gifts");
 
                 _Driver.Navigate().GoToUrl(giftUri);
+
+                Thread.Sleep(25000);
               
                 Click("#createButton.button.is-secondary");
              
@@ -242,25 +312,14 @@ namespace SecretSanta.Web.Tests
             }
 
 
-            [ClassCleanup()]
-            public static async Task ClassCleanupAsync()
-            {
-                await DeleteUserAsync(_ApiUri);
+        }
+    }
 
-                if (ApiHostProcess != null)
-                {
-                    ApiHostProcess.Kill();
-                    //ApiHostProcess.CloseMainWindow();
-                    ApiHostProcess.Close();
-                }
-                if (WebHostProcess != null)
-                {
-                    WebHostProcess.Kill();
-                    //WebHostProcess.CloseMainWindow();
-                    WebHostProcess.Close();
-                }
-
-            }
+    public static class StringRegExExtension
+    {
+        static public string RegexReplace(this string input, string findPattern, string replacePattern)
+        {
+            return Regex.Replace(input, findPattern, replacePattern);
         }
     }
 
