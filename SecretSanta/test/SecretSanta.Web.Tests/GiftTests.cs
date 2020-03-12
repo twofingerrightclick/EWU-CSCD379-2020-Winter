@@ -4,9 +4,12 @@ using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
 using SecretSanta.Web.Api;
 using System;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -26,6 +29,8 @@ namespace SecretSanta.Web.Tests
             Uri _WebAppUri = new Uri("https://localhost:44394/");
             UserClient _UserClient;
             static private User _TestUser;
+            private static Process? ApiHostProcess { get; set; }
+            private static Process? WebHostProcess { get; set; }
 
 
             [ClassInitialize]
@@ -35,6 +40,10 @@ namespace SecretSanta.Web.Tests
                     throw new ArgumentNullException(nameof(testContext));
 
                 await CreateUserAsync(_ApiUri);
+
+                ApiHostProcess = Process.Start("dotnet", "run -p ..\\..\\..\\..\\..\\src\\SecretSanta.Api\\SecretSanta.Api.csproj");
+                WebHostProcess = Process.Start("dotnet", "run -p ..\\..\\..\\..\\..\\src\\SecretSanta.Web\\SecretSanta.Web.csproj");
+                ApiHostProcess.WaitForExit(16000);
 
 
             }
@@ -49,7 +58,9 @@ namespace SecretSanta.Web.Tests
                 switch (browser)
                 {
                     case "Chrome":
-                        _Driver = new ChromeDriver();
+                        var chromeOptions = new ChromeOptions();
+                        chromeOptions.AddArguments("headless");
+                        _Driver = new ChromeDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),chromeOptions);
                         break;
                         /*  case "Firefox":
                               driver = new FirefoxDriver();
@@ -79,8 +90,9 @@ namespace SecretSanta.Web.Tests
                 Uri giftUri = new Uri(_WebAppUri + "Gifts");
 
                 _Driver.Navigate().GoToUrl(giftUri);
-
+              
                 Click("#createButton.button.is-secondary");
+             
 
                 String giftTitle = "The Princess Bride";
 
@@ -232,6 +244,20 @@ namespace SecretSanta.Web.Tests
             public static async Task ClassCleanupAsync()
             {
                 await DeleteUserAsync(_ApiUri);
+
+                if (ApiHostProcess != null)
+                {
+                    ApiHostProcess.Kill();
+                    //ApiHostProcess.CloseMainWindow();
+                    ApiHostProcess.Close();
+                }
+                if (WebHostProcess != null)
+                {
+                    WebHostProcess.Kill();
+                    //WebHostProcess.CloseMainWindow();
+                    WebHostProcess.Close();
+                }
+
             }
         }
     }
