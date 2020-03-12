@@ -43,8 +43,8 @@ steps:
     command: 'publish'
     publishWebProjects: false
     projects: |
-      **/SecretSant.Api.csproj
-      **/SecretSant.Web.csproj
+      **/SecretSanta.Api.csproj
+      **/SecretSanta.Web.csproj
     arguments: '--configuration $(BuildConfiguration) --output "$(build.artifactstagingdirectory)"'
 
     
