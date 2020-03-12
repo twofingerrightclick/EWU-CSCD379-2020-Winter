@@ -39,11 +39,13 @@ namespace SecretSanta.Web.Tests
                 if (testContext is null)
                     throw new ArgumentNullException(nameof(testContext));
 
-                await CreateUserAsync(_ApiUri);
+                
 
                 ApiHostProcess = Process.Start("dotnet", "run -p ..\\..\\..\\..\\..\\src\\SecretSanta.Api\\SecretSanta.Api.csproj");
                 WebHostProcess = Process.Start("dotnet", "run -p ..\\..\\..\\..\\..\\src\\SecretSanta.Web\\SecretSanta.Web.csproj");
                 ApiHostProcess.WaitForExit(16000);
+
+                await CreateUserAsync(_ApiUri);
 
 
             }
