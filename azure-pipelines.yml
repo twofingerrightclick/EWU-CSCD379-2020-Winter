@@ -37,3 +37,19 @@ steps:
   inputs:
     command: 'test'
     projects: '**/test/**/*.csproj'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'publish'
+    publishWebProjects: false
+    projects: |
+      **/SecretSant.Api.csproj
+      **/SecretSant.Web.csproj
+    arguments: '--configuration $(BuildConfiguration) --output "$(build.artifactstagingdirectory)"'
+
+    
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop' 
+    publishLocation: 'Container'
