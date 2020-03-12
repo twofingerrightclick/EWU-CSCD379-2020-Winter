@@ -25,8 +25,8 @@ namespace SecretSanta.Web.Tests
         {
             TestContext testContextInstance;
             private IWebDriver _Driver;
-            static private Uri _ApiUri = new Uri("https://localhost:5000/");
-            Uri _WebAppUri = new Uri("https://localhost:5001/");
+            static private Uri _ApiUri = new Uri("https://localhost:44388/");
+            static Uri _WebAppUri = new Uri("https://localhost:44394/");
             UserClient _UserClient;
             static private User _TestUser;
             private static Process? ApiHostProcess { get; set; }
@@ -41,10 +41,10 @@ namespace SecretSanta.Web.Tests
 
                 
 
-                ApiHostProcess = Process.Start("dotnet", "run -p ..\\..\\..\\..\\..\\src\\SecretSanta.Api\\SecretSanta.Api.csproj");
-                WebHostProcess = Process.Start("dotnet", "run -p ..\\..\\..\\..\\..\\src\\SecretSanta.Web\\SecretSanta.Web.csproj");
-                ApiHostProcess.WaitForExit(16000);
-
+                ApiHostProcess = Process.Start("dotnet", $"run -p ..\\..\\..\\..\\..\\src\\SecretSanta.Api\\SecretSanta.Api.csproj --urls={_ApiUri.ToString()}");
+                WebHostProcess = Process.Start("dotnet", $"run -p ..\\..\\..\\..\\..\\src\\SecretSanta.Web\\SecretSanta.Web.csproj --urls={_WebAppUri.ToString()}");
+                ApiHostProcess.WaitForExit(20000);
+                Thread.Sleep(1000);
                 await CreateUserAsync(_ApiUri);
 
 
