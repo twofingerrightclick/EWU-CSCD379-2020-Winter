@@ -19,7 +19,7 @@ namespace SecretSanta.Web.Tests
     public class GiftTests
 
     {
-  
+
         [TestClass]
         public class MySeleniumTests
         {
@@ -38,8 +38,22 @@ namespace SecretSanta.Web.Tests
             {
                 if (testContext is null)
                     throw new ArgumentNullException(nameof(testContext));
+                String[] projectNames = new String[] { "SecretSanta.Api", "SecretSanta.Web" };
 
-                
+                foreach (String projectName in projectNames)
+                {
+                    String fileName = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, projectName + ".exe");
+                    Process[] alreadyExecutingProcesses = Process.GetProcessesByName(projectName);
+                    if (alreadyExecutingProcesses.Length != 0)
+                    {
+                        foreach (Process item in alreadyExecutingProcesses)
+                        {
+                            item.Kill();
+                        }
+                    }
+                }
+
+
 
                 ApiHostProcess = Process.Start("dotnet", $"run -p ..\\..\\..\\..\\..\\src\\SecretSanta.Api\\SecretSanta.Api.csproj --urls={_ApiUri.ToString()}");
                 WebHostProcess = Process.Start("dotnet", $"run -p ..\\..\\..\\..\\..\\src\\SecretSanta.Web\\SecretSanta.Web.csproj --urls={_WebAppUri.ToString()}");
@@ -62,7 +76,7 @@ namespace SecretSanta.Web.Tests
                     case "Chrome":
                         var chromeOptions = new ChromeOptions();
                         //chromeOptions.AddArguments("headless");
-                        _Driver = new ChromeDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),chromeOptions);
+                        _Driver = new ChromeDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), chromeOptions);
                         break;
                         /*  case "Firefox":
                               driver = new FirefoxDriver();
@@ -92,7 +106,7 @@ namespace SecretSanta.Web.Tests
                 Uri giftUri = new Uri(_WebAppUri + "Gifts");
 
                 _Driver.Navigate().GoToUrl(giftUri);
-              
+
                 Click("#createButton.button.is-secondary");
                 Thread.Sleep(300);
 
@@ -115,9 +129,9 @@ namespace SecretSanta.Web.Tests
 
                 //Assert
 
-                string giftId=_Driver.FindElement(By.XPath($"//*[text()='{uniqueGiftTitleInput}']/parent::tr/child::td")).Text;
+                string giftId = _Driver.FindElement(By.XPath($"//*[text()='{uniqueGiftTitleInput}']/parent::tr/child::td")).Text;
 
-               
+
                 //screnshot
                 string path = $"{Directory.GetCurrentDirectory()}CreateGiftTest.png";
                 ((ITakesScreenshot)_Driver).GetScreenshot().SaveAsFile(path, ScreenshotImageFormat.Png);
@@ -231,7 +245,7 @@ namespace SecretSanta.Web.Tests
                 UserClient userClient = new UserClient(client);
 
                 await userClient.DeleteAsync(_TestUser.Id);
-               
+
 
                 client.Dispose();
             }
@@ -243,23 +257,15 @@ namespace SecretSanta.Web.Tests
             }
 
 
-            [ClassCleanup()]
+            [ClassCleanup]
             public static async Task ClassCleanupAsync()
             {
                 await DeleteUserAsync(_ApiUri);
 
-                if (ApiHostProcess != null)
-                {
-                    ApiHostProcess.Kill();
-                    //ApiHostProcess.CloseMainWindow();
-                    ApiHostProcess.Close();
-                }
-                if (WebHostProcess != null)
-                {
-                    WebHostProcess.Kill();
-                    //WebHostProcess.CloseMainWindow();
-                    WebHostProcess.Close();
-                }
+                ApiHostProcess?.CloseMainWindow();
+                ApiHostProcess?.Close();
+                WebHostProcess?.CloseMainWindow();
+                WebHostProcess?.Close();
 
             }
         }
