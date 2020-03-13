@@ -4,9 +4,12 @@ using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
 using SecretSanta.Web.Api;
 using System;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -22,10 +25,12 @@ namespace SecretSanta.Web.Tests
         {
             TestContext testContextInstance;
             private IWebDriver _Driver;
-            static private Uri _ApiUri = new Uri("https://localhost:44388/");
-            Uri _WebAppUri = new Uri("https://localhost:44394/");
+            static private Uri _ApiUri = new Uri("http://localhost:44388/");
+            static Uri _WebAppUri = new Uri("http://localhost:44394/");
             UserClient _UserClient;
             static private User _TestUser;
+            private static Process? ApiHostProcess { get; set; }
+            private static Process? WebHostProcess { get; set; }
 
 
             [ClassInitialize]
@@ -34,6 +39,12 @@ namespace SecretSanta.Web.Tests
                 if (testContext is null)
                     throw new ArgumentNullException(nameof(testContext));
 
+                
+
+                ApiHostProcess = Process.Start("dotnet", $"run -p ..\\..\\..\\..\\..\\src\\SecretSanta.Api\\SecretSanta.Api.csproj --urls={_ApiUri.ToString()}");
+                WebHostProcess = Process.Start("dotnet", $"run -p ..\\..\\..\\..\\..\\src\\SecretSanta.Web\\SecretSanta.Web.csproj --urls={_WebAppUri.ToString()}");
+                ApiHostProcess.WaitForExit(20000);
+                Thread.Sleep(1000);
                 await CreateUserAsync(_ApiUri);
 
 
@@ -49,7 +60,9 @@ namespace SecretSanta.Web.Tests
                 switch (browser)
                 {
                     case "Chrome":
-                        _Driver = new ChromeDriver();
+                        var chromeOptions = new ChromeOptions();
+                        //chromeOptions.AddArguments("headless");
+                        _Driver = new ChromeDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),chromeOptions);
                         break;
                         /*  case "Firefox":
                               driver = new FirefoxDriver();
@@ -79,8 +92,9 @@ namespace SecretSanta.Web.Tests
                 Uri giftUri = new Uri(_WebAppUri + "Gifts");
 
                 _Driver.Navigate().GoToUrl(giftUri);
-
+              
                 Click("#createButton.button.is-secondary");
+                Thread.Sleep(300);
 
                 String giftTitle = "The Princess Bride";
 
@@ -103,15 +117,16 @@ namespace SecretSanta.Web.Tests
 
                 string giftId=_Driver.FindElement(By.XPath($"//*[text()='{uniqueGiftTitleInput}']/parent::tr/child::td")).Text;
 
-                //cleanup
-
-               /* string path = $"{System.IO.Directory.GetCurrentDirectory()}CreateGiftTest.png";
-                System.Diagnostics.Trace.WriteLine(path);
+               
+                //screnshot
+                string path = $"{Directory.GetCurrentDirectory()}CreateGiftTest.png";
                 ((ITakesScreenshot)_Driver).GetScreenshot().SaveAsFile(path, ScreenshotImageFormat.Png);
-                this.TestContext.AddResultFile(path);*/
+                this.TestContext.AddResultFile(path);
 
-
+                //cleanup
                 await UseGiftClientAsync("DeleteAsync", int.Parse(giftId));
+
+
 
 
             }
@@ -232,6 +247,20 @@ namespace SecretSanta.Web.Tests
             public static async Task ClassCleanupAsync()
             {
                 await DeleteUserAsync(_ApiUri);
+
+                if (ApiHostProcess != null)
+                {
+                    ApiHostProcess.Kill();
+                    //ApiHostProcess.CloseMainWindow();
+                    ApiHostProcess.Close();
+                }
+                if (WebHostProcess != null)
+                {
+                    WebHostProcess.Kill();
+                    //WebHostProcess.CloseMainWindow();
+                    WebHostProcess.Close();
+                }
+
             }
         }
     }

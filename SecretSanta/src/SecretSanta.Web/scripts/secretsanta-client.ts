@@ -16,7 +16,7 @@ export class GiftClient {
 
     constructor(baseUrl?: string, instance?: AxiosInstance) {
         this.instance = instance ? instance : axios.create();
-        this.baseUrl = baseUrl ? baseUrl : "https://localhost:44388";
+        this.baseUrl = baseUrl ? baseUrl : "http://localhost:44388";
     }
 
     getAll(): Promise<Gift[]> {
@@ -504,7 +504,7 @@ export class UserClient {
 
     constructor(baseUrl?: string, instance?: AxiosInstance) {
         this.instance = instance ? instance : axios.create();
-        this.baseUrl = baseUrl ? baseUrl : "https://localhost:44388";
+        this.baseUrl = baseUrl ? baseUrl : "http://localhost:44388";
     }
 
     getAll(): Promise<User[]> {
