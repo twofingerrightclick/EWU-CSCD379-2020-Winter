@@ -25,7 +25,7 @@ namespace SecretSanta.Web.Tests
         {
             TestContext testContextInstance;
             private IWebDriver _Driver;
-            static private Uri _ApiUri = new Uri("https://localhost:44388/");
+            static private Uri _ApiUri = new Uri("https://localhost:44393/");
             static Uri _WebAppUri = new Uri("https://localhost:44394/");
             UserClient _UserClient;
             static private User _TestUser;
