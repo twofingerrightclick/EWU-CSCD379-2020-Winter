@@ -50,7 +50,7 @@ namespace SecretSanta.Web.Tests
                 using WebClient webClient = new WebClient();
                 ApiHostProcess = StartWebHost("SecretSanta.Api", 5000, "Swagger", new string[] { "ConnectionStrings:DefaultConnection='Data Source=SecretSanta.db'" });
 
-                WebHostProcess = StartWebHost("SecretSanta.Web", 5001, "", " ApiUrl=https://localhost:5000");
+                WebHostProcess = StartWebHost("SecretSanta.Web", 5001, "", "ApiUrl=https://localhost:5000");
 
                 Process StartWebHost(string projectName, int port, string urlSubDirectory, params string[] args)
                 {
@@ -77,7 +77,8 @@ namespace SecretSanta.Web.Tests
                         RedirectStandardError = true,
                         RedirectStandardOutput = true,
                         UseShellExecute = false,
-                        CreateNoWindow = true
+                        CreateNoWindow = false,
+                        LoadUserProfile = true
                     };
 
                     string stdErr = "";
@@ -136,13 +137,15 @@ namespace SecretSanta.Web.Tests
             {
 
                 string browser = "Chrome";
+                var chromeOptions = new ChromeOptions();
+                chromeOptions.PageLoadStrategy = PageLoadStrategy.Normal;
                 switch (browser)
                 {
                     case "Chrome":
-                        _Driver = new ChromeDriver();
+                        _Driver = new ChromeDriver(chromeOptions);
                         break;
                     default:
-                        _Driver = new ChromeDriver();
+                        _Driver = new ChromeDriver(chromeOptions);
                         break;
                 }
                 _Driver.Manage().Timeouts().ImplicitWait = new System.TimeSpan(0, 0, 10);
@@ -161,7 +164,7 @@ namespace SecretSanta.Web.Tests
 
                 _Driver.Navigate().GoToUrl(giftUri);
 
-                Thread.Sleep(25000);
+                Thread.Sleep(2000);
               
                 Click("#createButton.button.is-secondary");
              
