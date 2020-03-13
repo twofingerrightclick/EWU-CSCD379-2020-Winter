@@ -117,15 +117,16 @@ namespace SecretSanta.Web.Tests
 
                 string giftId=_Driver.FindElement(By.XPath($"//*[text()='{uniqueGiftTitleInput}']/parent::tr/child::td")).Text;
 
-                //cleanup
-
-               /* string path = $"{System.IO.Directory.GetCurrentDirectory()}CreateGiftTest.png";
-                System.Diagnostics.Trace.WriteLine(path);
+               
+                //screnshot
+                string path = $"{Directory.GetCurrentDirectory()}CreateGiftTest.png";
                 ((ITakesScreenshot)_Driver).GetScreenshot().SaveAsFile(path, ScreenshotImageFormat.Png);
-                this.TestContext.AddResultFile(path);*/
+                this.TestContext.AddResultFile(path);
 
-
+                //cleanup
                 await UseGiftClientAsync("DeleteAsync", int.Parse(giftId));
+
+
 
 
             }
