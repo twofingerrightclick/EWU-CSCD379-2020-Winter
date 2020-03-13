@@ -30,8 +30,8 @@ namespace SecretSanta.Web.Tests
         {
             TestContext testContextInstance;
             private IWebDriver _Driver;
-            static private Uri _ApiUri = new Uri("https://localhost:5000/");
-            static Uri _WebAppUri = new Uri("https://localhost:5001/");
+            static private Uri _ApiUri = new Uri("https://localhost:44388/");
+            static Uri _WebAppUri = new Uri("https://localhost:44394/");
             UserClient _UserClient;
             static private User _TestUser;
             private static Process? ApiHostProcess { get; set; }
@@ -45,12 +45,12 @@ namespace SecretSanta.Web.Tests
     */
 
             [ClassInitialize]
-            public static void ClassInitialize(TestContext testContext)
+            public static async Task ClassInitializeAsync(TestContext testContext)
             {
                 using WebClient webClient = new WebClient();
-                ApiHostProcess = StartWebHost("SecretSanta.Api", 5000, "Swagger", new string[] { "ConnectionStrings:DefaultConnection='Data Source=SecretSanta.db'" });
+                ApiHostProcess = StartWebHost("SecretSanta.Api", 44388, "Swagger", new string[] { "ConnectionStrings:DefaultConnection='Data Source=SecretSanta.db'" });
 
-                WebHostProcess = StartWebHost("SecretSanta.Web", 5001, "", "ApiUrl=https://localhost:5000");
+                WebHostProcess = StartWebHost("SecretSanta.Web", 44394, "", "ApiUrl=https://localhost:44388/");
 
                 Process StartWebHost(string projectName, int port, string urlSubDirectory, params string[] args)
                 {
@@ -77,8 +77,10 @@ namespace SecretSanta.Web.Tests
                         RedirectStandardError = true,
                         RedirectStandardOutput = true,
                         UseShellExecute = false,
-                        CreateNoWindow = false,
-                        LoadUserProfile = true
+                        CreateNoWindow = true,
+                        
+                        //allows the web.exe to get at the js and css files
+                        WorkingDirectory=Path.GetDirectoryName(projectExe)+ "/../../../"
                     };
 
                     string stdErr = "";
@@ -119,6 +121,8 @@ namespace SecretSanta.Web.Tests
                     throw new InvalidOperationException($"Unable to execute process successfully: {stdErr}") { Data = { { "StandardOut", stdOut } } };
 
                 }
+
+                await CreateUserAsync(_ApiUri);
             }
 
             [ClassCleanup]
@@ -139,6 +143,7 @@ namespace SecretSanta.Web.Tests
                 string browser = "Chrome";
                 var chromeOptions = new ChromeOptions();
                 chromeOptions.PageLoadStrategy = PageLoadStrategy.Normal;
+                chromeOptions.AddArguments("headless");
                 switch (browser)
                 {
                     case "Chrome":
@@ -157,17 +162,18 @@ namespace SecretSanta.Web.Tests
 
             public async Task CreateGift_SuccessAsync()
             {
-                await CreateUserAsync(_ApiUri);
+                
 
                 //arrange
                 Uri giftUri = new Uri(_WebAppUri + "Gifts");
 
                 _Driver.Navigate().GoToUrl(giftUri);
 
-                Thread.Sleep(2000);
+                
               
                 Click("#createButton.button.is-secondary");
-             
+                Thread.Sleep(800);
+
 
                 String giftTitle = "The Princess Bride";
 
@@ -181,6 +187,8 @@ namespace SecretSanta.Web.Tests
                 InputText(GiftInputField.urlInput.ToString(), "https://en.wikipedia.org/wiki/The_Princess_Bride_(novel)");
 
                 SelectOptionValueFromDropDown("select", _TestUser.Id.ToString(new System.Globalization.CultureInfo("en-us")));
+
+                
 
                 Click("#submit.button");
 
