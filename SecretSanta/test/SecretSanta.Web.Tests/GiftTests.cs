@@ -25,7 +25,7 @@ namespace SecretSanta.Web.Tests
         {
             TestContext testContextInstance;
             private IWebDriver _Driver;
-            static private Uri _ApiUri = new Uri("https://localhost:44393/");
+            static private Uri _ApiUri = new Uri("https://localhost:44388/");
             static Uri _WebAppUri = new Uri("https://localhost:44394/");
             UserClient _UserClient;
             static private User _TestUser;
@@ -61,7 +61,7 @@ namespace SecretSanta.Web.Tests
                 {
                     case "Chrome":
                         var chromeOptions = new ChromeOptions();
-                        chromeOptions.AddArguments("headless");
+                        //chromeOptions.AddArguments("headless");
                         _Driver = new ChromeDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),chromeOptions);
                         break;
                         /*  case "Firefox":
@@ -94,7 +94,7 @@ namespace SecretSanta.Web.Tests
                 _Driver.Navigate().GoToUrl(giftUri);
               
                 Click("#createButton.button.is-secondary");
-             
+                Thread.Sleep(300);
 
                 String giftTitle = "The Princess Bride";
 

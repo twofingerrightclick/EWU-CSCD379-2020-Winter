@@ -12,6 +12,7 @@ _layout.cshtml
 *.user
 *.userosscache
 *.sln.docstates
+BlogEngine/
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
