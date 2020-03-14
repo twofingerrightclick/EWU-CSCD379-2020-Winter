@@ -36,29 +36,29 @@ namespace SecretSanta.Web.Tests
             [ClassInitialize]
             public static async Task ClassInitalize(TestContext testContext)
             {
-                if (testContext is null)
-                    throw new ArgumentNullException(nameof(testContext));
-                String[] projectNames = new String[] { "SecretSanta.Api", "SecretSanta.Web" };
+                // if (testContext is null)
+                //     throw new ArgumentNullException(nameof(testContext));
+                // String[] projectNames = new String[] { "SecretSanta.Api", "SecretSanta.Web" };
 
-                foreach (String projectName in projectNames)
-                {
-                    String fileName = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, projectName + ".exe");
-                    Process[] alreadyExecutingProcesses = Process.GetProcessesByName(projectName);
-                    if (alreadyExecutingProcesses.Length != 0)
-                    {
-                        foreach (Process item in alreadyExecutingProcesses)
-                        {
-                            item.Kill();
-                        }
-                    }
-                }
+                // foreach (String projectName in projectNames)
+                // {
+                //     String fileName = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, projectName + ".exe");
+                //     Process[] alreadyExecutingProcesses = Process.GetProcessesByName(projectName);
+                //     if (alreadyExecutingProcesses.Length != 0)
+                //     {
+                //         foreach (Process item in alreadyExecutingProcesses)
+                //         {
+                //             item.Kill();
+                //         }
+                //     }
+                // }
 
 
 
-                ApiHostProcess = Process.Start("dotnet", $"run -p ..\\..\\..\\..\\..\\src\\SecretSanta.Api\\SecretSanta.Api.csproj --urls={_ApiUri.ToString()}");
-                WebHostProcess = Process.Start("dotnet", $"run -p ..\\..\\..\\..\\..\\src\\SecretSanta.Web\\SecretSanta.Web.csproj --urls={_WebAppUri.ToString()}");
-                ApiHostProcess.WaitForExit(20000);
-                Thread.Sleep(1000);
+                // ApiHostProcess = Process.Start("dotnet", $"run -p ..\\..\\..\\..\\..\\src\\SecretSanta.Api\\SecretSanta.Api.csproj --urls={_ApiUri.ToString()}");
+                // WebHostProcess = Process.Start("dotnet", $"run -p ..\\..\\..\\..\\..\\src\\SecretSanta.Web\\SecretSanta.Web.csproj --urls={_WebAppUri.ToString()}");
+                // ApiHostProcess.WaitForExit(20000);
+                // Thread.Sleep(1000);
                 await CreateUserAsync(_ApiUri);
 
 
