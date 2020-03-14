@@ -29,7 +29,6 @@ steps:
     command: 'custom'
     workingDir: 'SecretSanta/src/SecretSanta.Web'
     customCommand: 'run build:prod'
-- task: DotNetCoreCLI@2
+- task: PowerShell@2
   inputs:
-    command: 'test'
-    projects: '**/test/**/*.csproj'
+    filePath: './SecretSanta/SeleniumWebTests.ps1'
