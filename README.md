@@ -1,3 +1,3 @@
 # Assignment
 
-See [LinksAndScreenshots](/LinksAndScreenshots) 
+See [LinksAndScreenshots](LinksAndScreenshots.md) 
