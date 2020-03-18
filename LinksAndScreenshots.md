@@ -1,6 +1,6 @@
 # Links:
-[Api Swagger Link](http://secretsantaapp2server.azurewebsites.net/swagger)
-[Web App Link](https://secretsantawebapp.azurewebsites.net)
+	- [Api Swagger Link](http://secretsantaapp2server.azurewebsites.net/swagger)
+	- [Web App Link](https://secretsantawebapp.azurewebsites.net)
 
 ---
 
