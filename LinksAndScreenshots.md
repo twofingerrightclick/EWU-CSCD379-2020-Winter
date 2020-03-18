@@ -3,6 +3,6 @@
 
 ---
 
-![#Release Screenshot](https://github.com/twofingerrightclick/EWU-CSCD379-2020-Winter/blob/Assignment10/Release_Screenshot.JPG) 
-![#Resources Screenshot](./Resource_Screenshot.JPG) 
+![#Release Screenshot](./Release_Screenshot.JPG) 
+#![Resources Screenshot](./Resource_Screenshot.JPG) 
 
